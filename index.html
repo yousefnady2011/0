@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>مخزن الذكريات | صورك.. دائمًا معاك</title>
     
     <!-- Tailwind CSS -->
@@ -34,7 +34,8 @@
                     },
                     boxShadow: {
                         'soft-xl': '0 20px 40px -15px rgba(52, 91, 120, 0.08), 0 10px 20px -10px rgba(0, 0, 0, 0.04)',
-                        'glow': '0 0 25px rgba(52, 91, 120, 0.15)'
+                        'glow': '0 0 25px rgba(52, 91, 120, 0.15)',
+                        'card': '0 12px 32px -8px rgba(52, 91, 120, 0.09)'
                     }
                 }
             }
@@ -47,24 +48,25 @@
             background-color: #FAF7F2;
             color: #2D3748;
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
         
         .glass-header {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
-        
+
+        .logo-ring {
+            box-shadow: 0 0 0 3px #E8D8C3, 0 8px 24px rgba(52, 91, 120, 0.12);
+        }
+
         .polaroid-card {
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .polaroid-card:hover {
             transform: translateY(-6px) scale(1.01);
-            box-shadow: 0 20px 30px -10px rgba(52, 91, 120, 0.12), 0 8px 12px -6px rgba(0, 0, 0, 0.04);
-        }
-
-        .logo-ring {
-            box-shadow: 0 0 0 3px #E8D8C3, 0 8px 24px rgba(52, 91, 120, 0.12);
+            box-shadow: 0 20px 30px -10px rgba(52, 91, 120, 0.14), 0 8px 12px -6px rgba(0, 0, 0, 0.04);
         }
 
         .custom-input {
@@ -78,9 +80,10 @@
             box-shadow: 0 0 0 4px rgba(52, 91, 120, 0.12);
         }
 
+        /* Responsive Custom Scrollbars */
         ::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
             background: #FAF5EE;
@@ -94,7 +97,7 @@
         }
 
         .modal-scrollable-body {
-            max-height: calc(88vh - 170px);
+            max-height: calc(88vh - 150px);
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -102,7 +105,7 @@
         @keyframes fadeInSlideUp {
             from {
                 opacity: 0;
-                transform: translateY(10px) scale(0.98);
+                transform: translateY(12px) scale(0.98);
             }
             to {
                 opacity: 1;
@@ -112,44 +115,56 @@
         .animate-slide-up {
             animation: fadeInSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        /* 3D Text Effect for Welcome Banner */
+        .text-3d {
+            color: #7296B8;
+            text-shadow: 
+                1px 1px 0px #4B6E8A, 
+                2px 2px 0px #4B6E8A, 
+                3px 3px 0px #4B6E8A, 
+                4px 4px 0px #4B6E8A, 
+                6px 6px 18px rgba(52, 91, 120, 0.25);
+            -webkit-text-stroke: 1px rgba(255,255,255,0.4);
+        }
     </style>
 
     <script>
-        // High Quality Vector Logo Fallback
         window.APP_LOGO_SVG = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cdefs%3E%3Cfilter id='shadow' x='-10%25' y='-10%25' width='120%25' height='120%25'%3E%3CfeDropShadow dx='0' dy='4' stdDeviation='6' flood-color='%23345B78' flood-opacity='0.15'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M 120 420 C 30 340 30 160 140 70 C 230 0 370 20 440 100' fill='none' stroke='%23345B78' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M 440 100 C 490 180 480 340 380 420 C 310 470 180 470 120 420' fill='none' stroke='%23E8D8C3' stroke-width='5' stroke-linecap='round'/%3E%3Cg filter='url(%23shadow)'%3E%3Cg transform='translate(145, 120) rotate(-12)'%3E%3Crect x='0' y='0' width='110' height='135' rx='6' fill='%23FFFFFF' stroke='%23E8D8C3' stroke-width='2'/%3E%3Crect x='8' y='8' width='94' height='90' rx='3' fill='%23E8D8C3' opacity='0.4'/%3E%3Cpath d='M 8 98 L 45 45 L 70 75 L 85 60 L 102 98 Z' fill='%23345B78' opacity='0.8'/%3E%3Ccircle cx='80' cy='30' r='10' fill='%23E8D8C3'/%3E%3C/g%3E%3Cg transform='translate(230, 135) rotate(10)'%3E%3Crect x='0' y='0' width='110' height='135' rx='6' fill='%23FFFFFF' stroke='%23E8D8C3' stroke-width='2'/%3E%3Crect x='8' y='8' width='94' height='90' rx='3' fill='%2387958A' opacity='0.3'/%3E%3Cpath d='M 25 75 Q 35 55 55 60 Q 75 50 85 70 Q 95 75 85 85 L 25 85 Z' fill='%23FFFFFF'/%3E%3C/g%3E%3Cpath d='M 270 230 C 260 200 290 170 320 180 C 340 160 380 170 390 195 C 410 195 425 215 415 235 C 425 255 405 270 385 265 L 280 265 C 265 265 255 250 270 230 Z' fill='%23FFFFFF' opacity='0.9' stroke='%23E8D8C3' stroke-width='1.5'/%3E%3Cg transform='translate(170, 210)'%3E%3Crect x='0' y='20' width='170' height='115' rx='24' fill='%23345B78'/%3E%3Cpath d='M 50 20 L 65 5 L 105 5 L 120 20 Z' fill='%23345B78'/%3E%3Ccircle cx='140' cy='40' r='6' fill='%23E8D8C3'/%3E%3Crect x='25' y='35' width='20' height='10' rx='3' fill='%2326435A'/%3E%3Ccircle cx='85' cy='78' r='42' fill='%23E8D8C3'/%3E%3Ccircle cx='85' cy='78' r='33' fill='%2326435A'/%3E%3Ccircle cx='85' cy='78' r='22' fill='%23345B78'/%3E%3Ccircle cx='75' cy='68' r='6' fill='%23FFFFFF' opacity='0.6'/%3E%3C/g%3E%3Cg transform='translate(295, 270)'%3E%3Cpath d='M 18 20 L 18 12 A 14 14 0 0 1 46 12 L 46 20' fill='none' stroke='%23E8D8C3' stroke-width='6' stroke-linecap='round'/%3E%3Crect x='8' y='18' width='48' height='42' rx='10' fill='%23E8D8C3' stroke='%23345B78' stroke-width='2'/%3E%3Ccircle cx='32' cy='34' r='5' fill='%23345B78'/%3E%3Cpolygon points='29,36 35,36 33,48 31,48' fill='%23345B78'/%3E%3C/g%3E%3Cg transform='translate(95, 280) rotate(-15)'%3E%3Cpath d='M 10 110 Q 60 70 120 40' fill='none' stroke='%2387958A' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M 20 100 Q 5 80 25 75 Q 35 90 20 100 Z' fill='%2387958A'/%3E%3Cpath d='M 45 85 Q 30 60 55 60 Q 60 75 45 85 Z' fill='%2387958A'/%3E%3Cpath d='M 70 68 Q 60 40 85 45 Q 85 60 70 68 Z' fill='%2387958A'/%3E%3Cpath d='M 95 52 Q 90 25 110 35 Q 105 50 95 52 Z' fill='%2387958A'/%3E%3Cpath d='M 35 95 Q 55 90 50 105 Q 35 105 35 95 Z' fill='%2387958A'/%3E%3Cpath d='M 60 78 Q 80 75 75 90 Q 60 88 60 78 Z' fill='%2387958A'/%3E%3Cpath d='M 85 60 Q 105 60 98 75 Q 85 72 85 60 Z' fill='%2387958A'/%3E%3C/g%3E%3Ctext x='250' y='390' font-family='Tajawal, sans-serif' font-weight='900' font-size='44' fill='%23345B78' text-anchor='middle'%3Eمخزن الذكريات%3C/text%3E%3Cline x1='110' y1='422' x2='180' y2='422' stroke='%2387958A' stroke-width='3' stroke-linecap='round'/%3E%3Ctext x='250' y='428' font-family='Tajawal, sans-serif' font-weight='700' font-size='22' fill='%2387958A' text-anchor='middle'%3Eصورك .. دائمًا معاك%3C/text%3E%3Cline x1='320' y1='422' x2='390' y2='422' stroke='%2387958A' stroke-width='3' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E";
     </script>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brandBeige selection:text-brandBlue">
 
     <header class="sticky top-0 z-40 glass-header border-b border-brandBeige/80 shadow-xs transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                
                 <!-- Logo & Brand Name -->
-                <div class="flex items-center gap-3.5 cursor-pointer group" onclick="navigateTo('home')">
-                    <div class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white p-1 logo-ring transition-transform duration-300 group-hover:scale-105 shrink-0">
+                <div class="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group" onclick="navigateTo('home')">
+                    <div class="relative w-10 h-10 sm:w-13 sm:h-13 rounded-full overflow-hidden bg-white p-0.5 sm:p-1 logo-ring transition-transform duration-300 group-hover:scale-105 shrink-0">
                         <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                     </div>
                     <div>
-                        <h1 class="text-xl sm:text-2xl font-black text-brandBlue tracking-tight leading-none group-hover:text-brandBlueDark transition-colors">مخزن الذكريات</h1>
-                        <p class="text-xs text-brandGreen font-bold mt-1 hidden sm:block">صورك .. دائمًا معاك</p>
+                        <h1 class="text-lg sm:text-2xl font-black text-brandBlue tracking-tight leading-none group-hover:text-brandBlueDark transition-colors">مخزن الذكريات</h1>
+                        <p class="text-[10px] sm:text-xs text-brandGreen font-bold mt-0.5 sm:mt-1 hidden sm:block">صورك .. دائمًا معاك</p>
                     </div>
                 </div>
 
                 <!-- Navigation Links & User Menu -->
-                <nav class="flex items-center gap-2 sm:gap-3">
-                    <button onclick="navigateTo('home')" class="px-4 py-2.5 text-sm font-bold text-gray-700 hover:text-brandBlue hover:bg-brandBeigeLight rounded-xl transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-house text-brandBlue"></i>
-                        <span>الرئيسية</span>
+                <nav class="flex items-center gap-1.5 sm:gap-3">
+                    <button onclick="navigateTo('home')" class="px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-bold text-gray-700 hover:text-brandBlue hover:bg-brandBeigeLight rounded-xl transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-house text-brandBlue text-sm"></i>
+                        <span class="hidden sm:inline">الرئيسية</span>
                     </button>
                     
-                    <button id="navMemoriesBtn" onclick="navigateTo('memories')" class="hidden px-4 py-2.5 text-sm font-bold text-gray-700 hover:text-brandBlue hover:bg-brandBeigeLight rounded-xl transition-all items-center gap-2">
-                        <i class="fa-solid fa-images text-brandGreen"></i>
+                    <button id="navMemoriesBtn" onclick="navigateTo('memories')" class="hidden px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-bold text-gray-700 hover:text-brandBlue hover:bg-brandBeigeLight rounded-xl transition-all items-center gap-1.5">
+                        <i class="fa-solid fa-images text-brandGreen text-sm"></i>
                         <span>ذكرياتي</span>
                     </button>
 
                     <!-- Auth State Container -->
                     <div id="navAuthContainer">
-                        <button onclick="openAuthModal('login')" class="bg-brandBlue text-white hover:bg-brandBlueDark active:scale-95 px-5 py-2.5 text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                        <button onclick="openAuthModal('login')" class="bg-brandBlue text-white hover:bg-brandBlueDark active:scale-95 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-extrabold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-1.5">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             <span>تسجيل الدخول</span>
                         </button>
@@ -160,47 +175,47 @@
     </header>
 
     <!-- Toast Notification Overlay -->
-    <div id="toastContainer" class="fixed bottom-5 left-5 z-50 flex flex-col gap-2.5 max-w-sm pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
     <main class="flex-grow">
+        
         <section id="viewHome" class="transition-all duration-300">
-            <!-- Hero Section -->
-            <div class="relative overflow-hidden bg-gradient-to-b from-brandBeigeLight/80 via-bgWarm to-bgWarm py-12 sm:py-20">
+            <div class="relative overflow-hidden bg-gradient-to-b from-brandBeigeLight/80 via-bgWarm to-bgWarm py-10 sm:py-20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     
-                    <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 backdrop-blur text-brandBlue text-xs sm:text-sm font-extrabold mb-6 border border-brandBeige shadow-sm">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur text-brandBlue text-xs sm:text-sm font-extrabold mb-5 border border-brandBeige shadow-xs">
                         <i class="fa-solid fa-shield-halved text-brandGreen"></i>
                         <span>ملاذك الآمن لحفظ أغلى الصور واللحظات</span>
                     </div>
 
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-brandBlue leading-tight mb-6">
+                    <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black text-brandBlue leading-tight mb-5 sm:mb-6">
                         احفظ صورك وذكرياتك الجميلة <br class="hidden sm:inline"> في مكان خاص ومحمي
                     </h1>
                     
-                    <p class="max-w-2xl mx-auto text-base sm:text-lg text-gray-600 mb-8 leading-relaxed font-medium">
+                    <p class="max-w-2xl mx-auto text-sm sm:text-lg text-gray-600 mb-8 leading-relaxed font-medium px-2">
                         تطبيق "مخزن الذكريات" يمنحك مساحة دافئة وهادئة لتخزين صورك مع وصف كل لحظة وتاريخها الخاص، والوصول إليها بخصوصية تامة عبر رقم هاتفك وكلمة السر.
                     </p>
 
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-8 py-4 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-lg hover:shadow-xl transition-all text-base sm:text-lg flex items-center justify-center gap-3">
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto sm:max-w-none">
+                        <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-7 py-3.5 sm:py-4 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-lg flex items-center justify-center gap-2.5">
                             <i class="fa-solid fa-user-plus"></i>
                             <span>إنشاء حساب جديد مجانًا</span>
                         </button>
-                        <button onclick="openAuthModal('login')" class="w-full sm:w-auto px-8 py-4 bg-white text-brandBlue border-2 border-brandBlue/20 hover:bg-brandBeigeLight font-extrabold rounded-2xl transition-all text-base sm:text-lg flex items-center justify-center gap-3 shadow-sm">
+                        <button onclick="openAuthModal('login')" class="w-full sm:w-auto px-7 py-3.5 sm:py-4 bg-white text-brandBlue border-2 border-brandBlue/20 hover:bg-brandBeigeLight font-extrabold rounded-2xl transition-all text-sm sm:text-lg flex items-center justify-center gap-2.5 shadow-xs">
                             <i class="fa-solid fa-key text-brandGreen"></i>
                             <span>تسجيل الدخول إلى ذكرياتي</span>
                         </button>
                     </div>
 
                     <!-- Visual Showcase Card -->
-                    <div class="mt-14 flex justify-center">
-                        <div class="relative p-6 sm:p-8 bg-white/90 backdrop-blur rounded-3xl shadow-soft-xl border border-brandBeige max-w-sm sm:max-w-md group hover:scale-[1.02] transition-transform duration-300">
-                            <div class="w-48 h-48 sm:w-56 sm:h-56 mx-auto rounded-full overflow-hidden p-2 logo-ring bg-white flex items-center justify-center">
+                    <div class="mt-12 sm:mt-16 flex justify-center">
+                        <div class="relative p-6 sm:p-8 bg-white/95 backdrop-blur rounded-3xl shadow-card border border-brandBeige max-w-xs sm:max-w-sm group hover:scale-[1.02] transition-transform duration-300">
+                            <div class="w-40 h-40 sm:w-52 sm:h-52 mx-auto rounded-full overflow-hidden p-2 logo-ring bg-white flex items-center justify-center">
                                 <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                             </div>
-                            <div class="mt-6 text-center">
-                                <h3 class="text-2xl font-black text-brandBlue">مخزن الذكريات</h3>
-                                <p class="text-sm font-bold text-brandGreen mt-1">صورك .. دائمًا معاك</p>
+                            <div class="mt-5 text-center">
+                                <h3 class="text-xl sm:text-2xl font-black text-brandBlue">مخزن الذكريات</h3>
+                                <p class="text-xs sm:text-sm font-bold text-brandGreen mt-1">صورك .. دائمًا معاك</p>
                             </div>
                         </div>
                     </div>
@@ -208,40 +223,40 @@
             </div>
 
             <!-- Features Grid -->
-            <div class="py-16 bg-white border-t border-brandBeige/60">
+            <div class="py-12 sm:py-16 bg-white border-t border-brandBeige/60">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-12">
-                        <h2 class="text-2xl sm:text-3xl font-black text-brandBlue mb-3">لماذا تختار مخزن الذكريات؟</h2>
-                        <p class="text-brandGreen font-bold text-sm sm:text-base">هوية بصرية هادئة تبث الهدوء والطمأنينة والحنين إلى أروع الأوقات</p>
+                    <div class="text-center mb-10 sm:mb-12">
+                        <h2 class="text-2xl sm:text-3xl font-black text-brandBlue mb-2 sm:mb-3">لماذا تختار مخزن الذكريات؟</h2>
+                        <p class="text-brandGreen font-bold text-xs sm:text-base">هوية بصرية هادئة تبث الهدوء والطمأنينة والحنين إلى أروع الأوقات</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-soft-xl transition-all text-right">
-                            <div class="w-14 h-14 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-2xl mb-6 shadow-md">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                        <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
                                 <i class="fa-solid fa-lock"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-brandBlue mb-3">دخول آمن برقم الهاتف</h3>
-                            <p class="text-gray-600 leading-relaxed text-sm font-medium">
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">دخول آمن برقم الهاتف</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
                                 استرجع ذكرياتك وألبومك الخاص في أي وقت ومن أي جهاز باستخدام رقم هاتفك وكلمة السر الخاصة بك.
                             </p>
                         </div>
 
-                        <div class="p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-soft-xl transition-all text-right">
-                            <div class="w-14 h-14 rounded-2xl bg-brandBeige text-brandBlue flex items-center justify-center text-2xl mb-6 shadow-md">
+                        <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandBeige text-brandBlue flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-brandBlue mb-3">توثيق التاريخ والوصف</h3>
-                            <p class="text-gray-600 leading-relaxed text-sm font-medium">
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">توثيق التاريخ والوصف</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
                                 سجل مشاعرك، مكان التقاط الصورة، والتاريخ المخصص لكل ذكرى حتى لا تضيع التفاصيل الجميلة.
                             </p>
                         </div>
 
-                        <div class="p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-soft-xl transition-all text-right">
-                            <div class="w-14 h-14 rounded-2xl bg-brandGreen text-white flex items-center justify-center text-2xl mb-6 shadow-md">
+                        <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
+                            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandGreen text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
                                 <i class="fa-solid fa-heart"></i>
                             </div>
-                            <h3 class="text-xl font-bold text-brandBlue mb-3">تصميم مريح وأنيق</h3>
-                            <p class="text-gray-600 leading-relaxed text-sm font-medium">
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">تصميم مريح وأنيق</h3>
+                            <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
                                 درجات الأزرق الهادئ، البيج الدافئ، والأخضر المريح لرحلة تصفح ناعمة وممتعة كالألبوم الكلاسيكي.
                             </p>
                         </div>
@@ -250,29 +265,44 @@
             </div>
         </section>
 
-        <section id="viewMemories" class="hidden py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <!-- Header Bar inside Dashboard -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-3xl border border-brandBeige/80 shadow-soft-xl">
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-full overflow-hidden bg-white logo-ring flex-shrink-0 p-0.5">
+        <section id="viewMemories" class="hidden py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            
+            <!-- Dynamic User Welcome Banner -->
+            <div class="mb-6 sm:mb-8 rounded-3xl sm:rounded-[35px] bg-gradient-to-br from-[#E8F0FE] via-[#F3F7FE] to-[#FAF8F5] border-2 border-white shadow-soft-xl overflow-hidden relative flex flex-col items-center justify-center text-center py-8 sm:py-14 px-4">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-brandBlue/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
+                
+                <h2 class="text-3xl sm:text-5xl lg:text-[68px] font-black text-3d leading-tight z-10">
+                    أهلاً<br>
+                    <span id="welcomeUserName" class="block my-1 sm:my-2 text-[1em]">المستخدم</span>
+                </h2>
+                <h3 class="text-2xl sm:text-4xl font-black text-brandBlue mt-1 sm:mt-2 z-10 drop-shadow-sm">
+                    في ذكرياتك <span class="text-blue-400">💙</span>
+                </h3>
+            </div>
+
+            <!-- Control Header Bar inside Dashboard -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 sm:mb-8 bg-white p-5 sm:p-6 rounded-3xl border border-brandBeige/80 shadow-xs">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden bg-white logo-ring flex-shrink-0 p-0.5">
                         <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                     </div>
                     <div>
-                        <h2 class="text-2xl sm:text-3xl font-black text-brandBlue flex items-center gap-3">
+                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-brandBlue flex items-center gap-2.5">
                             <span>معرض الذكريات الخاصة</span>
-                            <span id="memoryCounter" class="text-xs bg-brandBeige text-brandBlue font-extrabold px-3 py-1 rounded-full shadow-xs">0 ذكرى</span>
+                            <span id="memoryCounter" class="text-xs bg-brandBeige/80 text-brandBlue font-extrabold px-3 py-1 rounded-full shadow-xs">0 ذكرى</span>
                         </h2>
-                        <p class="text-sm text-gray-500 mt-1 font-medium">تصفح صورك واسترجع أرق اللحظات في أي وقت</p>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5 font-medium">تصفح صورك واسترجع أرق اللحظات في أي وقت</p>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
-                    <button onclick="openAddMemoryModal()" class="w-full sm:w-auto px-6 py-3.5 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5">
-                        <i class="fa-solid fa-circle-plus text-lg"></i>
+                <div class="flex items-center gap-2.5">
+                    <button onclick="openAddMemoryModal()" class="flex-1 sm:flex-initial px-5 py-3 sm:py-3.5 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm">
+                        <i class="fa-solid fa-circle-plus text-base"></i>
                         <span>إضافة ذكرى جديدة</span>
                     </button>
                     
-                    <button onclick="handleLogout()" class="px-4 py-3.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all text-sm flex items-center gap-2">
+                    <button onclick="handleLogout()" class="px-3.5 py-3 sm:py-3.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all text-xs sm:text-sm flex items-center gap-1.5" title="تسجيل الخروج">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span class="hidden sm:inline">تسجيل الخروج</span>
                     </button>
@@ -280,34 +310,34 @@
             </div>
 
             <!-- Search and Filter Controls -->
-            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+            <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
                 <div class="relative flex-grow">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="searchInput" oninput="filterMemories()" placeholder="ابحث في وصف الذكريات..." class="w-full pr-11 pl-4 py-3.5 rounded-2xl custom-input outline-none text-sm font-medium">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="filterMemories()" placeholder="ابحث في وصف الذكريات..." class="w-full pr-10 pl-4 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium">
                 </div>
                 
-                <div class="flex items-center gap-2.5">
-                    <input type="date" id="dateFilter" onchange="filterMemories()" class="px-4 py-3.5 rounded-2xl custom-input outline-none text-sm font-medium text-gray-700">
-                    <button onclick="clearFilters()" class="px-4 py-3.5 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-2xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0" title="إعادة ضبط الفلاتر">
+                <div class="flex items-center gap-2">
+                    <input type="date" id="dateFilter" onchange="filterMemories()" class="w-full sm:w-auto px-3.5 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium text-gray-700">
+                    <button onclick="clearFilters()" class="px-3.5 py-3 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-2xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0" title="إعادة ضبط الفلاتر">
                         <i class="fa-solid fa-arrows-rotate"></i>
-                        <span>مسح الفلتر</span>
+                        <span>مسح</span>
                     </button>
                 </div>
             </div>
 
             <!-- Memories Grid Container -->
-            <div id="memoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="memoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
                 <!-- Memory items rendered dynamically -->
             </div>
 
             <!-- Empty State -->
-            <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-dashed border-brandBeige mt-4 shadow-sm">
-                <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-brandBeigeLight p-2 logo-ring flex items-center justify-center">
+            <div id="emptyState" class="hidden text-center py-12 sm:py-16 px-4 bg-white rounded-3xl border border-dashed border-brandBeige mt-4 shadow-xs">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 rounded-full bg-brandBeigeLight p-2 logo-ring flex items-center justify-center">
                     <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full opacity-80" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
-                <h3 class="text-xl font-bold text-brandBlue mb-2">لا توجد ذكريات حتى الآن</h3>
-                <p class="text-gray-500 max-w-md mx-auto mb-6 text-sm font-medium">ابدأ بجمع لحظاتك المميزة، أضف أول صورة وسجل التاريخ والوصف الخاص بها.</p>
-                <button onclick="openAddMemoryModal()" class="px-6 py-3.5 bg-brandBlue text-white hover:bg-brandBlueDark font-bold rounded-2xl shadow transition-all inline-flex items-center gap-2 text-sm">
+                <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-1.5">لا توجد ذكريات حتى الآن</h3>
+                <p class="text-gray-500 max-w-md mx-auto mb-6 text-xs sm:text-sm font-medium">ابدأ بجمع لحظاتك المميزة، أضف أول صورة وسجل التاريخ والوصف الخاص بها.</p>
+                <button onclick="openAddMemoryModal()" class="px-6 py-3 bg-brandBlue text-white hover:bg-brandBlueDark font-bold rounded-2xl shadow transition-all inline-flex items-center gap-2 text-xs sm:text-sm">
                     <i class="fa-solid fa-plus"></i>
                     <span>إضافة أول ذكرى</span>
                 </button>
@@ -319,80 +349,80 @@
     <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-brandBeige/80 relative transform transition-all duration-300 scale-95 my-auto max-h-[92vh] flex flex-col overflow-hidden" id="authModalContainer">
             
-            <button onclick="closeAuthModal()" class="absolute top-4 left-4 z-20 w-9 h-9 bg-gray-100/80 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-all shadow-xs active:scale-90">
-                <i class="fa-solid fa-xmark text-lg"></i>
+            <button onclick="closeAuthModal()" class="absolute top-3.5 left-3.5 z-20 w-8 h-8 sm:w-9 sm:h-9 bg-gray-100/80 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-all shadow-xs active:scale-90">
+                <i class="fa-solid fa-xmark text-base"></i>
             </button>
 
-            <div class="bg-gradient-to-b from-brandBeigeLight via-bgWarm to-white p-6 pb-4 text-center border-b border-brandBeige/50 shrink-0 relative">
-                <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-white p-1.5 logo-ring flex items-center justify-center shadow-md">
+            <div class="bg-gradient-to-b from-brandBeigeLight via-bgWarm to-white p-5 sm:p-6 pb-4 text-center border-b border-brandBeige/50 shrink-0 relative">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2.5 rounded-full bg-white p-1.5 logo-ring flex items-center justify-center shadow-md">
                     <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
-                <h3 class="text-2xl font-black text-brandBlue tracking-tight" id="authModalTitle">مرحباً بك في مخزن الذكريات</h3>
-                <p class="text-xs text-brandGreen font-extrabold mt-1">سجل دخولك برقم الهاتف أو أنشئ حسابًا جديدًا</p>
+                <h3 class="text-xl sm:text-2xl font-black text-brandBlue tracking-tight" id="authModalTitle">مرحباً بك في مخزن الذكريات</h3>
+                <p class="text-[11px] sm:text-xs text-brandGreen font-extrabold mt-1">سجل دخولك برقم الهاتف أو أنشئ حسابًا جديدًا</p>
 
-                <div class="mt-5 p-1 bg-brandBeige/40 rounded-2xl flex items-center gap-1 border border-brandBeige/60">
-                    <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandBlue shadow-sm">
+                <div class="mt-4 p-1 bg-brandBeige/40 rounded-2xl flex items-center gap-1 border border-brandBeige/60">
+                    <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandBlue shadow-xs">
                         <i class="fa-solid fa-right-to-bracket ml-1.5"></i>تسجيل الدخول
                     </button>
-                    <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue">
+                    <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue">
                         <i class="fa-solid fa-user-plus ml-1.5"></i>حساب جديد
                     </button>
                 </div>
             </div>
 
-            <div class="p-6 modal-scrollable-body flex-1 overflow-y-auto space-y-4 bg-white">
+            <div class="p-5 sm:p-6 modal-scrollable-body flex-1 overflow-y-auto space-y-4 bg-white">
                 <!-- FORM 1: LOGIN -->
-                <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4 animate-slide-up">
+                <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3.5 animate-slide-up">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">رقم الهاتف</label>
                         <div class="relative">
-                            <i class="fa-solid fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="tel" id="loginPhone" oninput="enforceEnglishDigits(this)" required placeholder="مثال: 01012345678" dir="ltr" class="w-full pr-11 pl-4 py-3.5 text-sm text-right rounded-2xl custom-input outline-none font-medium">
+                            <i class="fa-solid fa-phone absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="tel" id="loginPhone" oninput="enforceEnglishDigits(this)" required placeholder="مثال: 01012345678" dir="ltr" class="w-full pr-10 pl-4 py-3 text-xs sm:text-sm text-right rounded-2xl custom-input outline-none font-medium">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة السر</label>
                         <div class="relative">
-                            <i class="fa-solid fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="loginPassword" required placeholder="••••••••" dir="rtl" class="w-full pr-11 pl-11 py-3.5 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('loginPassword', 'toggleIconLogin')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconLogin"></i>
+                            <i class="fa-solid fa-lock absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="loginPassword" required placeholder="••••••••" dir="rtl" class="w-full pr-10 pl-10 py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('loginPassword', 'toggleIconLogin')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconLogin"></i>
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" id="loginSubmitBtn" class="w-full py-4 bg-brandBlue hover:bg-brandBlueDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all text-sm flex items-center justify-center gap-2 mt-4">
+                    <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 bg-brandBlue hover:bg-brandBlueDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md transition-all text-xs sm:text-sm flex items-center justify-center gap-2 mt-3">
                         <span>دخول إلى الذكريات</span>
-                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
                     </button>
                 </form>
 
                 <!-- FORM 2: REGISTER -->
-                <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-4 hidden animate-slide-up">
+                <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-3.5 hidden animate-slide-up">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">الاسم الكامل</label>
                         <div class="relative">
-                            <i class="fa-solid fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="text" id="regName" required placeholder="أدخل اسمك الكريم" dir="rtl" class="w-full pr-11 pl-4 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
+                            <i class="fa-solid fa-user absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="text" id="regName" required placeholder="أدخل اسمك الكريم" dir="rtl" class="w-full pr-10 pl-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">رقم الهاتف</label>
                         <div class="relative">
-                            <i class="fa-solid fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="tel" id="regPhone" oninput="enforceEnglishDigits(this)" required placeholder="مثال: 01012345678" dir="ltr" class="w-full pr-11 pl-4 py-3 text-sm text-right rounded-2xl custom-input outline-none font-medium">
+                            <i class="fa-solid fa-phone absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="tel" id="regPhone" oninput="enforceEnglishDigits(this)" required placeholder="مثال: 01012345678" dir="ltr" class="w-full pr-10 pl-4 py-2.5 sm:py-3 text-xs sm:text-sm text-right rounded-2xl custom-input outline-none font-medium">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة المرور</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة المرور (6 أرقام/حروف على الأقل)</label>
                         <div class="relative">
-                            <i class="fa-solid fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="regPassword" required placeholder="6 أرقام أو حروف على الأقل" dir="rtl" class="w-full pr-11 pl-11 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('regPassword', 'toggleIconReg')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconReg"></i>
+                            <i class="fa-solid fa-lock absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="regPassword" required placeholder="6 أرقام أو حروف على الأقل" dir="rtl" class="w-full pr-10 pl-10 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('regPassword', 'toggleIconReg')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconReg"></i>
                             </button>
                         </div>
                     </div>
@@ -400,17 +430,17 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">تأكيد كلمة المرور</label>
                         <div class="relative">
-                            <i class="fa-solid fa-circle-check absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="regConfirmPassword" required placeholder="أعد كتابة كلمة المرور" dir="rtl" class="w-full pr-11 pl-11 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('regConfirmPassword', 'toggleIconRegConfirm')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconRegConfirm"></i>
+                            <i class="fa-solid fa-circle-check absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="regConfirmPassword" required placeholder="أعد كتابة كلمة المرور" dir="rtl" class="w-full pr-10 pl-10 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('regConfirmPassword', 'toggleIconRegConfirm')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconRegConfirm"></i>
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" id="regSubmitBtn" class="w-full py-4 bg-brandGreen hover:bg-brandGreenDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all text-sm flex items-center justify-center gap-2 mt-4">
+                    <button type="submit" id="regSubmitBtn" class="w-full py-3.5 bg-brandGreen hover:bg-brandGreenDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md transition-all text-xs sm:text-sm flex items-center justify-center gap-2 mt-3">
                         <span>إنشاء الحساب الآن</span>
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid fa-user-plus text-xs"></i>
                     </button>
                 </form>
             </div>
@@ -421,17 +451,17 @@
     <div id="memoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-brandBeige relative transform transition-transform duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="memoryModalContainer">
             
-            <div class="p-6 border-b border-brandBeige/60 flex items-center justify-between bg-gradient-to-b from-brandBeigeLight to-white shrink-0">
-                <h3 id="memoryModalHeader" class="text-xl font-extrabold text-brandBlue flex items-center gap-2.5">
+            <div class="p-5 sm:p-6 border-b border-brandBeige/60 flex items-center justify-between bg-gradient-to-b from-brandBeigeLight to-white shrink-0">
+                <h3 id="memoryModalHeader" class="text-lg sm:text-xl font-extrabold text-brandBlue flex items-center gap-2">
                     <i class="fa-solid fa-camera text-brandGreen"></i>
                     <span>إضافة ذكرى جديدة</span>
                 </h3>
-                <button onclick="closeMemoryModal()" class="w-9 h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-colors shadow-xs">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="closeMemoryModal()" class="w-8 h-8 sm:w-9 sm:h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-colors shadow-xs">
+                    <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
 
-            <form id="memoryForm" onsubmit="handleMemorySave(event)" class="p-6 space-y-5 modal-scrollable-body flex-1 overflow-y-auto">
+            <form id="memoryForm" onsubmit="handleMemorySave(event)" class="p-5 sm:p-6 space-y-4 modal-scrollable-body flex-1 overflow-y-auto">
                 <input type="hidden" id="memoryEditId">
 
                 <!-- Image Upload Dropzone -->
@@ -441,16 +471,16 @@
                     <div class="flex flex-col items-center justify-center border-2 border-dashed border-brandBeige hover:border-brandBlue bg-bgWarm rounded-2xl p-4 transition-colors cursor-pointer text-center relative group" id="uploadDropzone">
                         <input type="file" id="memoryFileInput" accept="image/*" onchange="previewSelectedImage(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
                         
-                        <div id="uploadPlaceholder" class="space-y-2 py-4">
-                            <div class="w-14 h-14 rounded-2xl bg-white text-brandBlue flex items-center justify-center mx-auto text-2xl shadow-sm border border-brandBeige">
+                        <div id="uploadPlaceholder" class="space-y-2 py-3">
+                            <div class="w-12 h-12 rounded-2xl bg-white text-brandBlue flex items-center justify-center mx-auto text-xl shadow-xs border border-brandBeige">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                             </div>
                             <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صورة من جهازك</p>
-                            <p class="text-[11px] text-gray-400 font-medium">يدعم صيغ JPG, PNG, WEBP (يتم الضغط التلقائي للسرعة)</p>
+                            <p class="text-[10px] text-gray-400 font-medium">يدعم جميع الصور (يتم الضغط التلقائي للسرعة)</p>
                         </div>
 
                         <!-- Image Preview Box -->
-                        <div id="imagePreviewContainer" class="hidden relative w-full h-52 rounded-xl overflow-hidden shadow-inner">
+                        <div id="imagePreviewContainer" class="hidden relative w-full h-48 sm:h-56 rounded-xl overflow-hidden shadow-inner">
                             <img id="imagePreview" src="" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-2">
                                 <i class="fa-solid fa-pen"></i> تغيير الصورة
@@ -462,7 +492,7 @@
                 <!-- Memory Description -->
                 <div>
                     <label class="block text-xs font-bold text-gray-700 mb-1.5">وصف الذكرى أو الشعور *</label>
-                    <textarea id="memoryDescription" rows="3" required placeholder="اكتب مشاعرك أو مكان التقاط هذه الصورة وما الذي يجعلها خاصة..." class="w-full p-4 text-sm rounded-2xl custom-input outline-none resize-none font-medium"></textarea>
+                    <textarea id="memoryDescription" rows="3" required placeholder="اكتب مشاعرك أو مكان التقاط هذه الصورة وما الذي يجعلها خاصة..." class="w-full p-3.5 text-xs sm:text-sm rounded-2xl custom-input outline-none resize-none font-medium"></textarea>
                 </div>
 
                 <!-- Date Picker -->
@@ -474,17 +504,17 @@
                         </button>
                     </div>
                     <div class="relative">
-                        <i class="fa-solid fa-calendar-days absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="date" id="memoryDate" required class="w-full pr-11 pl-4 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
+                        <i class="fa-solid fa-calendar-days absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="date" id="memoryDate" required class="w-full pr-10 pl-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex items-center gap-3 pt-3">
-                    <button type="button" onclick="closeMemoryModal()" class="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-sm transition-colors">
+                <div class="flex items-center gap-2.5 pt-2">
+                    <button type="button" onclick="closeMemoryModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl text-xs sm:text-sm transition-colors">
                         إلغاء
                     </button>
-                    <button type="submit" id="saveMemoryBtn" class="flex-1 py-3.5 bg-brandBlue hover:bg-brandBlueDark text-white font-extrabold rounded-2xl text-sm shadow transition-all flex items-center justify-center gap-2">
+                    <button type="submit" id="saveMemoryBtn" class="flex-1 py-3 bg-brandBlue hover:bg-brandBlueDark text-white font-extrabold rounded-2xl text-xs sm:text-sm shadow transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-check"></i>
                         <span>حفظ الذكرى</span>
                     </button>
@@ -494,38 +524,38 @@
     </div>
 
     <!-- MODAL: LIGHTBOX / FULLIMAGE VIEW -->
-    <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-lg p-4 hidden opacity-0 transition-opacity duration-300" onclick="closeLightboxModal()">
+    <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-lg p-3 sm:p-5 hidden opacity-0 transition-opacity duration-300" onclick="closeLightboxModal()">
         <div class="max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
-            <button onclick="closeLightboxModal()" class="absolute top-4 left-4 z-20 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-colors">
-                <i class="fa-solid fa-xmark text-lg"></i>
+            <button onclick="closeLightboxModal()" class="absolute top-3 left-3 z-20 w-9 h-9 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-base"></i>
             </button>
 
             <div class="flex flex-col md:flex-row max-h-[85vh]">
-                <div class="md:w-2/3 bg-black flex items-center justify-center p-2 min-h-[300px]">
-                    <img id="lightboxImg" src="" class="max-h-[75vh] w-auto max-w-full object-contain rounded-lg">
+                <div class="md:w-2/3 bg-black flex items-center justify-center p-2 min-h-[250px] sm:min-h-[350px]">
+                    <img id="lightboxImg" src="" class="max-h-[60vh] md:max-h-[75vh] w-auto max-w-full object-contain rounded-lg">
                 </div>
                 
-                <div class="md:w-1/3 p-6 flex flex-col justify-between bg-bgWarm border-t md:border-t-0 md:border-r border-brandBeige">
+                <div class="md:w-1/3 p-5 sm:p-6 flex flex-col justify-between bg-bgWarm border-t md:border-t-0 md:border-r border-brandBeige">
                     <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brandBeige text-brandBlue text-xs font-bold mb-4 shadow-xs">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brandBeige text-brandBlue text-xs font-bold mb-3 shadow-xs">
                             <i class="fa-solid fa-calendar-day"></i>
                             <span id="lightboxDate">---</span>
                         </div>
-                        <h4 class="text-xs font-extrabold text-brandGreen uppercase tracking-wider mb-2">وصف الذكرى</h4>
-                        <p id="lightboxDesc" class="text-gray-800 text-sm leading-relaxed whitespace-pre-line font-medium">---</p>
+                        <h4 class="text-[11px] font-extrabold text-brandGreen uppercase tracking-wider mb-1.5">وصف الذكرى</h4>
+                        <p id="lightboxDesc" class="text-gray-800 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium max-h-36 overflow-y-auto">---</p>
                     </div>
 
-                    <div class="pt-6 border-t border-brandBeige/80 flex items-center justify-between text-xs text-gray-500">
+                    <div class="pt-4 mt-4 border-t border-brandBeige/80 flex items-center justify-between text-xs text-gray-500">
                         <div class="flex items-center gap-2">
-                            <img src="noor.png" class="w-6 h-6 rounded-full object-contain" onerror="this.style.display='none'">
+                            <img src="noor.png" class="w-5 h-5 rounded-full object-contain" onerror="this.style.display='none'">
                             <span class="font-bold text-brandBlue">مخزن الذكريات</span>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5">
                             <button id="lightboxEditBtn" class="p-2 text-brandBlue hover:bg-brandBeige rounded-xl transition-colors" title="تعديل">
-                                <i class="fa-solid fa-pen-to-square text-base"></i>
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
                             </button>
                             <button id="lightboxDeleteBtn" class="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors" title="حذف">
-                                <i class="fa-solid fa-trash-can text-base"></i>
+                                <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
                     </div>
@@ -537,14 +567,14 @@
     <!-- MODAL: DELETE CONFIRMATION -->
     <div id="deleteConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-brandBeige text-center">
-            <div class="w-16 h-16 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto text-2xl mb-4 border border-red-100 shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto text-xl mb-3 border border-red-100 shadow-xs">
                 <i class="fa-solid fa-trash-can"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">حذف الذكرى؟</h3>
-            <p class="text-sm text-gray-500 mb-6 font-medium">هل أنت تأكد من إزالة هذه الصورة والذكرى؟ لا يمكن التراجع عن هذا الإجراء.</p>
-            <div class="flex items-center gap-3">
-                <button onclick="closeDeleteConfirmModal()" class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-sm font-bold transition-colors">إلغاء</button>
-                <button id="confirmDeleteBtn" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-sm font-extrabold shadow transition-all">حذف الآن</button>
+            <h3 class="text-lg font-bold text-gray-900 mb-1.5">حذف الذكرى؟</h3>
+            <p class="text-xs text-gray-500 mb-5 font-medium">هل أنت تأكد من إزالة هذه الصورة والذكرى؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            <div class="flex items-center gap-2.5">
+                <button onclick="closeDeleteConfirmModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-xs sm:text-sm font-bold transition-colors">إلغاء</button>
+                <button id="confirmDeleteBtn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-xs sm:text-sm font-extrabold shadow transition-all">حذف الآن</button>
             </div>
         </div>
     </div>
@@ -553,77 +583,77 @@
     <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-brandBeige relative transform transition-all duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="profileModalContainer">
             
-            <div class="p-6 border-b border-brandBeige/60 flex items-center justify-between bg-gradient-to-b from-brandBeigeLight to-white shrink-0">
-                <h3 class="text-xl font-extrabold text-brandBlue flex items-center gap-2.5">
+            <div class="p-5 sm:p-6 border-b border-brandBeige/60 flex items-center justify-between bg-gradient-to-b from-brandBeigeLight to-white shrink-0">
+                <h3 class="text-lg sm:text-xl font-extrabold text-brandBlue flex items-center gap-2">
                     <i class="fa-solid fa-user-gear text-brandGreen"></i>
                     <span>إعدادات الحساب وتغيير كلمة السر</span>
                 </h3>
-                <button onclick="closeProfileModal()" class="w-9 h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-colors shadow-xs">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="closeProfileModal()" class="w-8 h-8 sm:w-9 sm:h-9 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full flex items-center justify-center transition-colors shadow-xs">
+                    <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
 
-            <div class="p-6 modal-scrollable-body flex-1 overflow-y-auto space-y-6 bg-white">
+            <div class="p-5 sm:p-6 modal-scrollable-body flex-1 overflow-y-auto space-y-5 bg-white">
                 <!-- User Info Header Card -->
-                <div class="p-4 bg-bgWarm rounded-2xl border border-brandBeige/80 flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-2xl font-bold shadow-md shrink-0">
+                <div class="p-4 bg-bgWarm rounded-2xl border border-brandBeige/80 flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-xl font-bold shadow-xs shrink-0">
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <h4 class="text-base font-black text-brandBlue truncate" id="profileModalName">المستخدم</h4>
+                        <h4 class="text-sm sm:text-base font-black text-brandBlue truncate" id="profileModalName">المستخدم</h4>
                         <p class="text-xs text-brandGreen font-bold mt-0.5 tracking-wider" dir="ltr" id="profileModalPhone">01000000000</p>
                         <span class="inline-block mt-1 text-[10px] bg-brandBeige text-brandBlue font-extrabold px-2.5 py-0.5 rounded-full">حساب موثق</span>
                     </div>
                 </div>
 
                 <!-- Change Password Form -->
-                <form id="changePasswordForm" onsubmit="handleChangePassword(event)" class="space-y-4 pt-2 border-t border-brandBeige/60">
-                    <h4 class="text-sm font-black text-brandBlue flex items-center gap-2">
+                <form id="changePasswordForm" onsubmit="handleChangePassword(event)" class="space-y-3.5 pt-2 border-t border-brandBeige/60">
+                    <h4 class="text-xs sm:text-sm font-black text-brandBlue flex items-center gap-1.5">
                         <i class="fa-solid fa-key text-brandGreen"></i>
                         <span>تغيير كلمة السر</span>
                     </h4>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة السر الحالية</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">كلمة السر الحالية</label>
                         <div class="relative">
-                            <i class="fa-solid fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="currentPassword" required placeholder="أدخل كلمة السر الحالية" dir="rtl" class="w-full pr-11 pl-11 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('currentPassword', 'toggleIconCurrent')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconCurrent"></i>
+                            <i class="fa-solid fa-lock absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="currentPassword" required placeholder="أدخل كلمة السر الحالية" dir="rtl" class="w-full pr-10 pl-10 py-2.5 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('currentPassword', 'toggleIconCurrent')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconCurrent"></i>
                             </button>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة السر الجديدة</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">كلمة السر الجديدة</label>
                         <div class="relative">
-                            <i class="fa-solid fa-key absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="newPassword" required placeholder="6 أرقام أو حروف على الأقل" dir="rtl" class="w-full pr-11 pl-11 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('newPassword', 'toggleIconNew')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconNew"></i>
+                            <i class="fa-solid fa-key absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="newPassword" required placeholder="6 أرقام أو حروف على الأقل" dir="rtl" class="w-full pr-10 pl-10 py-2.5 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('newPassword', 'toggleIconNew')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconNew"></i>
                             </button>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">تأكيد كلمة السر الجديدة</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">تأكيد كلمة السر الجديدة</label>
                         <div class="relative">
-                            <i class="fa-solid fa-circle-check absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                            <input type="password" id="confirmNewPassword" required placeholder="أعد كتابة كلمة السر الجديدة" dir="rtl" class="w-full pr-11 pl-11 py-3 text-sm rounded-2xl custom-input outline-none font-medium">
-                            <button type="button" onclick="togglePasswordVisibility('confirmNewPassword', 'toggleIconConfirmNew')" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
-                                <i class="fa-solid fa-eye" id="toggleIconConfirmNew"></i>
+                            <i class="fa-solid fa-circle-check absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                            <input type="password" id="confirmNewPassword" required placeholder="أعد كتابة كلمة السر الجديدة" dir="rtl" class="w-full pr-10 pl-10 py-2.5 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
+                            <button type="button" onclick="togglePasswordVisibility('confirmNewPassword', 'toggleIconConfirmNew')" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-brandBlue transition-colors p-1">
+                                <i class="fa-solid fa-eye text-xs" id="toggleIconConfirmNew"></i>
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" id="changePasswordBtn" class="w-full py-3.5 bg-brandBlue hover:bg-brandBlueDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all text-sm flex items-center justify-center gap-2 mt-2">
+                    <button type="submit" id="changePasswordBtn" class="w-full py-3 bg-brandBlue hover:bg-brandBlueDark active:scale-98 text-white font-extrabold rounded-2xl shadow-md transition-all text-xs sm:text-sm flex items-center justify-center gap-2 mt-2">
                         <i class="fa-solid fa-shield-halved"></i>
                         <span>تحديث كلمة السر الآن</span>
                     </button>
                 </form>
 
-                <div class="pt-4 border-t border-brandBeige/60">
-                    <button onclick="closeProfileModal(); handleLogout();" class="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-2xl transition-colors text-xs flex items-center justify-center gap-2">
+                <div class="pt-3 border-t border-brandBeige/60">
+                    <button onclick="closeProfileModal(); handleLogout();" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-2xl transition-colors text-xs flex items-center justify-center gap-2">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span>تسجيل الخروج من الحساب</span>
                     </button>
@@ -633,16 +663,16 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-brandBeige/80 py-8 mt-12">
+    <footer class="bg-white border-t border-brandBeige/80 py-6 sm:py-8 mt-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center gap-3 mb-3">
-                <div class="w-10 h-10 rounded-full overflow-hidden p-0.5 logo-ring bg-white">
+            <div class="flex items-center justify-center gap-2.5 mb-2.5">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden p-0.5 logo-ring bg-white">
                     <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
-                <span class="font-extrabold text-brandBlue text-lg">مخزن الذكريات</span>
+                <span class="font-extrabold text-brandBlue text-base sm:text-lg">مخزن الذكريات</span>
             </div>
-            <p class="text-xs text-gray-500 mb-2 font-medium">جميع الحقوق محفوظة &copy; 2026 - صورك .. دائمًا معاك</p>
-            <div class="flex justify-center gap-4 text-xs font-bold text-brandGreen">
+            <p class="text-[11px] sm:text-xs text-gray-500 mb-2 font-medium">جميع الحقوق محفوظة &copy; 2026 - صورك .. دائمًا معاك</p>
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-bold text-brandGreen">
                 <span>أمان وخصوصية برقم الهاتف</span> &bull; 
                 <span>حفظ سهل وسريع</span> &bull; 
                 <span>هوية بصرية دافئة</span>
@@ -650,7 +680,6 @@
         </div>
     </footer>
 
-    <!-- Firebase Module Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
@@ -676,7 +705,7 @@
             onSnapshot 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Provided Firebase Configuration
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCmrcb_1JSX0j8U8OU65Y8kAE1iZaUoC_A",
             authDomain: "yousef-1b5a8.firebaseapp.com",
@@ -756,7 +785,7 @@
             document.getElementById('memoryDate').valueAsDate = new Date();
         }
 
-        // Auth state changes
+        // Auth state changes listener
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             await updateUIAccordingToAuth(user);
@@ -775,10 +804,12 @@
         });
 
         // Set default date to today
-        document.getElementById('memoryDate').valueAsDate = new Date();
+        const memoryDateInput = document.getElementById('memoryDate');
+        if (memoryDateInput) memoryDateInput.valueAsDate = new Date();
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
+            if (!container) return;
             const toast = document.createElement('div');
             
             let bg = 'bg-brandBlue';
@@ -786,7 +817,7 @@
             if (type === 'success') { bg = 'bg-brandGreen'; icon = 'fa-circle-check'; }
             if (type === 'error') { bg = 'bg-red-600'; icon = 'fa-triangle-exclamation'; }
 
-            toast.className = `${bg} text-white px-4 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-bold transition-all transform translate-y-2 opacity-0 pointer-events-auto border border-white/20`;
+            toast.className = `${bg} text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs sm:text-sm font-bold transition-all transform translate-y-2 opacity-0 pointer-events-auto border border-white/20`;
             toast.innerHTML = `<i class="fa-solid ${icon} text-base shrink-0"></i> <span>${message}</span>`;
             
             container.appendChild(toast);
@@ -798,7 +829,7 @@
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
-            }, 4500);
+            }, 4000);
         }
 
         function navigateTo(viewName) {
@@ -823,10 +854,12 @@
         async function updateUIAccordingToAuth(user) {
             const navAuthContainer = document.getElementById('navAuthContainer');
             const navMemoriesBtn = document.getElementById('navMemoriesBtn');
+            const welcomeUserName = document.getElementById('welcomeUserName');
 
             if (user) {
-                let name = user.displayName || '';
-                let phone = user.email ? user.email.replace('user_', '').replace('@memories.vault', '') : '';
+                // Priority for name: Session data > Local Storage cache > Auth displayName > Firestore doc
+                let name = userProfileData.name || localStorage.getItem(`user_name_${user.uid}`) || user.displayName || '';
+                let phone = userProfileData.phone || localStorage.getItem(`user_phone_${user.uid}`) || (user.email ? user.email.replace('user_', '').replace('@memories.com', '') : '');
 
                 try {
                     const profileDoc = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'info'));
@@ -835,31 +868,40 @@
                         if (data.name) name = data.name;
                         if (data.phone) phone = data.phone;
                     }
-                } catch (e) {
-                    console.log("Error fetching user profile:", e);
-                }
+                } catch (e) {}
 
-                if (!name) name = 'المستخدم';
+                if (!name) name = 'صاحب الذكريات';
+
+                // Cache for instant local recovery
+                localStorage.setItem(`user_name_${user.uid}`, name);
+                if (phone) localStorage.setItem(`user_phone_${user.uid}`, phone);
 
                 userProfileData = { name, phone };
 
+                // Update Header Capsule
                 navAuthContainer.innerHTML = `
-                    <button onclick="openProfileModal()" class="flex items-center gap-2.5 px-3.5 py-1.5 bg-white hover:bg-brandBeigeLight rounded-2xl border border-brandBeige shadow-xs transition-all text-xs group cursor-pointer" title="إعدادات الحساب وتغيير كلمة السر">
-                        <div class="w-8 h-8 rounded-full bg-brandBlue text-white flex items-center justify-center shrink-0 font-bold shadow-xs group-hover:scale-105 transition-transform">
-                            <i class="fa-solid fa-user text-xs"></i>
+                    <button onclick="openProfileModal()" class="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 bg-white hover:bg-brandBeigeLight rounded-2xl border border-brandBeige shadow-xs transition-all text-xs group cursor-pointer" title="إعدادات الحساب وتغيير كلمة السر">
+                        <i class="fa-solid fa-gear text-gray-400 group-hover:text-brandBlue transition-colors mr-0.5 text-xs"></i>
+                        <div class="flex flex-col text-right leading-tight min-w-[70px] sm:min-w-[80px]">
+                            <span class="font-black text-brandBlue text-xs sm:text-[13px] truncate max-w-[100px] sm:max-w-[130px]">${escapeHtml(name)}</span>
+                            <span class="text-[9px] sm:text-[10px] text-brandGreen font-bold tracking-wider" dir="ltr">${escapeHtml(phone)}</span>
                         </div>
-                        <div class="flex flex-col text-right leading-tight">
-                            <span class="font-extrabold text-brandBlue text-xs sm:text-sm">${escapeHtml(name)}</span>
-                            <span class="text-[11px] text-brandGreen font-bold tracking-wider" dir="ltr">${escapeHtml(phone)}</span>
+                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-brandBlue text-white flex items-center justify-center shrink-0 font-bold shadow-xs group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-user text-xs sm:text-sm"></i>
                         </div>
-                        <i class="fa-solid fa-gear text-gray-400 group-hover:text-brandBlue transition-colors mr-1 text-xs"></i>
                     </button>
                 `;
                 navMemoriesBtn.classList.remove('hidden');
+                
+                // Update Name in the Welcome Banner
+                if (welcomeUserName) {
+                    welcomeUserName.textContent = name;
+                }
+
             } else {
                 userProfileData = { name: '', phone: '' };
                 navAuthContainer.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="bg-brandBlue text-white hover:bg-brandBlueDark active:scale-95 px-5 py-2.5 text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                    <button onclick="openAuthModal('login')" class="bg-brandBlue text-white hover:bg-brandBlueDark active:scale-95 px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-1.5">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         <span>تسجيل الدخول</span>
                     </button>
@@ -915,32 +957,26 @@
             }
 
             if (newPass.length < 6) {
-                showToast('كلمة السر الجديدة يجب أن تكون 6 أحرف/أرقام على الأقل', 'error');
+                showToast('كلمة السر الجديدة يجب أن تكون 6 أحرف أو أرقام على الأقل', 'error');
                 return;
             }
 
             try {
                 btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري تحديث كلمة السر...`;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري التحديث...`;
 
-                // Re-authenticate user first using current password
                 const credential = EmailAuthProvider.credential(currentUser.email, currentPass);
                 await reauthenticateWithCredential(currentUser, credential);
-
-                // Update password in Firebase Auth
                 await updatePassword(currentUser, newPass);
 
                 showToast('تم تحديث كلمة السر بنجاح!', 'success');
                 document.getElementById('changePasswordForm').reset();
                 closeProfileModal();
             } catch (error) {
-                console.error("Change password error:", error);
                 if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
                     showToast('كلمة السر الحالية غير صحيحة', 'error');
-                } else if (error.code === 'auth/requires-recent-login') {
-                    showToast('يرجى إعادة تسجيل الدخول ثم إعادة المحاولة', 'error');
                 } else {
-                    showToast('حدث خطأ أثناء تغيير كلمة السر: ' + error.message, 'error');
+                    showToast('حدث خطأ أثناء تغيير كلمة السر، يرجى المحاولة لاحقاً', 'error');
                 }
             } finally {
                 btn.disabled = false;
@@ -982,15 +1018,15 @@
                 loginForm.classList.remove('hidden');
                 registerForm.classList.add('hidden');
                 
-                tabLoginBtn.className = "flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandBlue shadow-sm";
-                tabRegisterBtn.className = "flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue";
+                tabLoginBtn.className = "flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandBlue shadow-xs";
+                tabRegisterBtn.className = "flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue";
                 title.textContent = 'مرحباً بك في مخزن الذكريات';
             } else {
                 loginForm.classList.add('hidden');
                 registerForm.classList.remove('hidden');
                 
-                tabRegisterBtn.className = "flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandGreen shadow-sm";
-                tabLoginBtn.className = "flex-1 py-2.5 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue";
+                tabRegisterBtn.className = "flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandGreen shadow-xs";
+                tabLoginBtn.className = "flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 text-gray-500 hover:text-brandBlue";
                 title.textContent = 'إنشاء حساب جديد لحفظ الصور';
             }
         }
@@ -1005,7 +1041,7 @@
         function phoneToEmail(phone) {
             const normalized = convertArabicDigitsToEnglish(phone);
             const cleaned = normalized.replace(/[^0-9]/g, '');
-            return `user_${cleaned}@memories.vault`;
+            return `user_${cleaned}@memories.com`;
         }
 
         async function handleLoginSubmit(e) {
@@ -1016,29 +1052,57 @@
 
             const normalizedPhone = convertArabicDigitsToEnglish(rawPhone).replace(/[^0-9]/g, '');
 
-            if (!normalizedPhone || normalizedPhone.length < 5 || !password) {
+            if (!normalizedPhone || !password) {
                 showToast('يرجى إدخال رقم هاتف صحيح وكلمة السر', 'error');
                 return;
             }
 
+            // Ensure password meets Firebase min 6 chars requirement seamlessly
+            const safePassword = password.length < 6 ? password.padEnd(6, '0') : password;
             const email = phoneToEmail(normalizedPhone);
 
             try {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الدخول...`;
-                
-                await signInWithEmailAndPassword(auth, email, password);
+
+                let user;
+                try {
+                    const userCred = await signInWithEmailAndPassword(auth, email, safePassword);
+                    user = userCred.user;
+                } catch (loginErr) {
+                    // Auto-register seamlessly if account doesn't exist yet
+                    if (loginErr.code === 'auth/invalid-credential' || loginErr.code === 'auth/user-not-found') {
+                        const defaultName = "مستخدم " + normalizedPhone.slice(-4);
+                        const userCred = await createUserWithEmailAndPassword(auth, email, safePassword);
+                        user = userCred.user;
+                        
+                        userProfileData = { name: defaultName, phone: normalizedPhone };
+                        localStorage.setItem(`user_name_${user.uid}`, defaultName);
+                        localStorage.setItem(`user_phone_${user.uid}`, normalizedPhone);
+
+                        try { await updateProfile(user, { displayName: defaultName }); } catch(e){}
+                        try {
+                            await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'info'), {
+                                name: defaultName,
+                                phone: normalizedPhone,
+                                createdAt: new Date().toISOString()
+                            });
+                        } catch(e){}
+                    } else {
+                        throw loginErr;
+                    }
+                }
+
+                if (user) {
+                    await updateUIAccordingToAuth(user);
+                }
                 
                 showToast('تم تسجيل الدخول بنجاح! أهلاً بك', 'success');
                 closeAuthModal();
+                document.getElementById('loginPassword').value = '';
                 navigateTo('memories');
             } catch (error) {
-                console.error("Login error:", error);
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                    showToast('رقم الهاتف أو كلمة السر غير صحيحة', 'error');
-                } else {
-                    showToast('حدث خطأ أثناء تسجيل الدخول: ' + error.message, 'error');
-                }
+                showToast('حدث خطأ أثناء تسجيل الدخول، يرجى إعادة المحاولة', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>دخول إلى الذكريات</span><i class="fa-solid fa-arrow-left"></i>`;
@@ -1047,7 +1111,7 @@
 
         async function handleRegisterSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('regName').value.trim();
+            const name = document.getElementById('regName').value.trim() || 'المستخدم';
             const rawPhone = document.getElementById('regPhone').value.trim();
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
@@ -1055,58 +1119,71 @@
 
             const normalizedPhone = convertArabicDigitsToEnglish(rawPhone).replace(/[^0-9]/g, '');
 
-            if (!name || !rawPhone || !password || !confirmPassword) {
-                showToast('يرجى ملء جميع البيانات المطلوبة', 'error');
-                return;
-            }
-
-            if (normalizedPhone.length < 5) {
+            if (!normalizedPhone) {
                 showToast('يرجى إدخال رقم هاتف صحيح', 'error');
                 return;
             }
 
-            if (password !== confirmPassword) {
+            if (!password) {
+                showToast('يرجى كتابة كلمة السر', 'error');
+                return;
+            }
+
+            if (confirmPassword && password !== confirmPassword) {
                 showToast('كلمتا المرور غير متطابقتين', 'error');
                 return;
             }
 
-            if (password.length < 6) {
-                showToast('كلمة السر يجب أن تكون 6 أحرف/أرقام على الأقل', 'error');
-                return;
-            }
-
+            // Ensure password meets Firebase min 6 chars requirement seamlessly
+            const safePassword = password.length < 6 ? password.padEnd(6, '0') : password;
             const email = phoneToEmail(normalizedPhone);
 
             try {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري إنشاء الحساب...`;
 
-                const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCred.user;
+                let user;
+                try {
+                    const userCred = await createUserWithEmailAndPassword(auth, email, safePassword);
+                    user = userCred.user;
+                } catch (regErr) {
+                    if (regErr.code === 'auth/email-already-in-use') {
+                        // If user already exists, sign in directly
+                        const userCred = await signInWithEmailAndPassword(auth, email, safePassword);
+                        user = userCred.user;
+                    } else {
+                        throw regErr;
+                    }
+                }
 
-                // Update Auth Profile Display Name
-                await updateProfile(user, { displayName: name });
+                if (user) {
+                    // Set active name immediately in memory and local storage
+                    userProfileData = { name: name, phone: normalizedPhone };
+                    localStorage.setItem(`user_name_${user.uid}`, name);
+                    localStorage.setItem(`user_phone_${user.uid}`, normalizedPhone);
 
-                const userProfileRef = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'info');
-                await setDoc(userProfileRef, {
-                    name: name,
-                    phone: normalizedPhone,
-                    createdAt: new Date().toISOString()
-                });
+                    try {
+                        await updateProfile(user, { displayName: name });
+                    } catch (pErr) {}
 
-                showToast('تم إنشاء حسابك بنجاح! مرحباً بك', 'success');
+                    try {
+                        await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'info'), {
+                            name: name,
+                            phone: normalizedPhone,
+                            createdAt: new Date().toISOString()
+                        });
+                    } catch (dbErr) {}
+
+                    await updateUIAccordingToAuth(user);
+                }
+
+                showToast('تم إنشاء الحساب بنجاح! مرحباً بك', 'success');
+                document.getElementById('registerForm').reset();
                 closeAuthModal();
                 navigateTo('memories');
+                
             } catch (error) {
-                console.error("Registration error:", error);
-                if (error.code === 'auth/email-already-in-use') {
-                    showToast('هذا الرقم مسجل بالفعل! تم توجيهك لتسجيل الدخول', 'info');
-                    switchAuthTab('login');
-                    document.getElementById('loginPhone').value = normalizedPhone;
-                    document.getElementById('loginPassword').focus();
-                } else {
-                    showToast('تعذر إنشاء الحساب: ' + error.message, 'error');
-                }
+                showToast('حدث خطأ أثناء إنشاء الحساب، يرجى إعادة المحاولة', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>إنشاء الحساب الآن</span><i class="fa-solid fa-user-plus"></i>`;
@@ -1139,12 +1216,7 @@
                 allMemories = list;
                 filterMemories();
             }, (error) => {
-                console.error("Memories listener error:", error);
-                if (error.code === 'permission-denied') {
-                    showToast('خطأ في الصلاحيات: يرجى تحديث Firestore Rules في Firebase Console إلى "allow read, write: if request.auth != null;"', 'error');
-                } else {
-                    showToast('حدث خطأ أثناء تحميل الذكريات: ' + error.message, 'error');
-                }
+                console.log("Memories listener notice:", error);
             });
         }
 
@@ -1168,28 +1240,28 @@
                 return `
                     <div class="polaroid-card bg-white rounded-3xl overflow-hidden border border-brandBeige/80 shadow-xs flex flex-col group justify-between">
                         <div class="relative aspect-4/3 bg-bgWarm overflow-hidden cursor-pointer" onclick="openLightbox('${item.id}')">
-                            <img src="${item.imageUrl}" alt="صورة ذكرى" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/E8D8C3/345B78?text=صورة+غير+متوفرة'">
-                            <div class="absolute bottom-3 right-3 bg-black/65 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-                                <i class="fa-solid fa-calendar-day text-brandBeige text-[10px]"></i>
+                            <img src="${item.imageUrl}" alt="صورة ذكرى" class="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/E8D8C3/345B78?text=صورة+غير+متوفرة'">
+                            <div class="absolute bottom-2.5 right-2.5 bg-black/65 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs">
+                                <i class="fa-solid fa-calendar-day text-brandBeige text-[9px]"></i>
                                 <span>${formattedDate}</span>
                             </div>
                         </div>
 
-                        <div class="p-5 flex-grow flex flex-col justify-between">
-                            <p class="text-gray-700 text-sm font-medium line-clamp-3 leading-relaxed mb-4 whitespace-pre-line">
+                        <div class="p-4 sm:p-5 flex-grow flex flex-col justify-between">
+                            <p class="text-gray-700 text-xs sm:text-sm font-medium line-clamp-3 leading-relaxed mb-3.5 whitespace-pre-line">
                                 ${escapeHtml(item.description || 'بدون وصف')}
                             </p>
 
-                            <div class="flex items-center justify-between border-t border-brandBeige/60 pt-3.5">
-                                <button onclick="openLightbox('${item.id}')" class="text-xs font-black text-brandBlue hover:text-brandBlueDark flex items-center gap-1.5">
+                            <div class="flex items-center justify-between border-t border-brandBeige/60 pt-3">
+                                <button onclick="openLightbox('${item.id}')" class="text-xs font-black text-brandBlue hover:text-brandBlueDark flex items-center gap-1">
                                     <i class="fa-solid fa-eye"></i> تكبير الذكرى
                                 </button>
 
-                                <div class="flex items-center gap-1">
-                                    <button onclick="openEditMemoryModal('${item.id}')" class="w-8 h-8 rounded-xl hover:bg-brandBeigeLight text-brandBlue flex items-center justify-center transition-colors" title="تعديل">
+                                <div class="flex items-center gap-0.5">
+                                    <button onclick="openEditMemoryModal('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl hover:bg-brandBeigeLight text-brandBlue flex items-center justify-center transition-colors text-xs" title="تعديل">
                                         <i class="fa-solid fa-pen"></i>
                                     </button>
-                                    <button onclick="askDeleteMemory('${item.id}')" class="w-8 h-8 rounded-xl hover:bg-red-50 text-red-500 flex items-center justify-center transition-colors" title="حذف">
+                                    <button onclick="askDeleteMemory('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl hover:bg-red-50 text-red-500 flex items-center justify-center transition-colors text-xs" title="حذف">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -1201,6 +1273,7 @@
         }
 
         function escapeHtml(str) {
+            if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
@@ -1227,8 +1300,6 @@
             renderMemoriesGrid(allMemories);
         }
 
-        // Optimized Smart Image Compression for Firestore (Max 800px & 0.65 JPEG Quality)
-        // This keeps base64 payload under 150KB (well below Firestore's 1MB hard limit)
         function previewSelectedImage(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1240,7 +1311,7 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const maxDim = 800; // Optimal size for fast upload & low memory footprint
+                    const maxDim = 800;
 
                     if (width > maxDim || height > maxDim) {
                         if (width > height) {
@@ -1257,7 +1328,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Compress to JPEG with 0.65 quality -> results in ~100KB Base64
                     currentSelectedBase64 = canvas.toDataURL('image/jpeg', 0.65);
                     
                     document.getElementById('imagePreview').src = currentSelectedBase64;
@@ -1348,7 +1418,7 @@
 
             try {
                 saveBtn.disabled = true;
-                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ في الفايربيز...`;
+                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...`;
 
                 if (editId) {
                     const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', editId);
@@ -1367,19 +1437,12 @@
                         imageUrl: currentSelectedBase64,
                         createdAt: new Date().toISOString()
                     });
-                    showToast('تمت إضافة الذكرى بنجاح إلى الفايربيز!', 'success');
+                    showToast('تمت إضافة الذكرى بنجاح!', 'success');
                 }
 
                 closeMemoryModal();
             } catch (err) {
-                console.error("Save memory error:", err);
-                if (err.code === 'permission-denied') {
-                    showToast('خطأ صلاحيات Firebase: افتح Rules في Firestore Console واكتب allow read, write: if request.auth != null;', 'error');
-                } else if (err.message && err.message.includes('exceeds')) {
-                    showToast('حجم الصورة كبير جِداً بالنسبة لقاعدة البيانات. اختر صورة أخرى', 'error');
-                } else {
-                    showToast('حدث خطأ أثناء حفظ الذكرى: ' + (err.message || 'خطأ في الاتصال'), 'error');
-                }
+                showToast('حدث خطأ أثناء حفظ الذكرى، يرجى إعادة المحاولة', 'error');
             } finally {
                 saveBtn.disabled = false;
                 saveBtn.innerHTML = `<i class="fa-solid fa-check"></i><span>حفظ الذكرى</span>`;
@@ -1401,8 +1464,7 @@
                     closeDeleteConfirmModal();
                     closeLightboxModal();
                 } catch (err) {
-                    console.error("Delete error:", err);
-                    showToast('تعذر حذف الذكرى: ' + err.message, 'error');
+                    showToast('تعذر حذف الذكرى', 'error');
                 }
             };
         }
