@@ -1016,6 +1016,68 @@
             }, 300);
         }
 
+        function openAddMemoryModal() {
+            if (!currentUser) {
+                openAuthModal('login');
+                return;
+            }
+            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة ذكرى جديدة</span>`;
+            document.getElementById('saveBtnText').textContent = 'حفظ الذكرى';
+            document.getElementById('memoryEditId').value = '';
+            document.getElementById('memoryDescription').value = '';
+            setTodayDate();
+            currentSelectedBase64List = [];
+            renderPreviewThumbnails();
+
+            const uploadField = document.getElementById('uploadFieldContainer');
+            if (uploadField) uploadField.classList.remove('hidden');
+
+            const modal = document.getElementById('memoryModal');
+            const container = document.getElementById('memoryModalContainer');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                container.classList.remove('scale-95');
+                container.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeMemoryModal() {
+            const modal = document.getElementById('memoryModal');
+            const container = document.getElementById('memoryModalContainer');
+            modal.classList.add('opacity-0');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                currentSelectedBase64List = [];
+                renderPreviewThumbnails();
+            }, 300);
+        }
+
+        function openEditMemoryModal(id) {
+            const memory = allMemories.find(m => m.id === id);
+            if (!memory) return;
+
+            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-pen text-brandBlue"></i><span>تعديل الذكرى</span>`;
+            document.getElementById('saveBtnText').textContent = 'حفظ التعديلات';
+            document.getElementById('memoryEditId').value = id;
+            document.getElementById('memoryDescription').value = memory.description || '';
+            document.getElementById('memoryDate').value = memory.date || '';
+
+            currentSelectedBase64List = memory.imageUrl ? [memory.imageUrl] : [];
+            renderPreviewThumbnails();
+
+            const modal = document.getElementById('memoryModal');
+            const container = document.getElementById('memoryModalContainer');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                container.classList.remove('scale-95');
+                container.classList.add('scale-100');
+            }, 10);
+        }
+
         async function handleChangePassword(e) {
             e.preventDefault();
             if (!currentUser) return;
@@ -1369,6 +1431,48 @@
             renderMemoriesGrid(allMemories);
         }
 
+        // High-Speed Parallel Image Compression
+        function fastCompressImage(file) {
+            return new Promise((resolve) => {
+                try {
+                    const objectUrl = URL.createObjectURL(file);
+                    const img = new Image();
+                    img.onload = () => {
+                        URL.revokeObjectURL(objectUrl);
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 720;
+
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d', { alpha: false });
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Lightweight 62% JPEG quality for blazing fast network speed and cloud storage
+                        resolve(canvas.toDataURL('image/jpeg', 0.62));
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(objectUrl);
+                        resolve(null);
+                    };
+                    img.src = objectUrl;
+                } catch (err) {
+                    resolve(null);
+                }
+            });
+        }
+
         async function previewSelectedImages(event) {
             const files = Array.from(event.target.files);
             if (!files.length) return;
@@ -1385,28 +1489,31 @@
             const initialText = saveBtn.innerHTML;
             saveBtn.disabled = true;
 
-            showToast(`جاري تجهيز وضغط ${files.length} صورة... يرجى الانتظار لحظات`, 'info');
+            showToast(`جاري تجهيز ${files.length} صورة بسرعة فائقة...`, 'info');
 
-            // Process with non-blocking async loops so UI stays smooth
-            for (let i = 0; i < files.length; i++) {
-                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> تجهيز (${i + 1}/${files.length})...`;
-                const base64 = await processAndCompressImage(files[i]);
-                currentSelectedBase64List.push(base64);
+            // Process in parallel batches of 8 for lightning performance
+            const batchSize = 8;
+            for (let i = 0; i < files.length; i += batchSize) {
+                const chunk = files.slice(i, i + batchSize);
+                const chunkResults = await Promise.all(chunk.map(f => fastCompressImage(f)));
                 
-                // Allow browser to breathe every few items
-                if (i % 5 === 0) {
-                    await new Promise(r => setTimeout(r, 10));
-                }
+                chunkResults.forEach(b64 => {
+                    if (b64) currentSelectedBase64List.push(b64);
+                });
+
+                const processed = Math.min(i + batchSize, files.length);
+                saveBtn.innerHTML = `<i class="fa-solid fa-bolt text-yellow-400 fa-spin"></i> تجهيز فائق (${processed}/${files.length})...`;
+                
+                // Keep UI fully responsive
+                await new Promise(r => setTimeout(r, 5));
             }
 
             saveBtn.disabled = false;
             saveBtn.innerHTML = initialText;
-
-            // Reset file input value so user can pick more if needed
             event.target.value = '';
 
             renderPreviewThumbnails();
-            showToast(`تم تجهيز جميع الصور (${currentSelectedBase64List.length} صورة) بنجاح!`, 'success');
+            showToast(`تم تجهيز (${currentSelectedBase64List.length}) صورة بنجاح وخلال ثوانٍ!`, 'success');
         }
 
         function renderPreviewThumbnails() {
@@ -1428,9 +1535,14 @@
 
             countBadge.textContent = `${currentSelectedBase64List.length} صور محددة`;
             countBadge.classList.remove('hidden');
-            saveBtnText.textContent = currentSelectedBase64List.length > 1 ? `حفظ (${currentSelectedBase64List.length}) صورة معاً` : 'حفظ الذكرى';
+            saveBtnText.textContent = currentSelectedBase64List.length > 1 ? `حفظ (${currentSelectedBase64List.length}) صورة فورا` : 'حفظ الذكرى';
 
-            previewGrid.innerHTML = currentSelectedBase64List.map((b64, idx) => `
+            // Render fast lightweight preview (first 20 images + counter if large set to prevent mobile freezing)
+            const maxVisibleThumbs = 24;
+            const visibleThumbs = currentSelectedBase64List.slice(0, maxVisibleThumbs);
+            const remainingCount = currentSelectedBase64List.length - maxVisibleThumbs;
+
+            let html = visibleThumbs.map((b64, idx) => `
                 <div class="relative aspect-square rounded-xl overflow-hidden shadow-xs border border-brandBeige group/thumb">
                     <img src="${b64}" class="w-full h-full object-cover">
                     <button type="button" onclick="removeSinglePreviewImage(${idx}, event)" class="absolute top-1 left-1 w-5 h-5 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[10px] shadow transition-transform active:scale-90 z-20" title="إزالة">
@@ -1439,6 +1551,17 @@
                     <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] px-1.5 rounded-full font-bold">${idx + 1}</span>
                 </div>
             `).join('');
+
+            if (remainingCount > 0) {
+                html += `
+                    <div class="aspect-square rounded-xl bg-brandBlue text-white flex flex-col items-center justify-center font-black text-xs shadow-xs border border-brandBlue/40">
+                        <span>+${remainingCount}</span>
+                        <span class="text-[9px] font-medium text-brandBeige">صورة إضافية</span>
+                    </div>
+                `;
+            }
+
+            previewGrid.innerHTML = html;
         }
 
         function removeSinglePreviewImage(index, event) {
@@ -1459,113 +1582,6 @@
             renderPreviewThumbnails();
         }
 
-        function processAndCompressImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = new Image();
-                    img.onload = function () {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-                        const maxDim = 850;
-
-                        if (width > maxDim || height > maxDim) {
-                            if (width > height) {
-                                height = Math.round((height * maxDim) / width);
-                                width = maxDim;
-                            } else {
-                                width = Math.round((width * maxDim) / height);
-                                height = maxDim;
-                            }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // High quality yet compact size (~70KB) to ensure reliable bulk uploads of 100s of photos
-                        resolve(canvas.toDataURL('image/jpeg', 0.68));
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function openAddMemoryModal() {
-            if (!currentUser) return;
-
-            document.getElementById('memoryEditId').value = '';
-            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة ذكريات جديدة</span>`;
-            document.getElementById('memoryForm').reset();
-            document.getElementById('memoryDate').valueAsDate = new Date();
-            
-            currentSelectedBase64List = [];
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            document.getElementById('imagePreviewContainer').classList.add('hidden');
-            document.getElementById('previewGrid').innerHTML = '';
-            document.getElementById('selectedImagesCountText').classList.add('hidden');
-            document.getElementById('saveBtnText').textContent = 'حفظ الذكرى';
-
-            // Reset progress bar
-            const progressContainer = document.getElementById('saveProgressBarContainer');
-            if (progressContainer) progressContainer.classList.add('hidden');
-
-            const modal = document.getElementById('memoryModal');
-            const container = document.getElementById('memoryModalContainer');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                container.classList.remove('scale-95');
-                container.classList.add('scale-100');
-            }, 10);
-        }
-
-        function openEditMemoryModal(id) {
-            const memory = allMemories.find(m => m.id === id);
-            if (!memory) return;
-
-            document.getElementById('memoryEditId').value = id;
-            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-pen-to-square text-brandBlue"></i><span>تعديل الذكرى</span>`;
-            document.getElementById('memoryDescription').value = memory.description || '';
-            document.getElementById('memoryDate').value = memory.date || '';
-
-            currentSelectedBase64List = [memory.imageUrl || ''];
-            const previewGrid = document.getElementById('previewGrid');
-            previewGrid.innerHTML = `
-                <div class="relative col-span-full h-44 rounded-xl overflow-hidden shadow-xs border border-brandBeige">
-                    <img src="${memory.imageUrl}" class="w-full h-full object-cover">
-                </div>
-            `;
-            document.getElementById('uploadPlaceholder').classList.add('hidden');
-            document.getElementById('imagePreviewContainer').classList.remove('hidden');
-            document.getElementById('selectedImagesCountText').classList.add('hidden');
-            document.getElementById('saveBtnText').textContent = 'تحديث الذكرى';
-
-            const modal = document.getElementById('memoryModal');
-            const container = document.getElementById('memoryModalContainer');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                container.classList.remove('scale-95');
-                container.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeMemoryModal() {
-            const modal = document.getElementById('memoryModal');
-            const container = document.getElementById('memoryModalContainer');
-            modal.classList.add('opacity-0');
-            container.classList.remove('scale-100');
-            container.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Helper: Upload a single image to Firestore with automatic retries
         async function uploadSingleImageWithRetry(colRef, payload, maxRetries = 3) {
             let attempt = 0;
             while (attempt < maxRetries) {
@@ -1575,11 +1591,9 @@
                 } catch (err) {
                     attempt++;
                     if (attempt >= maxRetries) {
-                        console.error("Failed to upload image after max retries:", err);
                         return false;
                     }
-                    // Wait with exponential backoff before retrying
-                    await new Promise(res => setTimeout(res, 500 * Math.pow(2, attempt)));
+                    await new Promise(res => setTimeout(res, 200 * attempt));
                 }
             }
             return false;
@@ -1624,7 +1638,7 @@
                     showToast('تم تحديث الذكرى بنجاح', 'success');
                     closeMemoryModal();
                 } else {
-                    // Multi-Image Resilient Upload
+                    // Turbo-Speed Parallel Uploads to Firebase
                     const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'memories');
                     
                     if (progressContainer) {
@@ -1633,13 +1647,12 @@
 
                     let savedCount = 0;
                     let failedCount = 0;
-                    const concurrency = 3; // Upload 3 in parallel for stability and high speed
+                    const concurrency = 6; // High throughput 6-parallel writes
                     
                     for (let i = 0; i < total; i += concurrency) {
                         const chunk = currentSelectedBase64List.slice(i, i + concurrency);
                         
-                        const chunkPromises = chunk.map((imgB64, idxInChunk) => {
-                            const actualIndex = i + idxInChunk;
+                        const chunkPromises = chunk.map((imgB64) => {
                             const payload = {
                                 description: description,
                                 date: date,
@@ -1647,7 +1660,7 @@
                                 createdAt: new Date().toISOString()
                             };
 
-                            return uploadSingleImageWithRetry(colRef, payload, 4).then(success => {
+                            return uploadSingleImageWithRetry(colRef, payload, 3).then(success => {
                                 if (success) {
                                     savedCount++;
                                 } else {
@@ -1659,21 +1672,20 @@
                                 if (progressPercentText) progressPercentText.textContent = `${percent}%`;
                                 if (progressStatusText) {
                                     progressStatusText.innerHTML = `
-                                        <i class="fa-solid fa-cloud-arrow-up text-brandGreen"></i>
-                                        <span>جاري حفظ الصور (${savedCount}/${total})...</span>
+                                        <i class="fa-solid fa-bolt text-brandGreen"></i>
+                                        <span>جاري الرفع الصاروخي (${savedCount}/${total})...</span>
                                     `;
                                 }
-                                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> (${savedCount}/${total}) محفوظ...`;
+                                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> (${savedCount}/${total}) تم الحفظ...`;
                             });
                         });
 
                         await Promise.all(chunkPromises);
-                        // Brief pause to prevent connection flood
-                        await new Promise(r => setTimeout(r, 60));
+                        await new Promise(r => setTimeout(r, 20));
                     }
                     
                     if (savedCount === total) {
-                        showToast(`تم حفظ جميع الصور (${total} صورة كاملة) بنجاح!`, 'success');
+                        showToast(`تم حفظ جميع الصور (${total} صورة كاملة) بسرعة قياسية!`, 'success');
                     } else if (savedCount > 0) {
                         showToast(`تم حفظ (${savedCount} من أصل ${total}) صورة بنجاح!`, 'info');
                     } else {
