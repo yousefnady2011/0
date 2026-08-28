@@ -16,6 +16,9 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- JSZip for Instant Bulk ZIP Downloads (Supports 100s & 1000s of photos in 1 click) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -65,7 +68,7 @@
             transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .polaroid-card:hover {
-            transform: translateY(-6px) scale(1.01);
+            transform: translateY(-4px) scale(1.005);
             box-shadow: 0 20px 30px -10px rgba(52, 91, 120, 0.14), 0 8px 12px -6px rgba(0, 0, 0, 0.04);
         }
 
@@ -80,7 +83,7 @@
             box-shadow: 0 0 0 4px rgba(52, 91, 120, 0.12);
         }
 
-        /* Responsive Custom Scrollbars */
+        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -97,7 +100,7 @@
         }
 
         .modal-scrollable-body {
-            max-height: calc(88vh - 150px);
+            max-height: calc(88vh - 140px);
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -118,12 +121,12 @@
 
         /* 3D Text Effect for Welcome Banner */
         .text-3d {
-            color: #7296B8;
+            color: #5D84A6;
             text-shadow: 
-                1px 1px 0px #4B6E8A, 
-                2px 2px 0px #4B6E8A, 
-                3px 3px 0px #4B6E8A, 
-                4px 4px 0px #4B6E8A, 
+                1px 1px 0px #345B78, 
+                2px 2px 0px #345B78, 
+                3px 3px 0px #345B78, 
+                4px 4px 0px #345B78, 
                 6px 6px 18px rgba(52, 91, 120, 0.25);
             -webkit-text-stroke: 1px rgba(255,255,255,0.4);
         }
@@ -141,11 +144,11 @@
                 
                 <!-- Logo & Brand Name -->
                 <div class="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group" onclick="navigateTo('home')">
-                    <div class="relative w-10 h-10 sm:w-13 sm:h-13 rounded-full overflow-hidden bg-white p-0.5 sm:p-1 logo-ring transition-transform duration-300 group-hover:scale-105 shrink-0">
+                    <div class="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-white p-0.5 sm:p-1 logo-ring transition-transform duration-300 group-hover:scale-105 shrink-0">
                         <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                     </div>
                     <div>
-                        <h1 class="text-lg sm:text-2xl font-black text-brandBlue tracking-tight leading-none group-hover:text-brandBlueDark transition-colors">مخزن الذكريات</h1>
+                        <h1 class="text-base sm:text-2xl font-black text-brandBlue tracking-tight leading-none group-hover:text-brandBlueDark transition-colors">مخزن الذكريات</h1>
                         <p class="text-[10px] sm:text-xs text-brandGreen font-bold mt-0.5 sm:mt-1 hidden sm:block">صورك .. دائمًا معاك</p>
                     </div>
                 </div>
@@ -179,27 +182,28 @@
 
     <main class="flex-grow">
         
+        <!-- HOME LANDING SECTION -->
         <section id="viewHome" class="transition-all duration-300">
             <div class="relative overflow-hidden bg-gradient-to-b from-brandBeigeLight/80 via-bgWarm to-bgWarm py-10 sm:py-20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur text-brandBlue text-xs sm:text-sm font-extrabold mb-5 border border-brandBeige shadow-xs">
                         <i class="fa-solid fa-shield-halved text-brandGreen"></i>
-                        <span>ملاذك الآمن لحفظ أغلى الصور واللحظات</span>
+                        <span>ملاذك الآمن لحفظ وتنزيل أغلى الصور واللحظات</span>
                     </div>
 
                     <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black text-brandBlue leading-tight mb-5 sm:mb-6">
-                        احفظ صورك وذكرياتك الجميلة <br class="hidden sm:inline"> في مكان خاص ومحمي
+                        احفظ صورك وذكرياتك الخاصة <br class="hidden sm:inline"> واسترجعها على أي جهاز في أي وقت
                     </h1>
                     
                     <p class="max-w-2xl mx-auto text-sm sm:text-lg text-gray-600 mb-8 leading-relaxed font-medium px-2">
-                        تطبيق "مخزن الذكريات" يمنحك مساحة دافئة وهادئة لتخزين صورك مع وصف كل لحظة وتاريخها الخاص، والوصول إليها بخصوصية تامة عبر رقم هاتفك وكلمة السر.
+                        تطبيق "مخزن الذكريات" يوفر لك مساحة خاصة ومحفوظة لتخزين صورك مع وصفها وتواريخها، مع إمكانية رفع عدة صور معاً وتنزيلها بالكامل على هاتفك الجديد بسهولة وسرعة.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto sm:max-w-none">
                         <button onclick="openAuthModal('register')" class="w-full sm:w-auto px-7 py-3.5 sm:py-4 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-lg hover:shadow-xl transition-all text-sm sm:text-lg flex items-center justify-center gap-2.5">
                             <i class="fa-solid fa-user-plus"></i>
-                            <span>إنشاء حساب جديد مجانًا</span>
+                            <span>إنشاء حسابك الخاص مجانًا</span>
                         </button>
                         <button onclick="openAuthModal('login')" class="w-full sm:w-auto px-7 py-3.5 sm:py-4 bg-white text-brandBlue border-2 border-brandBlue/20 hover:bg-brandBeigeLight font-extrabold rounded-2xl transition-all text-sm sm:text-lg flex items-center justify-center gap-2.5 shadow-xs">
                             <i class="fa-solid fa-key text-brandGreen"></i>
@@ -210,7 +214,7 @@
                     <!-- Visual Showcase Card -->
                     <div class="mt-12 sm:mt-16 flex justify-center">
                         <div class="relative p-6 sm:p-8 bg-white/95 backdrop-blur rounded-3xl shadow-card border border-brandBeige max-w-xs sm:max-w-sm group hover:scale-[1.02] transition-transform duration-300">
-                            <div class="w-40 h-40 sm:w-52 sm:h-52 mx-auto rounded-full overflow-hidden p-2 logo-ring bg-white flex items-center justify-center">
+                            <div class="w-36 h-36 sm:w-48 sm:h-48 mx-auto rounded-full overflow-hidden p-2 logo-ring bg-white flex items-center justify-center">
                                 <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                             </div>
                             <div class="mt-5 text-center">
@@ -225,39 +229,34 @@
             <!-- Features Grid -->
             <div class="py-12 sm:py-16 bg-white border-t border-brandBeige/60">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-10 sm:mb-12">
-                        <h2 class="text-2xl sm:text-3xl font-black text-brandBlue mb-2 sm:mb-3">لماذا تختار مخزن الذكريات؟</h2>
-                        <p class="text-brandGreen font-bold text-xs sm:text-base">هوية بصرية هادئة تبث الهدوء والطمأنينة والحنين إلى أروع الأوقات</p>
-                    </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                         <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
-                                <i class="fa-solid fa-lock"></i>
+                                <i class="fa-solid fa-user-shield"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">دخول آمن برقم الهاتف</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">خصوصية تامة لكل حساب</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                استرجع ذكرياتك وألبومك الخاص في أي وقت ومن أي جهاز باستخدام رقم هاتفك وكلمة السر الخاصة بك.
+                                كل حساب مستقل برقم الهاتف وكلمة السر، ولا يمكن لأي شخص آخر الوصول لذكرياتك الخاصة إطلاقاً.
                             </p>
                         </div>
 
                         <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandBeige text-brandBlue flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <i class="fa-solid fa-images"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">توثيق التاريخ والوصف</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">رفع صور متعددة دفعة واحدة</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                سجل مشاعرك، مكان التقاط الصورة، والتاريخ المخصص لكل ذكرى حتى لا تضيع التفاصيل الجميلة.
+                                اختر عدة صور معاً من جهازك لرفعها دفعة واحدة بسرعة مع توثيق التاريخ والوصف.
                             </p>
                         </div>
 
                         <div class="p-6 sm:p-8 rounded-3xl bg-bgWarm border border-brandBeige/80 hover:shadow-card transition-all text-right">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandGreen text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
-                                <i class="fa-solid fa-heart"></i>
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">تصميم مريح وأنيق</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">تنزيل الكل واسترجاع الصور</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                درجات الأزرق الهادئ، البيج الدافئ، والأخضر المريح لرحلة تصفح ناعمة وممتعة كالألبوم الكلاسيكي.
+                                إذا تعطل هاتفك أو قمت بتغييره، سجل دخولك بحسابك ونزّل صورك كلها على جهازك الجديد بضغطة واحدة!
                             </p>
                         </div>
                     </div>
@@ -265,19 +264,21 @@
             </div>
         </section>
 
+        <!-- MEMORIES DASHBOARD SECTION -->
         <section id="viewMemories" class="hidden py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             
-            <!-- Dynamic User Welcome Banner -->
-            <div class="mb-6 sm:mb-8 rounded-3xl sm:rounded-[35px] bg-gradient-to-br from-[#E8F0FE] via-[#F3F7FE] to-[#FAF8F5] border-2 border-white shadow-soft-xl overflow-hidden relative flex flex-col items-center justify-center text-center py-8 sm:py-14 px-4">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                <div class="absolute bottom-0 left-0 w-40 h-40 bg-brandBlue/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
+            <!-- Dynamic 3D User Welcome Banner -->
+            <div class="mb-6 sm:mb-8 rounded-3xl sm:rounded-[35px] bg-gradient-to-br from-[#E2ECF6] via-[#EDF3FA] to-[#FAF7F2] border-2 border-white shadow-soft-xl overflow-hidden relative flex flex-col items-center justify-center text-center py-8 sm:py-12 px-4">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/60 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-brandBlue/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
                 
-                <h2 class="text-3xl sm:text-5xl lg:text-[68px] font-black text-3d leading-tight z-10">
+                <h2 class="text-3xl sm:text-5xl lg:text-[62px] font-black text-3d leading-tight z-10">
                     أهلاً<br>
-                    <span id="welcomeUserName" class="block my-1 sm:my-2 text-[1em]">المستخدم</span>
+                    <span id="welcomeUserName" class="block my-1 sm:my-2 text-[0.9em]">المستخدم</span>
                 </h2>
-                <h3 class="text-2xl sm:text-4xl font-black text-brandBlue mt-1 sm:mt-2 z-10 drop-shadow-sm">
-                    في ذكرياتك <span class="text-blue-400">💙</span>
+                <h3 class="text-2xl sm:text-3xl font-black text-brandBlue mt-1 sm:mt-2 z-10 drop-shadow-sm flex items-center gap-2">
+                    <span>في ذكرياتك</span>
+                    <span class="text-blue-500">💙</span>
                 </h3>
             </div>
 
@@ -288,40 +289,71 @@
                         <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                     </div>
                     <div>
-                        <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-brandBlue flex items-center gap-2.5">
+                        <h2 class="text-xl sm:text-2xl font-black text-brandBlue flex items-center gap-2.5">
                             <span>معرض الذكريات الخاصة</span>
                             <span id="memoryCounter" class="text-xs bg-brandBeige/80 text-brandBlue font-extrabold px-3 py-1 rounded-full shadow-xs">0 ذكرى</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5 font-medium">تصفح صورك واسترجع أرق اللحظات في أي وقت</p>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5 font-medium">احفظ صورك، نزّلها على جهازك، واسترجع أجمل اللحظات دائماً</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2.5">
-                    <button onclick="openAddMemoryModal()" class="flex-1 sm:flex-initial px-5 py-3 sm:py-3.5 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-xs sm:text-sm">
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <button onclick="openAddMemoryModal()" class="flex-1 sm:flex-initial px-4 sm:px-5 py-3 bg-brandBlue text-white hover:bg-brandBlueDark active:scale-98 font-extrabold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 text-xs sm:text-sm">
                         <i class="fa-solid fa-circle-plus text-base"></i>
                         <span>إضافة ذكرى جديدة</span>
                     </button>
+
+                    <button onclick="downloadAllMemories()" id="downloadAllBtn" class="px-4 py-3 bg-brandGreen hover:bg-brandGreenDark text-white font-extrabold rounded-2xl shadow-md transition-all text-xs sm:text-sm flex items-center gap-1.5" title="تنزيل كل الصور في ملف مضغوط ZIP">
+                        <i class="fa-solid fa-file-zipper text-base"></i>
+                        <span>تنزيل الكل (ملف ZIP)</span>
+                    </button>
                     
-                    <button onclick="handleLogout()" class="px-3.5 py-3 sm:py-3.5 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all text-xs sm:text-sm flex items-center gap-1.5" title="تسجيل الخروج">
+                    <button onclick="handleLogout()" class="px-3.5 py-3 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-2xl transition-all text-xs sm:text-sm flex items-center gap-1.5" title="تسجيل الخروج">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span class="hidden sm:inline">تسجيل الخروج</span>
+                        <span class="hidden sm:inline">خروج</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Search and Filter Controls -->
-            <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
-                <div class="relative flex-grow">
-                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                    <input type="text" id="searchInput" oninput="filterMemories()" placeholder="ابحث في وصف الذكريات..." class="w-full pr-10 pl-4 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium">
+            <!-- Search and Filter & Batch Actions Bar -->
+            <div class="space-y-3 mb-6 sm:mb-8">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="filterMemories()" placeholder="ابحث في وصف الذكريات..." class="w-full pr-10 pl-4 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium">
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <input type="date" id="dateFilter" onchange="filterMemories()" class="w-full sm:w-auto px-3.5 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium text-gray-700">
+                        <button onclick="clearFilters()" class="px-3.5 py-3 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-2xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0" title="إعادة ضبط الفلاتر">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>مسح</span>
+                        </button>
+                        <button onclick="toggleSelectionMode()" id="toggleSelectBtn" class="px-4 py-3 bg-brandBeige text-brandBlue hover:bg-brandBeige/80 rounded-2xl text-xs font-extrabold transition-all flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span id="toggleSelectText">اختيار صور</span>
+                        </button>
+                    </div>
                 </div>
-                
-                <div class="flex items-center gap-2">
-                    <input type="date" id="dateFilter" onchange="filterMemories()" class="w-full sm:w-auto px-3.5 py-3 rounded-2xl custom-input outline-none text-xs sm:text-sm font-medium text-gray-700">
-                    <button onclick="clearFilters()" class="px-3.5 py-3 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-2xl text-xs font-bold transition-colors flex items-center gap-1.5 shrink-0" title="إعادة ضبط الفلاتر">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                        <span>مسح</span>
-                    </button>
+
+                <!-- Batch Action Bar (Visible when Selection Mode is Active) -->
+                <div id="batchActionBar" class="hidden bg-brandBlue text-white p-3.5 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md animate-slide-up">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs sm:text-sm font-extrabold bg-white/20 px-3 py-1 rounded-xl" id="selectedCountBadge">0 محددة</span>
+                        <button onclick="selectAllMemories(true)" class="text-xs underline hover:text-brandBeige transition-colors">تحديد الكل</button>
+                        <span class="text-white/40">|</span>
+                        <button onclick="selectAllMemories(false)" class="text-xs underline hover:text-brandBeige transition-colors">إلغاء التحديد</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="downloadSelectedMemories()" class="px-3.5 py-2 bg-brandGreen hover:bg-brandGreenDark text-white text-xs font-bold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
+                            <i class="fa-solid fa-file-zipper"></i>
+                            <span>تنزيل المحددة (ZIP)</span>
+                        </button>
+                        <button onclick="deleteSelectedMemories()" class="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
+                            <i class="fa-solid fa-trash"></i>
+                            <span>حذف المحددة</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -335,8 +367,8 @@
                 <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 rounded-full bg-brandBeigeLight p-2 logo-ring flex items-center justify-center">
                     <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full opacity-80" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-1.5">لا توجد ذكريات حتى الآن</h3>
-                <p class="text-gray-500 max-w-md mx-auto mb-6 text-xs sm:text-sm font-medium">ابدأ بجمع لحظاتك المميزة، أضف أول صورة وسجل التاريخ والوصف الخاص بها.</p>
+                <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-1.5">لا توجد ذكريات في هذا الحساب حتى الآن</h3>
+                <p class="text-gray-500 max-w-md mx-auto mb-6 text-xs sm:text-sm font-medium">ابدأ بجمع صورك ولحظاتك المميزة، يمكنك اختيار صورة واحدة أو مجموعة صور دفعة واحدة.</p>
                 <button onclick="openAddMemoryModal()" class="px-6 py-3 bg-brandBlue text-white hover:bg-brandBlueDark font-bold rounded-2xl shadow transition-all inline-flex items-center gap-2 text-xs sm:text-sm">
                     <i class="fa-solid fa-plus"></i>
                     <span>إضافة أول ذكرى</span>
@@ -358,7 +390,7 @@
                     <img src="noor.png" alt="مخزن الذكريات" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
                 <h3 class="text-xl sm:text-2xl font-black text-brandBlue tracking-tight" id="authModalTitle">مرحباً بك في مخزن الذكريات</h3>
-                <p class="text-[11px] sm:text-xs text-brandGreen font-extrabold mt-1">سجل دخولك برقم الهاتف أو أنشئ حسابًا جديدًا</p>
+                <p class="text-[11px] sm:text-xs text-brandGreen font-extrabold mt-1">سجل برقم هاتفك للوصول لذكرياتك الخاصة من أي جهاز</p>
 
                 <div class="mt-4 p-1 bg-brandBeige/40 rounded-2xl flex items-center gap-1 border border-brandBeige/60">
                     <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs sm:text-sm font-extrabold rounded-xl transition-all duration-200 bg-white text-brandBlue shadow-xs">
@@ -417,7 +449,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة المرور (6 أرقام/حروف على الأقل)</label>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">كلمة المرور (6 أرقام أو حروف على الأقل)</label>
                         <div class="relative">
                             <i class="fa-solid fa-lock absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                             <input type="password" id="regPassword" required placeholder="6 أرقام أو حروف على الأقل" dir="rtl" class="w-full pr-10 pl-10 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl custom-input outline-none font-medium">
@@ -447,7 +479,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD / EDIT MEMORY -->
+    <!-- MODAL: ADD / EDIT MEMORY (SUPPORTS MULTIPLE PHOTOS) -->
     <div id="memoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-brandBeige relative transform transition-transform duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="memoryModalContainer">
             
@@ -461,29 +493,37 @@
                 </button>
             </div>
 
-            <form id="memoryForm" onsubmit="handleMemorySave(event)" class="p-5 sm:p-6 space-y-4 modal-scrollable-body flex-1 overflow-y-auto">
-                <input type="hidden" id="memoryEditId">
+            <form id="memoryForm" onsubmit="handleMemorySave(event)" class="p-5 sm:p-6 modal-scrollable-body flex-1 overflow-y-auto space-y-4 bg-white">
+                <input type="hidden" id="memoryEditId" value="">
 
-                <!-- Image Upload Dropzone -->
+                <!-- Image Upload Dropzone (Supports Multiple Selection & Accumulation) -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-2">صورة الذكرى *</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold text-gray-700">صور الذكرى (يمكنك تحديد عدد غير محدود) *</label>
+                        <div class="flex items-center gap-2">
+                            <span id="selectedImagesCountText" class="text-[11px] font-bold text-brandGreen hidden">0 صور محددة</span>
+                            <button type="button" id="clearAllImagesBtn" onclick="clearSelectedImages(event)" class="text-[10px] text-red-500 font-bold hover:underline hidden">مسح الكل</button>
+                        </div>
+                    </div>
                     
                     <div class="flex flex-col items-center justify-center border-2 border-dashed border-brandBeige hover:border-brandBlue bg-bgWarm rounded-2xl p-4 transition-colors cursor-pointer text-center relative group" id="uploadDropzone">
-                        <input type="file" id="memoryFileInput" accept="image/*" onchange="previewSelectedImage(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                        <!-- Multiple file input -->
+                        <input type="file" id="memoryFileInput" accept="image/*" multiple onchange="previewSelectedImages(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
                         
                         <div id="uploadPlaceholder" class="space-y-2 py-3">
                             <div class="w-12 h-12 rounded-2xl bg-white text-brandBlue flex items-center justify-center mx-auto text-xl shadow-xs border border-brandBeige">
-                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <i class="fa-solid fa-images"></i>
                             </div>
-                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صورة من جهازك</p>
-                            <p class="text-[10px] text-gray-400 font-medium">يدعم جميع الصور (يتم الضغط التلقائي للسرعة)</p>
+                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صور من جهازك (يمكنك اختيار 80 أو 1000 صورة)</p>
+                            <p class="text-[10px] text-gray-400 font-medium">يدعم التحديد المتعدد والإضافة التدريجية مع ضغط ذكي</p>
                         </div>
 
-                        <!-- Image Preview Box -->
-                        <div id="imagePreviewContainer" class="hidden relative w-full h-48 sm:h-56 rounded-xl overflow-hidden shadow-inner">
-                            <img id="imagePreview" src="" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-2">
-                                <i class="fa-solid fa-pen"></i> تغيير الصورة
+                        <!-- Multi-Image Thumbnails Preview Box -->
+                        <div id="imagePreviewContainer" class="hidden w-full space-y-2.5">
+                            <div id="previewGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 max-h-56 overflow-y-auto p-1.5 bg-white/60 rounded-xl border border-brandBeige/60"></div>
+                            <div class="flex items-center justify-between pt-1 px-1 text-[11px] text-brandBlue font-bold">
+                                <span><i class="fa-solid fa-circle-plus ml-1"></i> اضغط لإضافة المزيد من الصور</span>
+                                <span class="text-gray-500 text-[10px] font-medium">انقر على ✕ لإزالة صورة</span>
                             </div>
                         </div>
                     </div>
@@ -491,8 +531,8 @@
 
                 <!-- Memory Description -->
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1.5">وصف الذكرى أو الشعور *</label>
-                    <textarea id="memoryDescription" rows="3" required placeholder="اكتب مشاعرك أو مكان التقاط هذه الصورة وما الذي يجعلها خاصة..." class="w-full p-3.5 text-xs sm:text-sm rounded-2xl custom-input outline-none resize-none font-medium"></textarea>
+                    <label class="block text-xs font-bold text-gray-700 mb-1.5">وصف الذكرى أو الشعور</label>
+                    <textarea id="memoryDescription" rows="3" placeholder="اكتب مشاعرك أو مكان التقاط هذه الصور..." class="w-full p-3.5 text-xs sm:text-sm rounded-2xl custom-input outline-none resize-none font-medium"></textarea>
                 </div>
 
                 <!-- Date Picker -->
@@ -516,7 +556,7 @@
                     </button>
                     <button type="submit" id="saveMemoryBtn" class="flex-1 py-3 bg-brandBlue hover:bg-brandBlueDark text-white font-extrabold rounded-2xl text-xs sm:text-sm shadow transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-check"></i>
-                        <span>حفظ الذكرى</span>
+                        <span id="saveBtnText">حفظ الذكرى</span>
                     </button>
                 </div>
             </form>
@@ -545,17 +585,20 @@
                         <p id="lightboxDesc" class="text-gray-800 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium max-h-36 overflow-y-auto">---</p>
                     </div>
 
-                    <div class="pt-4 mt-4 border-t border-brandBeige/80 flex items-center justify-between text-xs text-gray-500">
-                        <div class="flex items-center gap-2">
-                            <img src="noor.png" class="w-5 h-5 rounded-full object-contain" onerror="this.style.display='none'">
-                            <span class="font-bold text-brandBlue">مخزن الذكريات</span>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <button id="lightboxEditBtn" class="p-2 text-brandBlue hover:bg-brandBeige rounded-xl transition-colors" title="تعديل">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                    <div class="pt-4 mt-4 border-t border-brandBeige/80 flex flex-col gap-2.5">
+                        <button id="lightboxDownloadBtn" class="w-full py-2.5 bg-brandGreen hover:bg-brandGreenDark text-white font-extrabold rounded-2xl transition-all text-xs flex items-center justify-center gap-2 shadow-xs">
+                            <i class="fa-solid fa-download"></i>
+                            <span>تنزيل الصورة للجهاز</span>
+                        </button>
+                        
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <button id="lightboxEditBtn" class="p-2 text-brandBlue hover:bg-brandBeige rounded-xl transition-colors flex items-center gap-1 font-bold" title="تعديل">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span>تعديل</span>
                             </button>
-                            <button id="lightboxDeleteBtn" class="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors" title="حذف">
-                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            <button id="lightboxDeleteBtn" class="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors flex items-center gap-1 font-bold" title="حذف">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>حذف</span>
                             </button>
                         </div>
                     </div>
@@ -570,8 +613,8 @@
             <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto text-xl mb-3 border border-red-100 shadow-xs">
                 <i class="fa-solid fa-trash-can"></i>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-1.5">حذف الذكرى؟</h3>
-            <p class="text-xs text-gray-500 mb-5 font-medium">هل أنت تأكد من إزالة هذه الصورة والذكرى؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            <h3 class="text-lg font-bold text-gray-900 mb-1.5" id="deleteModalTitle">حذف الذكرى؟</h3>
+            <p class="text-xs text-gray-500 mb-5 font-medium" id="deleteModalDesc">هل أنت متأكد من الحذف؟ لا يمكن التراجع عن هذا الإجراء.</p>
             <div class="flex items-center gap-2.5">
                 <button onclick="closeDeleteConfirmModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl text-xs sm:text-sm font-bold transition-colors">إلغاء</button>
                 <button id="confirmDeleteBtn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-xs sm:text-sm font-extrabold shadow transition-all">حذف الآن</button>
@@ -602,7 +645,7 @@
                     <div class="flex-1 overflow-hidden">
                         <h4 class="text-sm sm:text-base font-black text-brandBlue truncate" id="profileModalName">المستخدم</h4>
                         <p class="text-xs text-brandGreen font-bold mt-0.5 tracking-wider" dir="ltr" id="profileModalPhone">01000000000</p>
-                        <span class="inline-block mt-1 text-[10px] bg-brandBeige text-brandBlue font-extrabold px-2.5 py-0.5 rounded-full">حساب موثق</span>
+                        <span class="inline-block mt-1 text-[10px] bg-brandBeige text-brandBlue font-extrabold px-2.5 py-0.5 rounded-full">حسابك الخاص والمحمي</span>
                     </div>
                 </div>
 
@@ -655,7 +698,7 @@
                 <div class="pt-3 border-t border-brandBeige/60">
                     <button onclick="closeProfileModal(); handleLogout();" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-2xl transition-colors text-xs flex items-center justify-center gap-2">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>تسجيل الخروج من الحساب</span>
+                        <span>تسجيل الخروج من هذا الحساب</span>
                     </button>
                 </div>
             </div>
@@ -674,8 +717,8 @@
             <p class="text-[11px] sm:text-xs text-gray-500 mb-2 font-medium">جميع الحقوق محفوظة &copy; 2026 - صورك .. دائمًا معاك</p>
             <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-bold text-brandGreen">
                 <span>أمان وخصوصية برقم الهاتف</span> &bull; 
-                <span>حفظ سهل وسريع</span> &bull; 
-                <span>هوية بصرية دافئة</span>
+                <span>رفع وتنزيل متعدد للصور</span> &bull; 
+                <span>حفظ سحابي دائم</span>
             </div>
         </div>
     </footer>
@@ -728,10 +771,20 @@
         let userProfileData = { name: '', phone: '' };
         let unsubscribeMemories = null;
         let allMemories = [];
-        let currentSelectedBase64 = '';
-        let pendingDeleteId = null;
+        let currentSelectedBase64List = []; // Supports multiple images
+        let pendingDeleteIds = [];
+        let isSelectionMode = false;
+        let selectedMemoryIds = new Set();
 
-        // Auto-convert Arabic digits to English in text inputs
+        // Convert Arabic/Persian digits to standard English digits
+        function convertArabicDigitsToEnglish(str) {
+            if (!str) return '';
+            return str
+                .replace(/[٠-٩]/g, d => String.fromCharCode(d.charCodeAt(0) - 1632))
+                .replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1776));
+        }
+
+        // Auto-convert Arabic digits to English in input fields
         window.enforceEnglishDigits = function(input) {
             if (!input) return;
             const converted = convertArabicDigitsToEnglish(input.value);
@@ -750,7 +803,7 @@
         window.navigateTo = navigateTo;
         window.openAddMemoryModal = openAddMemoryModal;
         window.closeMemoryModal = closeMemoryModal;
-        window.previewSelectedImage = previewSelectedImage;
+        window.previewSelectedImages = previewSelectedImages;
         window.handleMemorySave = handleMemorySave;
         window.openEditMemoryModal = openEditMemoryModal;
         window.askDeleteMemory = askDeleteMemory;
@@ -764,7 +817,17 @@
         window.openProfileModal = openProfileModal;
         window.closeProfileModal = closeProfileModal;
         window.handleChangePassword = handleChangePassword;
+        window.downloadSingleMemory = downloadSingleMemory;
+        window.downloadAllMemories = downloadAllMemories;
+        window.removeSinglePreviewImage = removeSinglePreviewImage;
+        window.clearSelectedImages = clearSelectedImages;
+        window.toggleSelectionMode = toggleSelectionMode;
+        window.toggleMemorySelection = toggleMemorySelection;
+        window.selectAllMemories = selectAllMemories;
+        window.downloadSelectedMemories = downloadSelectedMemories;
+        window.deleteSelectedMemories = deleteSelectedMemories;
 
+        // Toggle password show/hide
         function togglePasswordVisibility(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -799,6 +862,7 @@
                 }
                 allMemories = [];
                 userProfileData = { name: '', phone: '' };
+                selectedMemoryIds.clear();
                 renderMemoriesGrid([]);
             }
         });
@@ -857,7 +921,7 @@
             const welcomeUserName = document.getElementById('welcomeUserName');
 
             if (user) {
-                // Priority for name: Session data > Local Storage cache > Auth displayName > Firestore doc
+                // Fetch strictly for THIS authenticated user
                 let name = userProfileData.name || localStorage.getItem(`user_name_${user.uid}`) || user.displayName || '';
                 let phone = userProfileData.phone || localStorage.getItem(`user_phone_${user.uid}`) || (user.email ? user.email.replace('user_', '').replace('@memories.com', '') : '');
 
@@ -872,7 +936,7 @@
 
                 if (!name) name = 'صاحب الذكريات';
 
-                // Cache for instant local recovery
+                // Cache isolated to this specific UID
                 localStorage.setItem(`user_name_${user.uid}`, name);
                 if (phone) localStorage.setItem(`user_phone_${user.uid}`, phone);
 
@@ -893,7 +957,7 @@
                 `;
                 navMemoriesBtn.classList.remove('hidden');
                 
-                // Update Name in the Welcome Banner
+                // Update Name in the 3D Welcome Banner
                 if (welcomeUserName) {
                     welcomeUserName.textContent = name;
                 }
@@ -1031,13 +1095,6 @@
             }
         }
 
-        function convertArabicDigitsToEnglish(str) {
-            if (!str) return '';
-            return str
-                .replace(/[٠-٩]/g, d => String.fromCharCode(d.charCodeAt(0) - 1632))
-                .replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1776));
-        }
-
         function phoneToEmail(phone) {
             const normalized = convertArabicDigitsToEnglish(phone);
             const cleaned = normalized.replace(/[^0-9]/g, '');
@@ -1057,7 +1114,6 @@
                 return;
             }
 
-            // Ensure password meets Firebase min 6 chars requirement seamlessly
             const safePassword = password.length < 6 ? password.padEnd(6, '0') : password;
             const email = phoneToEmail(normalizedPhone);
 
@@ -1070,24 +1126,9 @@
                     const userCred = await signInWithEmailAndPassword(auth, email, safePassword);
                     user = userCred.user;
                 } catch (loginErr) {
-                    // Auto-register seamlessly if account doesn't exist yet
                     if (loginErr.code === 'auth/invalid-credential' || loginErr.code === 'auth/user-not-found') {
-                        const defaultName = "مستخدم " + normalizedPhone.slice(-4);
-                        const userCred = await createUserWithEmailAndPassword(auth, email, safePassword);
-                        user = userCred.user;
-                        
-                        userProfileData = { name: defaultName, phone: normalizedPhone };
-                        localStorage.setItem(`user_name_${user.uid}`, defaultName);
-                        localStorage.setItem(`user_phone_${user.uid}`, normalizedPhone);
-
-                        try { await updateProfile(user, { displayName: defaultName }); } catch(e){}
-                        try {
-                            await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'info'), {
-                                name: defaultName,
-                                phone: normalizedPhone,
-                                createdAt: new Date().toISOString()
-                            });
-                        } catch(e){}
+                        showToast('رقم الهاتف أو كلمة السر غير صحيحة، أو لم يتم إنشاء حساب بهذا الرقم', 'error');
+                        return;
                     } else {
                         throw loginErr;
                     }
@@ -1134,7 +1175,6 @@
                 return;
             }
 
-            // Ensure password meets Firebase min 6 chars requirement seamlessly
             const safePassword = password.length < 6 ? password.padEnd(6, '0') : password;
             const email = phoneToEmail(normalizedPhone);
 
@@ -1148,7 +1188,7 @@
                     user = userCred.user;
                 } catch (regErr) {
                     if (regErr.code === 'auth/email-already-in-use') {
-                        // If user already exists, sign in directly
+                        // Sign in if already exists
                         const userCred = await signInWithEmailAndPassword(auth, email, safePassword);
                         user = userCred.user;
                     } else {
@@ -1157,7 +1197,6 @@
                 }
 
                 if (user) {
-                    // Set active name immediately in memory and local storage
                     userProfileData = { name: name, phone: normalizedPhone };
                     localStorage.setItem(`user_name_${user.uid}`, name);
                     localStorage.setItem(`user_phone_${user.uid}`, normalizedPhone);
@@ -1236,9 +1275,21 @@
             emptyState.classList.add('hidden');
             grid.innerHTML = memories.map((item) => {
                 const formattedDate = item.date ? new Date(item.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : 'بدون تاريخ';
-                
+                const isChecked = selectedMemoryIds.has(item.id);
+
                 return `
-                    <div class="polaroid-card bg-white rounded-3xl overflow-hidden border border-brandBeige/80 shadow-xs flex flex-col group justify-between">
+                    <div class="polaroid-card bg-white rounded-3xl overflow-hidden border ${isChecked ? 'border-brandBlue ring-2 ring-brandBlue' : 'border-brandBeige/80'} shadow-xs flex flex-col group justify-between relative">
+                        
+                        <!-- Checkbox for Batch Mode -->
+                        <div class="${isSelectionMode ? 'block' : 'hidden'} absolute top-3 right-3 z-30">
+                            <input type="checkbox" onchange="toggleMemorySelection('${item.id}', this.checked)" ${isChecked ? 'checked' : ''} class="w-6 h-6 rounded-lg text-brandBlue focus:ring-brandBlue cursor-pointer shadow-md accent-brandBlue">
+                        </div>
+
+                        <!-- Direct Download Button on Card -->
+                        <button onclick="downloadSingleMemory('${item.id}', event)" class="absolute top-3 left-3 z-30 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-all shadow-md active:scale-95" title="تنزيل الصورة للجهاز">
+                            <i class="fa-solid fa-download text-xs"></i>
+                        </button>
+
                         <div class="relative aspect-4/3 bg-bgWarm overflow-hidden cursor-pointer" onclick="openLightbox('${item.id}')">
                             <img src="${item.imageUrl}" alt="صورة ذكرى" class="w-full h-48 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/E8D8C3/345B78?text=صورة+غير+متوفرة'">
                             <div class="absolute bottom-2.5 right-2.5 bg-black/65 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs">
@@ -1254,10 +1305,13 @@
 
                             <div class="flex items-center justify-between border-t border-brandBeige/60 pt-3">
                                 <button onclick="openLightbox('${item.id}')" class="text-xs font-black text-brandBlue hover:text-brandBlueDark flex items-center gap-1">
-                                    <i class="fa-solid fa-eye"></i> تكبير الذكرى
+                                    <i class="fa-solid fa-eye"></i> تكبير
                                 </button>
 
-                                <div class="flex items-center gap-0.5">
+                                <div class="flex items-center gap-1">
+                                    <button onclick="downloadSingleMemory('${item.id}', event)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl hover:bg-brandGreen/10 text-brandGreen flex items-center justify-center transition-colors text-xs" title="تنزيل الصورة">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
                                     <button onclick="openEditMemoryModal('${item.id}')" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl hover:bg-brandBeigeLight text-brandBlue flex items-center justify-center transition-colors text-xs" title="تعديل">
                                         <i class="fa-solid fa-pen"></i>
                                     </button>
@@ -1300,57 +1354,133 @@
             renderMemoriesGrid(allMemories);
         }
 
-        function previewSelectedImage(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        async function previewSelectedImages(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    const maxDim = 800;
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const previewGrid = document.getElementById('previewGrid');
+            const countBadge = document.getElementById('selectedImagesCountText');
+            const clearBtn = document.getElementById('clearAllImagesBtn');
+            const saveBtnText = document.getElementById('saveBtnText');
 
-                    if (width > maxDim || height > maxDim) {
-                        if (width > height) {
-                            height = Math.round((height * maxDim) / width);
-                            width = maxDim;
-                        } else {
-                            width = Math.round((width * maxDim) / height);
-                            height = maxDim;
+            placeholder.classList.add('hidden');
+            previewContainer.classList.remove('hidden');
+            clearBtn.classList.remove('hidden');
+
+            showToast(`جاري تجهيز وضغط ${files.length} صورة...`, 'info');
+
+            for (const file of files) {
+                const base64 = await processAndCompressImage(file);
+                // Accumulate without deleting previous images
+                currentSelectedBase64List.push(base64);
+            }
+
+            // Reset file input value so user can pick same/more files again
+            event.target.value = '';
+
+            renderPreviewThumbnails();
+        }
+
+        function renderPreviewThumbnails() {
+            const previewGrid = document.getElementById('previewGrid');
+            const countBadge = document.getElementById('selectedImagesCountText');
+            const saveBtnText = document.getElementById('saveBtnText');
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const clearBtn = document.getElementById('clearAllImagesBtn');
+
+            if (!currentSelectedBase64List.length) {
+                previewContainer.classList.add('hidden');
+                clearBtn.classList.add('hidden');
+                countBadge.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                saveBtnText.textContent = 'حفظ الذكرى';
+                return;
+            }
+
+            countBadge.textContent = `${currentSelectedBase64List.length} صور محددة`;
+            countBadge.classList.remove('hidden');
+            saveBtnText.textContent = currentSelectedBase64List.length > 1 ? `حفظ (${currentSelectedBase64List.length}) صورة معاً` : 'حفظ الذكرى';
+
+            previewGrid.innerHTML = currentSelectedBase64List.map((b64, idx) => `
+                <div class="relative aspect-square rounded-xl overflow-hidden shadow-xs border border-brandBeige group/thumb">
+                    <img src="${b64}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeSinglePreviewImage(${idx}, event)" class="absolute top-1 left-1 w-5 h-5 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[10px] shadow transition-transform active:scale-90 z-20" title="إزالة">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <span class="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] px-1.5 rounded-full font-bold">${idx + 1}</span>
+                </div>
+            `).join('');
+        }
+
+        function removeSinglePreviewImage(index, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            currentSelectedBase64List.splice(index, 1);
+            renderPreviewThumbnails();
+        }
+
+        function clearSelectedImages(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            currentSelectedBase64List = [];
+            renderPreviewThumbnails();
+        }
+
+        function processAndCompressImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 900;
+
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
                         }
-                    }
 
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
 
-                    currentSelectedBase64 = canvas.toDataURL('image/jpeg', 0.65);
-                    
-                    document.getElementById('imagePreview').src = currentSelectedBase64;
-                    document.getElementById('uploadPlaceholder').classList.add('hidden');
-                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                    img.src = e.target.result;
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
         }
 
         function openAddMemoryModal() {
             if (!currentUser) return;
 
             document.getElementById('memoryEditId').value = '';
-            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة ذكرى جديدة</span>`;
+            document.getElementById('memoryModalHeader').innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة ذكريات جديدة</span>`;
             document.getElementById('memoryForm').reset();
             document.getElementById('memoryDate').valueAsDate = new Date();
             
-            currentSelectedBase64 = '';
+            currentSelectedBase64List = [];
             document.getElementById('uploadPlaceholder').classList.remove('hidden');
             document.getElementById('imagePreviewContainer').classList.add('hidden');
-            document.getElementById('imagePreview').src = '';
+            document.getElementById('previewGrid').innerHTML = '';
+            document.getElementById('selectedImagesCountText').classList.add('hidden');
+            document.getElementById('saveBtnText').textContent = 'حفظ الذكرى';
 
             const modal = document.getElementById('memoryModal');
             const container = document.getElementById('memoryModalContainer');
@@ -1371,10 +1501,17 @@
             document.getElementById('memoryDescription').value = memory.description || '';
             document.getElementById('memoryDate').value = memory.date || '';
 
-            currentSelectedBase64 = memory.imageUrl || '';
-            document.getElementById('imagePreview').src = currentSelectedBase64;
+            currentSelectedBase64List = [memory.imageUrl || ''];
+            const previewGrid = document.getElementById('previewGrid');
+            previewGrid.innerHTML = `
+                <div class="relative col-span-full h-44 rounded-xl overflow-hidden shadow-xs border border-brandBeige">
+                    <img src="${memory.imageUrl}" class="w-full h-full object-cover">
+                </div>
+            `;
             document.getElementById('uploadPlaceholder').classList.add('hidden');
             document.getElementById('imagePreviewContainer').classList.remove('hidden');
+            document.getElementById('selectedImagesCountText').classList.add('hidden');
+            document.getElementById('saveBtnText').textContent = 'تحديث الذكرى';
 
             const modal = document.getElementById('memoryModal');
             const container = document.getElementById('memoryModalContainer');
@@ -1406,38 +1543,45 @@
             const date = document.getElementById('memoryDate').value;
             const saveBtn = document.getElementById('saveMemoryBtn');
 
-            if (!currentSelectedBase64) {
-                showToast('يرجى اختيار صورة للذكرى', 'error');
+            if (!currentSelectedBase64List.length) {
+                showToast('يرجى اختيار صورة واحدة على الأقل', 'error');
                 return;
             }
 
-            if (!description || !date) {
-                showToast('يرجى إدخال الوصف والتاريخ', 'error');
+            if (!date) {
+                showToast('يرجى تحديد التاريخ', 'error');
                 return;
             }
 
             try {
                 saveBtn.disabled = true;
-                saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ...`;
+                const total = currentSelectedBase64List.length;
 
                 if (editId) {
+                    saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري التحديث...`;
                     const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', editId);
                     await updateDoc(docRef, {
                         description: description,
                         date: date,
-                        imageUrl: currentSelectedBase64,
+                        imageUrl: currentSelectedBase64List[0],
                         updatedAt: new Date().toISOString()
                     });
                     showToast('تم تحديث الذكرى بنجاح', 'success');
                 } else {
                     const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'memories');
-                    await addDoc(colRef, {
-                        description: description,
-                        date: date,
-                        imageUrl: currentSelectedBase64,
-                        createdAt: new Date().toISOString()
-                    });
-                    showToast('تمت إضافة الذكرى بنجاح!', 'success');
+                    
+                    // Batch save with progress indicator for large sets (e.g. 50, 80, 100+ images)
+                    for (let i = 0; i < total; i++) {
+                        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري حفظ (${i + 1}/${total})...`;
+                        await addDoc(colRef, {
+                            description: description,
+                            date: date,
+                            imageUrl: currentSelectedBase64List[i],
+                            createdAt: new Date().toISOString()
+                        });
+                    }
+                    
+                    showToast(total > 1 ? `تم حفظ جميع الصور (${total} صورة) بنجاح!` : 'تمت إضافة الذكرى بنجاح!', 'success');
                 }
 
                 closeMemoryModal();
@@ -1445,20 +1589,219 @@
                 showToast('حدث خطأ أثناء حفظ الذكرى، يرجى إعادة المحاولة', 'error');
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.innerHTML = `<i class="fa-solid fa-check"></i><span>حفظ الذكرى</span>`;
+                saveBtn.innerHTML = `<i class="fa-solid fa-check"></i><span id="saveBtnText">حفظ الذكرى</span>`;
             }
         }
 
-        function askDeleteMemory(id) {
-            pendingDeleteId = id;
+        function triggerDownload(dataUrl, filename) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = filename || `ذكرى_${Date.now()}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function downloadSingleMemory(id, event) {
+            if (event) event.stopPropagation();
+            const memory = allMemories.find(m => m.id === id);
+            if (!memory || !memory.imageUrl) {
+                showToast('تعذر العثور على الصورة لتنزيلها', 'error');
+                return;
+            }
+
+            const cleanDate = memory.date ? memory.date.replace(/[^0-9-]/g, '') : Date.now();
+            const filename = `مخزن_الذكريات_${cleanDate}_${id.slice(0, 4)}.jpg`;
+            triggerDownload(memory.imageUrl, filename);
+            showToast('تم بدء تنزيل الصورة للجهاز', 'success');
+        }
+
+        async function downloadAllMemories() {
+            if (!allMemories.length) {
+                showToast('لا توجد صور في حسابك لتنزيلها', 'info');
+                return;
+            }
+
+            const btn = document.getElementById('downloadAllBtn');
+            const originalText = btn.innerHTML;
+
+            try {
+                btn.disabled = true;
+                showToast(`جاري تجهيز وضغط جميع الصور (${allMemories.length} صورة) في ملف ZIP...`, 'info');
+
+                // If only 1 image, download directly
+                if (allMemories.length === 1) {
+                    downloadSingleMemory(allMemories[0].id);
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Create a ZIP archive using JSZip for bulk download (80, 100, 1000 images seamlessly)
+                const zip = new JSZip();
+                const folder = zip.folder("ذكرياتي");
+
+                for (let i = 0; i < allMemories.length; i++) {
+                    const item = allMemories[i];
+                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ضغط (${i + 1}/${allMemories.length})...`;
+
+                    if (item.imageUrl && item.imageUrl.includes('base64,')) {
+                        const base64Data = item.imageUrl.split('base64,')[1];
+                        const dateStr = item.date || 'memory';
+                        const safeDesc = (item.description || '').slice(0, 15).replace(/[/\\?%*:|"<>]/g, '_');
+                        folder.file(`ذكرى_${i + 1}_${dateStr}_${safeDesc}.jpg`, base64Data, { base64: true });
+                    }
+                }
+
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري إنتاج ملف الـ ZIP...`;
+                const zipBlob = await zip.generateAsync({ type: "blob" });
+                
+                const url = URL.createObjectURL(zipBlob);
+                const userName = (userProfileData.name || 'ذكريات').replace(/\s+/g, '_');
+                triggerDownload(url, `مخزن_الذكريات_${userName}_الكامل.zip`);
+                
+                setTimeout(() => URL.revokeObjectURL(url), 10000);
+                showToast(`تم تنزيل جميع الصور (${allMemories.length} صورة) في ملف ZIP بنجاح!`, 'success');
+            } catch (err) {
+                showToast('حدث خطأ أثناء تجميع ملف الصور، سيتم التنزيل الفردي...', 'error');
+                // Fallback sequential download
+                for (let i = 0; i < allMemories.length; i++) {
+                    triggerDownload(allMemories[i].imageUrl, `ذكرى_${i + 1}.jpg`);
+                    await new Promise(r => setTimeout(r, 300));
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        function toggleSelectionMode() {
+            isSelectionMode = !isSelectionMode;
+            const batchBar = document.getElementById('batchActionBar');
+            const toggleText = document.getElementById('toggleSelectText');
+
+            if (isSelectionMode) {
+                batchBar.classList.remove('hidden');
+                toggleText.textContent = 'إلغاء التحديد';
+            } else {
+                batchBar.classList.add('hidden');
+                toggleText.textContent = 'اختيار صور';
+                selectedMemoryIds.clear();
+            }
+
+            updateBatchCounter();
+            filterMemories();
+        }
+
+        function toggleMemorySelection(id, checked) {
+            if (checked) {
+                selectedMemoryIds.add(id);
+            } else {
+                selectedMemoryIds.delete(id);
+            }
+            updateBatchCounter();
+            filterMemories();
+        }
+
+        function selectAllMemories(select) {
+            if (select) {
+                allMemories.forEach(m => selectedMemoryIds.add(m.id));
+            } else {
+                selectedMemoryIds.clear();
+            }
+            updateBatchCounter();
+            filterMemories();
+        }
+
+        function updateBatchCounter() {
+            const badge = document.getElementById('selectedCountBadge');
+            if (badge) badge.textContent = `${selectedMemoryIds.size} محددة`;
+        }
+
+        async function downloadSelectedMemories() {
+            if (!selectedMemoryIds.size) {
+                showToast('يرجى تحديد صورة واحدة على الأقل للتنزيل', 'info');
+                return;
+            }
+
+            const itemsToDownload = allMemories.filter(m => selectedMemoryIds.has(m.id));
+            showToast(`جاري تجهيز وضغط (${itemsToDownload.length}) صورة محددة في ملف ZIP...`, 'info');
+
+            try {
+                if (itemsToDownload.length === 1) {
+                    downloadSingleMemory(itemsToDownload[0].id);
+                    return;
+                }
+
+                const zip = new JSZip();
+                const folder = zip.folder("ذكريات_محددة");
+
+                for (let i = 0; i < itemsToDownload.length; i++) {
+                    const item = itemsToDownload[i];
+                    if (item.imageUrl && item.imageUrl.includes('base64,')) {
+                        const base64Data = item.imageUrl.split('base64,')[1];
+                        const dateStr = item.date || 'memory';
+                        folder.file(`صورة_${i + 1}_${dateStr}.jpg`, base64Data, { base64: true });
+                    }
+                }
+
+                const zipBlob = await zip.generateAsync({ type: "blob" });
+                const url = URL.createObjectURL(zipBlob);
+                triggerDownload(url, `ذكريات_محددة_${itemsToDownload.length}_صور.zip`);
+                setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+                showToast(`تم تنزيل (${itemsToDownload.length}) صورة محددة في ملف ZIP بنجاح!`, 'success');
+            } catch (e) {
+                for (let i = 0; i < itemsToDownload.length; i++) {
+                    triggerDownload(itemsToDownload[i].imageUrl, `صورة_${i + 1}.jpg`);
+                    await new Promise(res => setTimeout(res, 300));
+                }
+            }
+        }
+
+        function deleteSelectedMemories() {
+            if (!selectedMemoryIds.size) {
+                showToast('يرجى تحديد صورة واحدة على الأقل للحذف', 'info');
+                return;
+            }
+
+            pendingDeleteIds = Array.from(selectedMemoryIds);
+            document.getElementById('deleteModalTitle').textContent = `حذف (${pendingDeleteIds.length}) ذكريات؟`;
+            document.getElementById('deleteModalDesc').textContent = 'هل أنت متأكد من حذف الصور المحددة نهائياً؟';
+
             const modal = document.getElementById('deleteConfirmModal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
 
             document.getElementById('confirmDeleteBtn').onclick = async function () {
-                if (!pendingDeleteId || !currentUser) return;
+                if (!currentUser || !pendingDeleteIds.length) return;
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', pendingDeleteId);
+                    for (const id of pendingDeleteIds) {
+                        const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', id);
+                        await deleteDoc(docRef);
+                    }
+                    showToast(`تم حذف ${pendingDeleteIds.length} ذكريات بنجاح`, 'info');
+                    selectedMemoryIds.clear();
+                    updateBatchCounter();
+                    closeDeleteConfirmModal();
+                } catch (err) {
+                    showToast('تعذر حذف الذكريات المحددة', 'error');
+                }
+            };
+        }
+
+        function askDeleteMemory(id) {
+            pendingDeleteIds = [id];
+            document.getElementById('deleteModalTitle').textContent = 'حذف الذكرى؟';
+            document.getElementById('deleteModalDesc').textContent = 'هل أنت متأكد من إزالة هذه الصورة والذكرى نهائياً؟';
+
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+
+            document.getElementById('confirmDeleteBtn').onclick = async function () {
+                if (!pendingDeleteIds.length || !currentUser) return;
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', pendingDeleteIds[0]);
                     await deleteDoc(docRef);
                     showToast('تم حذف الذكرى بنجاح', 'info');
                     closeDeleteConfirmModal();
@@ -1470,7 +1813,7 @@
         }
 
         function closeDeleteConfirmModal() {
-            pendingDeleteId = null;
+            pendingDeleteIds = [];
             const modal = document.getElementById('deleteConfirmModal');
             modal.classList.add('opacity-0');
             setTimeout(() => modal.classList.add('hidden'), 300);
@@ -1483,6 +1826,10 @@
             document.getElementById('lightboxImg').src = memory.imageUrl;
             document.getElementById('lightboxDesc').textContent = memory.description || 'بدون وصف';
             document.getElementById('lightboxDate').textContent = memory.date ? new Date(memory.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : '---';
+
+            document.getElementById('lightboxDownloadBtn').onclick = () => {
+                downloadSingleMemory(id);
+            };
 
             document.getElementById('lightboxEditBtn').onclick = () => {
                 closeLightboxModal();
