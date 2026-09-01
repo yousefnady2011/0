@@ -65,7 +65,7 @@
         }
 
         .vault-card {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .vault-card:hover {
             transform: translateY(-4px);
@@ -115,7 +115,7 @@
             }
         }
         .animate-slide-up {
-            animation: fadeInSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .text-3d {
@@ -194,7 +194,7 @@
                     </h1>
                     
                     <p class="max-w-2xl mx-auto text-sm sm:text-lg text-gray-600 mb-8 leading-relaxed font-medium px-2">
-                        احفظ صورك ولحظاتك المميزة، مقاطع الفيديو الخاصة بك، وحساباتك وباسورداتك (Google، بريدك، وتطبيقاتك) في مكان واحد مشفر وآمن يمكن استرجاعه على أي هاتف جديد في ثوانٍ.
+                        احفظ صورك ولحظاتك المميزة، مقاطع الفيديو الخاصة بك، وحساباتك وباسورداتك في مكان واحد مشفر وآمن يمكن استرجاعه وتنزيله بالكامل كملف ZIP على أي هاتف جديد في ثوانٍ.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto sm:max-w-none">
@@ -231,9 +231,9 @@
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandBlue text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
                                 <i class="fa-solid fa-images"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">قسم الصور</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">قسم الصور (تحديد غير محدود)</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                رفع مئات الصور دفعة واحدة مع التواريخ والأوصاف وتنزيلها بالكامل كملف ZIP بضغطة زر واحدة على هاتفك الجديد.
+                                رفع مئات أو آلاف الصور دفعة واحدة مع التواريخ والأوصاف، وتحديد الكل لتنزيلها كملف ZIP بضغطة زر واحدة على هاتفك الجديد.
                             </p>
                         </div>
 
@@ -376,25 +376,29 @@
                         </button>
                         <button onclick="toggleSelectionMode()" id="toggleSelectBtn" class="px-4 py-3 bg-brandBeige text-brandBlue hover:bg-brandBeige/80 rounded-2xl text-xs font-extrabold transition-all flex items-center gap-1.5 shrink-0">
                             <i class="fa-solid fa-list-check"></i>
-                            <span id="toggleSelectText">تحديد</span>
+                            <span id="toggleSelectText">تحديد متعدد</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Batch Action Bar -->
-                <div id="batchActionBar" class="hidden bg-brandBlue text-white p-3.5 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md animate-slide-up">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs sm:text-sm font-extrabold bg-white/20 px-3 py-1 rounded-xl" id="selectedCountBadge">0 محددة</span>
-                        <button onclick="selectAllMemories(true)" class="text-xs underline hover:text-brandBeige transition-colors">تحديد الكل</button>
-                        <span class="text-white/40">|</span>
-                        <button onclick="selectAllMemories(false)" class="text-xs underline hover:text-brandBeige transition-colors">إلغاء التحديد</button>
+                <!-- Batch Action Bar with Instant Select All -->
+                <div id="batchActionBar" class="hidden bg-brandBlue text-white p-3.5 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md animate-slide-up border border-white/20">
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <span class="text-xs sm:text-sm font-extrabold bg-white/20 px-3 py-1.5 rounded-xl border border-white/30" id="selectedCountBadge">0 محددة</span>
+                        <button onclick="selectAllMemories(true)" class="px-3 py-1.5 bg-white text-brandBlue rounded-xl text-xs font-black hover:bg-brandBeigeLight transition-all flex items-center gap-1 shadow-xs">
+                            <i class="fa-solid fa-check-double"></i>
+                            <span>تحديد الكل</span>
+                        </button>
+                        <button onclick="selectAllMemories(false)" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all">
+                            إلغاء التحديد
+                        </button>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="downloadSelectedMemories()" class="px-3.5 py-2 bg-brandGreen hover:bg-brandGreenDark text-white text-xs font-bold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
+                        <button onclick="downloadSelectedMemories()" class="px-3.5 py-2 bg-brandGreen hover:bg-brandGreenDark text-white text-xs font-extrabold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
                             <i class="fa-solid fa-file-zipper"></i>
                             <span>تنزيل المحددة (ZIP)</span>
                         </button>
-                        <button onclick="deleteSelectedMemories()" class="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
+                        <button onclick="deleteSelectedMemories()" class="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-extrabold rounded-xl shadow-xs flex items-center gap-1.5 transition-all">
                             <i class="fa-solid fa-trash"></i>
                             <span>حذف المحددة</span>
                         </button>
@@ -443,8 +447,8 @@
                         <i class="fa-solid fa-images"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="text-sm font-black text-brandBlue">إضافة صور (دفعة واحدة)</h4>
-                        <p class="text-[11px] text-gray-500 mt-0.5">رفع مئات الصور مع وصف وتاريخ</p>
+                        <h4 class="text-sm font-black text-brandBlue">إضافة صور (تحديد غير محدود)</h4>
+                        <p class="text-[11px] text-gray-500 mt-0.5">رفع مئات أو آلاف الصور دفعة واحدة مع وصف وتاريخ</p>
                     </div>
                     <i class="fa-solid fa-chevron-left text-gray-400 group-hover:text-brandBlue transition-colors"></i>
                 </button>
@@ -506,7 +510,7 @@
                     <div class="w-full bg-white rounded-full h-3 overflow-hidden border border-brandBeige/80 p-0.5">
                         <div id="saveProgressBarFill" class="bg-gradient-to-r from-brandGreen to-brandBlue h-full rounded-full transition-all duration-300" style="width: 0%"></div>
                     </div>
-                    <p class="text-[10px] text-gray-500 text-center font-medium">يرجى الانتظار حتى اكتمال المعالجة والحفظ</p>
+                    <p class="text-[10px] text-gray-500 text-center font-medium">يرجى الانتظار حتى اكتمال المعالجة والحفظ لجميع الصور</p>
                 </div>
 
                 <!-- Photos Upload Dropzone -->
@@ -526,8 +530,8 @@
                             <div class="w-12 h-12 rounded-2xl bg-white text-brandBlue flex items-center justify-center mx-auto text-xl shadow-xs border border-brandBeige">
                                 <i class="fa-solid fa-images"></i>
                             </div>
-                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صور من هاتفك أو جهازك</p>
-                            <p class="text-[10px] text-gray-400 font-medium">يدعم رفع مجموعات الصور دفعة واحدة مع ضغط سريع</p>
+                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صور من هاتفك أو جهازك (تحديد جماعي)</p>
+                            <p class="text-[10px] text-gray-400 font-medium">يدعم رفع عشرات أو مئات الصور دفعة واحدة مع ضغط سريع وفوري</p>
                         </div>
 
                         <div id="imagePreviewContainer" class="hidden w-full space-y-2.5">
@@ -922,7 +926,7 @@
             collection, 
             doc, 
             setDoc, 
-            getDoc,
+            getDoc, 
             addDoc, 
             updateDoc, 
             deleteDoc, 
@@ -1125,7 +1129,7 @@
             }
         }
 
-        // Image compression helper (using HTML5 Canvas for speed and memory efficiency)
+        // Fast parallel image compression
         function compressImage(file, maxDimension = 1280, quality = 0.75) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -1160,7 +1164,7 @@
             });
         }
 
-        // Fast video reader to Data URL
+        // Fast video reader
         function readVideoAsDataURL(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1174,13 +1178,13 @@
             const files = Array.from(event.target.files || []);
             if (!files.length) return;
 
-            showToast(`جاري قراءة وتجهيز ${files.length} صورة...`, 'info');
+            showToast(`جاري تجهيز وضغط ${files.length} صورة...`, 'info');
 
-            for (const file of files) {
-                if (file.type.startsWith('image/')) {
-                    const compressed = await compressImage(file);
-                    currentSelectedBase64List.push(compressed);
-                }
+            const batchSize = 6;
+            for (let i = 0; i < files.length; i += batchSize) {
+                const chunk = files.slice(i, i + batchSize);
+                const results = await Promise.all(chunk.map(f => f.type.startsWith('image/') ? compressImage(f) : null));
+                results.forEach(res => { if (res) currentSelectedBase64List.push(res); });
             }
 
             renderPreviewThumbnails();
@@ -1261,7 +1265,7 @@
             if (!file) return;
 
             if (file.size > 80 * 1024 * 1024) {
-                showToast('حجم الفيديو كبير جداً، يفضل اختيار فيديو أصغر من 80 ميجابايت', 'error');
+                showToast('حجم الفيديو كبير، يفضل اختيار فيديو أصغر من 80 ميجابايت', 'error');
                 return;
             }
 
@@ -1318,7 +1322,6 @@
                 const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'memories');
 
                 if (editId) {
-                    // Update single item
                     const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', editId);
                     const updateData = {
                         description: description,
@@ -1335,7 +1338,7 @@
                 } else {
                     if (mediaType === 'photo') {
                         const total = currentSelectedBase64List.length;
-                        const batchSize = 3;
+                        const batchSize = 4;
                         let completed = 0;
 
                         for (let i = 0; i < total; i += batchSize) {
@@ -1392,7 +1395,6 @@
                     items.push({ id: d.id, ...d.data() });
                 });
 
-                // Sort in memory by date descending
                 items.sort((a, b) => {
                     const dateA = new Date(a.date || a.createdAt || 0);
                     const dateB = new Date(b.date || b.createdAt || 0);
@@ -1427,22 +1429,19 @@
             if (counter) counter.textContent = `${items.length} عنصر`;
         }
 
-        function filterMemories() {
+        function getCurrentlyFilteredItems() {
             const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
             const dateVal = document.getElementById('dateFilter')?.value;
 
-            const filtered = allVaultItems.filter(item => {
+            return allVaultItems.filter(item => {
                 const cat = item.category || 'photo';
 
-                // Section Tab Match
                 if (currentSectionFilter === 'photos' && cat !== 'photo') return false;
                 if (currentSectionFilter === 'videos' && cat !== 'video') return false;
                 if (currentSectionFilter === 'accounts' && cat !== 'account') return false;
 
-                // Date Filter Match
                 if (dateVal && item.date !== dateVal) return false;
 
-                // Search Query Match
                 if (query) {
                     if (cat === 'account') {
                         const plat = (item.platformName || '').toLowerCase();
@@ -1457,7 +1456,10 @@
 
                 return true;
             });
+        }
 
+        function filterMemories() {
+            const filtered = getCurrentlyFilteredItems();
             renderVaultGrid(filtered);
         }
 
@@ -1493,9 +1495,9 @@
                     if (item.platformKey === 'instagram') platformIcon = 'fa-brands fa-instagram text-pink-600';
 
                     return `
-                        <div class="vault-card bg-white rounded-3xl p-5 border border-brandBeige/80 shadow-card flex flex-col justify-between relative group ${isSelected ? 'ring-2 ring-brandBlue' : ''}">
+                        <div class="vault-card bg-white rounded-3xl p-5 border border-brandBeige/80 shadow-card flex flex-col justify-between relative group ${isSelected ? 'ring-3 ring-brandBlue bg-blue-50/20' : ''}" ${isSelectionMode ? `onclick="toggleVaultSelection('${item.id}', ${!isSelected})"` : ''}>
                             ${isSelectionMode ? `
-                                <div class="absolute top-4 left-4 z-20">
+                                <div class="absolute top-4 left-4 z-20" onclick="event.stopPropagation()">
                                     <input type="checkbox" onchange="toggleVaultSelection('${item.id}', this.checked)" ${isSelected ? 'checked' : ''} class="w-5 h-5 accent-brandBlue rounded cursor-pointer">
                                 </div>
                             ` : ''}
@@ -1519,7 +1521,7 @@
                                         <span class="text-gray-500 text-[11px] font-bold">المستخدم:</span>
                                         <div class="flex items-center gap-1.5 overflow-hidden">
                                             <span class="font-bold text-gray-800 truncate" dir="ltr">${escapeHtml(item.username)}</span>
-                                            <button onclick="copyTextToClipboard('${escapeHtml(item.username)}', 'تم نسخ اسم المستخدم')" class="text-brandBlue hover:text-brandBlueDark p-1" title="نسخ">
+                                            <button onclick="event.stopPropagation(); copyTextToClipboard('${escapeHtml(item.username)}', 'تم نسخ اسم المستخدم')" class="text-brandBlue hover:text-brandBlueDark p-1" title="نسخ">
                                                 <i class="fa-regular fa-copy"></i>
                                             </button>
                                         </div>
@@ -1529,7 +1531,7 @@
                                         <span class="text-gray-500 text-[11px] font-bold">الباسورد:</span>
                                         <div class="flex items-center gap-1.5 overflow-hidden">
                                             <span class="font-bold text-gray-800 tracking-wider" dir="ltr" id="passText_${item.id}">••••••••</span>
-                                            <button onclick="copyTextToClipboard('${escapeHtml(item.password)}', 'تم نسخ كلمة السر')" class="text-amber-700 hover:text-amber-800 p-1" title="نسخ الباسورد">
+                                            <button onclick="event.stopPropagation(); copyTextToClipboard('${escapeHtml(item.password)}', 'تم نسخ كلمة السر')" class="text-amber-700 hover:text-amber-800 p-1" title="نسخ الباسورد">
                                                 <i class="fa-regular fa-copy"></i>
                                             </button>
                                         </div>
@@ -1543,7 +1545,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between pt-2 border-t border-brandBeige/60">
+                            <div class="flex items-center justify-between pt-2 border-t border-brandBeige/60" onclick="event.stopPropagation()">
                                 <div class="flex items-center gap-1">
                                     <button onclick="openEditVaultItem('${item.id}')" class="p-2 text-brandBlue hover:bg-brandBeigeLight rounded-xl transition-colors text-xs font-bold" title="تعديل">
                                         <i class="fa-solid fa-pen"></i>
@@ -1566,7 +1568,7 @@
                 const formattedDate = item.date ? new Date(item.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }) : '---';
 
                 return `
-                    <div class="vault-card bg-white rounded-3xl overflow-hidden border border-brandBeige/80 shadow-card flex flex-col justify-between relative group cursor-pointer ${isSelected ? 'ring-2 ring-brandBlue' : ''}" onclick="openLightbox('${item.id}')">
+                    <div class="vault-card bg-white rounded-3xl overflow-hidden border border-brandBeige/80 shadow-card flex flex-col justify-between relative group cursor-pointer ${isSelected ? 'ring-3 ring-brandBlue bg-blue-50/20' : ''}" onclick="${isSelectionMode ? `toggleVaultSelection('${item.id}', ${!isSelected})` : `openLightbox('${item.id}')`}">
                         ${isSelectionMode ? `
                             <div class="absolute top-3.5 left-3.5 z-20" onclick="event.stopPropagation()">
                                 <input type="checkbox" onchange="toggleVaultSelection('${item.id}', this.checked)" ${isSelected ? 'checked' : ''} class="w-5 h-5 accent-brandBlue rounded cursor-pointer shadow-md">
@@ -1702,7 +1704,7 @@
             const saveBtnText = document.getElementById('saveMediaBtnText');
 
             if (type === 'photo') {
-                if (header) header.innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة صور جديدة</span>`;
+                if (header) header.innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة صور جديدة (تحديد جماعي)</span>`;
                 if (saveBtnText) saveBtnText.textContent = 'حفظ الصور في الخزنة';
                 if (photosDrop) photosDrop.classList.remove('hidden');
                 if (videoDrop) videoDrop.classList.add('hidden');
@@ -2020,7 +2022,7 @@
             }
         }
 
-        // Selection Controller
+        // Selection Controller (Multi-select and Select All)
         function toggleSelectionMode() {
             isSelectionMode = !isSelectionMode;
             const batchBar = document.getElementById('batchActionBar');
@@ -2028,10 +2030,10 @@
 
             if (isSelectionMode) {
                 batchBar.classList.remove('hidden');
-                toggleText.textContent = 'إلغاء';
+                toggleText.textContent = 'إلغاء التحديد';
             } else {
                 batchBar.classList.add('hidden');
-                toggleText.textContent = 'تحديد';
+                toggleText.textContent = 'تحديد متعدد';
                 selectedVaultIds.clear();
             }
 
@@ -2050,10 +2052,13 @@
         }
 
         function selectAllMemories(select) {
+            const currentItems = getCurrentlyFilteredItems();
             if (select) {
-                allVaultItems.forEach(m => selectedVaultIds.add(m.id));
+                currentItems.forEach(m => selectedVaultIds.add(m.id));
+                showToast(`تم تحديد ${selectedVaultIds.size} عنصر بنجاح`, 'info');
             } else {
                 selectedVaultIds.clear();
+                showToast('تم إلغاء التحديد', 'info');
             }
             updateBatchCounter();
             filterMemories();
@@ -2071,7 +2076,7 @@
             }
 
             const itemsToDownload = allVaultItems.filter(m => selectedVaultIds.has(m.id));
-            showToast(`جاري تجهيز وضغط (${itemsToDownload.length}) عنصر محدد...`, 'info');
+            showToast(`جاري تجهيز وضغط (${itemsToDownload.length}) عنصر محدد في ملف ZIP...`, 'info');
 
             try {
                 const zip = new JSZip();
@@ -2080,9 +2085,9 @@
                 for (let i = 0; i < itemsToDownload.length; i++) {
                     const item = itemsToDownload[i];
                     if (item.category === 'video' && item.videoUrl && item.videoUrl.includes('base64,')) {
-                        folder.file(`فيديو_${i + 1}.mp4`, item.videoUrl.split('base64,')[1], { base64: true });
+                        folder.file(`فيديو_${i + 1}_${item.date || 'vid'}.mp4`, item.videoUrl.split('base64,')[1], { base64: true });
                     } else if (item.imageUrl && item.imageUrl.includes('base64,')) {
-                        folder.file(`صورة_${i + 1}.jpg`, item.imageUrl.split('base64,')[1], { base64: true });
+                        folder.file(`صورة_${i + 1}_${item.date || 'img'}.jpg`, item.imageUrl.split('base64,')[1], { base64: true });
                     } else if (item.category === 'account') {
                         folder.file(`حساب_${item.platformName}_${i + 1}.txt`, `المنصة: ${item.platformName}\nالمستخدم: ${item.username}\nالباسورد: ${item.password}`);
                     }
@@ -2093,7 +2098,7 @@
                 triggerDownload(url, `عناصر_محددة_${itemsToDownload.length}.zip`);
                 setTimeout(() => URL.revokeObjectURL(url), 10000);
 
-                showToast(`تم تنزيل العناصر المحددة في ملف ZIP بنجاح!`, 'success');
+                showToast(`تم تنزيل العناصر المحددة (${itemsToDownload.length}) في ملف ZIP بنجاح!`, 'success');
             } catch (e) {
                 showToast('حدث خطأ أثناء تنزيل العناصر المحددة', 'error');
             }
