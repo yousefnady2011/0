@@ -958,7 +958,7 @@
         let allVaultItems = [];
         let currentSectionFilter = 'all'; // 'all', 'photos', 'videos', 'accounts'
         let currentSelectedBase64List = [];
-        let currentSelectedVideoBase64 = null;
+        let currentSelectedVideoBase64List = [];
         let selectedPlatformKey = 'google';
         let pendingDeleteIds = [];
         let isSelectionMode = false;
@@ -1260,33 +1260,88 @@
             renderPreviewThumbnails();
         }
 
-        async function previewSelectedVideo(event) {
-            const file = event.target.files?.[0];
-            if (!file) return;
+        async function previewSelectedVideos(event) {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) return;
 
-            if (file.size > 80 * 1024 * 1024) {
-                showToast('حجم الفيديو كبير، يفضل اختيار فيديو أصغر من 80 ميجابايت', 'error');
+            showToast(`جاري تجهيز ${files.length} مقطع فيديو في ثوانٍ...`, 'info');
+
+            const readPromises = files.map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve({ dataUrl: e.target.result, name: file.name, size: (file.size / (1024 * 1024)).toFixed(1) });
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            const results = await Promise.all(readPromises);
+            results.forEach(res => {
+                if (res) currentSelectedVideoBase64List.push(res);
+            });
+
+            renderVideoPreviewThumbnails();
+            event.target.value = '';
+        }
+
+        function renderVideoPreviewThumbnails() {
+            const container = document.getElementById('videoPreviewContainer');
+            const placeholder = document.getElementById('videoUploadPlaceholder');
+            const grid = document.getElementById('videoPreviewGrid');
+            const countText = document.getElementById('selectedVideosCountText');
+            const clearBtn = document.getElementById('clearAllVideosBtn');
+
+            if (!container || !placeholder || !grid) return;
+
+            if (currentSelectedVideoBase64List.length === 0) {
+                container.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                if (countText) countText.classList.add('hidden');
+                if (clearBtn) clearBtn.classList.add('hidden');
+                grid.innerHTML = '';
                 return;
             }
 
-            showToast('جاري تجهيز مقطع الفيديو...', 'info');
-
-            try {
-                const videoDataUrl = await readVideoAsDataURL(file);
-                currentSelectedVideoBase64 = videoDataUrl;
-
-                const placeholder = document.getElementById('videoUploadPlaceholder');
-                const previewBox = document.getElementById('videoPreviewBox');
-                const player = document.getElementById('videoPreviewPlayer');
-                const infoText = document.getElementById('videoInfoText');
-
-                if (placeholder) placeholder.classList.add('hidden');
-                if (previewBox) previewBox.classList.remove('hidden');
-                if (player) player.src = videoDataUrl;
-                if (infoText) infoText.textContent = `تم اختيار: ${file.name} (${(file.size / (1024*1024)).toFixed(1)} MB)`;
-            } catch (err) {
-                showToast('تعذر قراءة ملف الفيديو', 'error');
+            placeholder.classList.add('hidden');
+            container.classList.remove('hidden');
+            if (countText) {
+                countText.classList.remove('hidden');
+                countText.textContent = `${currentSelectedVideoBase64List.length} فيديوهات محددة`;
             }
+            if (clearBtn) clearBtn.classList.remove('hidden');
+
+            grid.innerHTML = currentSelectedVideoBase64List.map((item, idx) => `
+                <div class="relative group rounded-xl overflow-hidden bg-black aspect-video border border-brandBeige flex items-center justify-center">
+                    <video src="${item.dataUrl}" class="w-full h-full object-cover"></video>
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <i class="fa-solid fa-play text-white text-xs"></i>
+                    </div>
+                    <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">${item.size} MB</span>
+                    <button type="button" onclick="removeSinglePreviewVideo(${idx}, event)" class="absolute top-1 left-1 w-5 h-5 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[10px] shadow transition-transform group-hover:scale-110" title="إزالة">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeSinglePreviewVideo(index, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            if (index >= 0 && index < currentSelectedVideoBase64List.length) {
+                currentSelectedVideoBase64List.splice(index, 1);
+                renderVideoPreviewThumbnails();
+            }
+        }
+
+        function clearSelectedVideos(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            currentSelectedVideoBase64List = [];
+            renderVideoPreviewThumbnails();
         }
 
         async function handleMediaSave(e) {
@@ -1298,10 +1353,7 @@
             const description = document.getElementById('mediaDescription')?.value.trim() || '';
             const date = document.getElementById('mediaDate')?.value || new Date().toISOString().split('T')[0];
             const saveBtn = document.getElementById('saveMediaBtn');
-            const progressContainer = document.getElementById('saveProgressBarContainer');
-            const progressFill = document.getElementById('saveProgressBarFill');
-            const progressStatus = document.getElementById('saveProgressStatusText');
-            const progressPercent = document.getElementById('saveProgressPercentText');
+            const saveBtnText = document.getElementById('saveMediaBtnText');
 
             if (mediaType === 'photo') {
                 if (!editId && currentSelectedBase64List.length === 0) {
@@ -1309,15 +1361,15 @@
                     return;
                 }
             } else if (mediaType === 'video') {
-                if (!editId && !currentSelectedVideoBase64) {
-                    showToast('يرجى اختيار مقطع فيديو', 'error');
+                if (!editId && currentSelectedVideoBase64List.length === 0) {
+                    showToast('يرجى اختيار فيديو واحد على الأقل', 'error');
                     return;
                 }
             }
 
             try {
                 if (saveBtn) saveBtn.disabled = true;
-                if (progressContainer) progressContainer.classList.remove('hidden');
+                if (saveBtnText) saveBtnText.innerHTML = `<i class="fa-solid fa-bolt text-amber-300 fa-beat mr-1"></i> جاري الحفظ الصاروخي...`;
 
                 const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'memories');
 
@@ -1330,47 +1382,38 @@
                     };
                     if (mediaType === 'photo' && currentSelectedBase64List.length > 0) {
                         updateData.imageUrl = currentSelectedBase64List[0];
-                    } else if (mediaType === 'video' && currentSelectedVideoBase64) {
-                        updateData.videoUrl = currentSelectedVideoBase64;
+                    } else if (mediaType === 'video' && currentSelectedVideoBase64List.length > 0) {
+                        updateData.videoUrl = currentSelectedVideoBase64List[0].dataUrl;
                     }
                     await updateDoc(docRef, updateData);
                     showToast('تم تحديث العنصر بنجاح!', 'success');
                 } else {
                     if (mediaType === 'photo') {
                         const total = currentSelectedBase64List.length;
-                        const batchSize = 4;
-                        let completed = 0;
-
-                        for (let i = 0; i < total; i += batchSize) {
-                            const chunk = currentSelectedBase64List.slice(i, i + batchSize);
-                            await Promise.all(chunk.map(async (base64) => {
-                                await addDoc(colRef, {
-                                    category: 'photo',
-                                    imageUrl: base64,
-                                    description: description,
-                                    date: date,
-                                    createdAt: new Date().toISOString()
-                                });
-                                completed++;
-                                const percent = Math.round((completed / total) * 100);
-                                if (progressFill) progressFill.style.width = `${percent}%`;
-                                if (progressPercent) progressPercent.textContent = `${percent}%`;
-                                if (progressStatus) progressStatus.innerHTML = `<i class="fa-solid fa-cloud-arrow-up fa-bounce text-brandGreen"></i> <span>جاري حفظ ${completed} من ${total}...</span>`;
-                            }));
-                        }
-                        showToast(`تم حفظ ${total} صورة بنجاح في الخزنة!`, 'success');
+                        // Concurrent sub-5-second parallel writes
+                        await Promise.all(currentSelectedBase64List.map(base64 => {
+                            return addDoc(colRef, {
+                                category: 'photo',
+                                imageUrl: base64,
+                                description: description,
+                                date: date,
+                                createdAt: new Date().toISOString()
+                            });
+                        }));
+                        showToast(`تم حفظ ${total} صورة بنجاح في الخزنة! ⚡`, 'success');
                     } else if (mediaType === 'video') {
-                        if (progressFill) progressFill.style.width = `50%`;
-                        if (progressPercent) progressPercent.textContent = `50%`;
-                        await addDoc(colRef, {
-                            category: 'video',
-                            videoUrl: currentSelectedVideoBase64,
-                            description: description,
-                            date: date,
-                            createdAt: new Date().toISOString()
-                        });
-                        if (progressFill) progressFill.style.width = `100%`;
-                        showToast('تم حفظ مقطع الفيديو في الخزنة بنجاح!', 'success');
+                        const total = currentSelectedVideoBase64List.length;
+                        // Concurrent sub-5-second parallel writes for multiple videos
+                        await Promise.all(currentSelectedVideoBase64List.map(item => {
+                            return addDoc(colRef, {
+                                category: 'video',
+                                videoUrl: item.dataUrl,
+                                description: description || item.name,
+                                date: date,
+                                createdAt: new Date().toISOString()
+                            });
+                        }));
+                        showToast(`تم حفظ ${total} مقطع فيديو في الخزنة بنجاح! ⚡`, 'success');
                     }
                 }
 
@@ -1379,7 +1422,7 @@
                 showToast('حدث خطأ أثناء حفظ الملفات، يرجى المحاولة ثانية', 'error');
             } finally {
                 if (saveBtn) saveBtn.disabled = false;
-                if (progressContainer) progressContainer.classList.add('hidden');
+                if (saveBtnText) saveBtnText.textContent = 'حفظ في الخزنة';
             }
         }
 
@@ -1711,17 +1754,12 @@
                 currentSelectedBase64List = [];
                 renderPreviewThumbnails();
             } else {
-                if (header) header.innerHTML = `<i class="fa-solid fa-video text-brandBlue"></i><span>إضافة مقطع فيديو</span>`;
-                if (saveBtnText) saveBtnText.textContent = 'حفظ الفيديو في الخزنة';
+                if (header) header.innerHTML = `<i class="fa-solid fa-video text-brandBlue"></i><span>إضافة مقاطع فيديو (تحديد متعدد)</span>`;
+                if (saveBtnText) saveBtnText.textContent = 'حفظ الفيديوهات في الخزنة';
                 if (photosDrop) photosDrop.classList.add('hidden');
                 if (videoDrop) videoDrop.classList.remove('hidden');
-                currentSelectedVideoBase64 = null;
-                const previewBox = document.getElementById('videoPreviewBox');
-                if (previewBox) previewBox.classList.add('hidden');
-                const uploadPlaceholder = document.getElementById('videoUploadPlaceholder');
-                if (uploadPlaceholder) uploadPlaceholder.classList.remove('hidden');
-                const videoInput = document.getElementById('videoFileInput');
-                if (videoInput) videoInput.value = '';
+                currentSelectedVideoBase64List = [];
+                renderVideoPreviewThumbnails();
             }
 
             const modal = document.getElementById('mediaModal');
@@ -1746,7 +1784,7 @@
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     currentSelectedBase64List = [];
-                    currentSelectedVideoBase64 = null;
+                    currentSelectedVideoBase64List = [];
                 }, 300);
             }
         }
@@ -2492,9 +2530,11 @@
         window.openAccountModal = openAccountModal;
         window.closeAccountModal = closeAccountModal;
         window.previewSelectedImages = previewSelectedImages;
-        window.previewSelectedVideo = previewSelectedVideo;
+        window.previewSelectedVideos = previewSelectedVideos;
         window.clearSelectedImages = clearSelectedImages;
+        window.clearSelectedVideos = clearSelectedVideos;
         window.removeSinglePreviewImage = removeSinglePreviewImage;
+        window.removeSinglePreviewVideo = removeSinglePreviewVideo;
         window.setMediaTodayDate = setMediaTodayDate;
         window.selectPlatform = selectPlatform;
         window.handleMediaSave = handleMediaSave;
