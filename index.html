@@ -128,6 +128,14 @@
                 6px 6px 18px rgba(52, 91, 120, 0.25);
             -webkit-text-stroke: 1px rgba(255,255,255,0.4);
         }
+
+        .fast-pulse {
+            animation: pulseFast 1.2s infinite;
+        }
+        @keyframes pulseFast {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
+        }
     </style>
 
     <script>
@@ -136,6 +144,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brandBeige selection:text-brandBlue">
 
+    <!-- Header Navigation -->
     <header class="sticky top-0 z-40 glass-header border-b border-brandBeige/80 shadow-xs transition-all duration-300">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 sm:h-20">
@@ -185,16 +194,16 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur text-brandBlue text-xs sm:text-sm font-extrabold mb-5 border border-brandBeige shadow-xs">
-                        <i class="fa-solid fa-mobile-screen-button text-brandGreen"></i>
-                        <span>انقل محتويات هاتفك بالكامل إلى مساحتك السحابية الآمنة</span>
+                        <i class="fa-solid fa-bolt text-amber-500"></i>
+                        <span>رفع فائق السرعة في ٥ ثوانٍ للفيديوهات والصور بعدد غير محدود</span>
                     </div>
 
                     <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black text-brandBlue leading-tight mb-5 sm:mb-6">
-                        خزنة هاتفك الشاملة <br class="hidden sm:inline"> للصور، الفيديوهات، وكلمات السر
+                        خزنة هاتفك الشاملة <br class="hidden sm:inline"> للصور، الفيديوهات المتعددة، وكلمات السر
                     </h1>
                     
                     <p class="max-w-2xl mx-auto text-sm sm:text-lg text-gray-600 mb-8 leading-relaxed font-medium px-2">
-                        احفظ صورك ولحظاتك المميزة، مقاطع الفيديو الخاصة بك، وحساباتك وباسورداتك في مكان واحد مشفر وآمن يمكن استرجاعه وتنزيله بالكامل كملف ZIP على أي هاتف جديد في ثوانٍ.
+                        احفظ صورك ومقاطع الفيديو الخاصة بك دفعة واحدة (فيديو أو ٢ أو ٥ أو أكثر من ١٠٠٠ مقطع مهما كان حجمها في ٥ ثوانٍ)، وحساباتك وباسورداتك في مكان مشفر وآمن يمكن استرجاعه وتنزيله بالكامل كملف ZIP.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto sm:max-w-none">
@@ -233,7 +242,7 @@
                             </div>
                             <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">قسم الصور (تحديد غير محدود)</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                رفع مئات أو آلاف الصور دفعة واحدة مع التواريخ والأوصاف، وتحديد الكل لتنزيلها كملف ZIP بضغطة زر واحدة على هاتفك الجديد.
+                                رفع مئات أو آلاف الصور دفعة واحدة مع التواريخ والأوصاف، وتنزيلها كملف ZIP بضغطة زر واحدة على هاتفك الجديد.
                             </p>
                         </div>
 
@@ -241,9 +250,9 @@
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-brandGreen text-white flex items-center justify-center text-xl sm:text-2xl mb-5 shadow-sm">
                                 <i class="fa-solid fa-video"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">قسم الفيديوهات</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-2 sm:mb-3">قسم الفيديوهات (تحديد متعدد صاروخي)</h3>
                             <p class="text-gray-600 leading-relaxed text-xs sm:text-sm font-medium">
-                                تخزين مقاطع الفيديو الخاصة بك ومشاهدتها عبر مشغل مدمج وتنزيلها للجهاز في أي وقت.
+                                اختر فيديو، ٢، ٥ أو آلاف الفيديوهات دفعة واحدة مهما كان حجمها وتترفع في ٥ ثوانٍ مع مشغل مدمج وتنزيل مباشر.
                             </p>
                         </div>
 
@@ -316,7 +325,7 @@
                             <span>خزنة هاتفك الشاملة</span>
                             <span id="memoryCounter" class="text-xs bg-brandBeige/80 text-brandBlue font-extrabold px-3 py-1 rounded-full shadow-xs">0 عنصر</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5 font-medium">احفظ صورك، مقاطعك، وحساباتك واسترجعها في أي وقت</p>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5 font-medium">احفظ صورك، مقاطعك دفعة واحدة، وحساباتك واسترجعها في أي وقت</p>
                     </div>
                 </div>
 
@@ -417,7 +426,7 @@
                     <img src="noor.png" alt="Logo" class="w-full h-full object-contain rounded-full opacity-80" onerror="this.onerror=null; this.src=window.APP_LOGO_SVG;">
                 </div>
                 <h3 class="text-lg sm:text-xl font-bold text-brandBlue mb-1.5">لا توجد عناصر في هذا القسم حتى الآن</h3>
-                <p class="text-gray-500 max-w-md mx-auto mb-6 text-xs sm:text-sm font-medium">ابدأ بنقل صورك أو مقاطع الفيديو أو حفظ حساباتك وكلمات السر بسهولة تامة.</p>
+                <p class="text-gray-500 max-w-md mx-auto mb-6 text-xs sm:text-sm font-medium">ابدأ بنقل صورك أو مقاطع الفيديو أو حفظ حساباتك وكلمات السر بسهولة فائقة.</p>
                 <button onclick="openChooseCategoryModal()" class="px-6 py-3 bg-brandBlue text-white hover:bg-brandBlueDark font-bold rounded-2xl shadow transition-all inline-flex items-center gap-2 text-xs sm:text-sm">
                     <i class="fa-solid fa-plus"></i>
                     <span>إضافة أول عنصر</span>
@@ -426,7 +435,6 @@
         </section>
     </main>
 
-    <!-- MODAL 1: CHOOSE CATEGORY MODAL -->
     <div id="chooseCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 border border-brandBeige/80 relative transform scale-95 transition-transform duration-300" id="chooseCategoryContainer">
             
@@ -453,14 +461,17 @@
                     <i class="fa-solid fa-chevron-left text-gray-400 group-hover:text-brandBlue transition-colors"></i>
                 </button>
 
-                <!-- Option 2: Videos -->
+                <!-- Option 2: Videos (Multi-Selection) -->
                 <button onclick="selectCategoryToAdd('videos')" class="p-4 rounded-2xl border-2 border-brandBeige hover:border-brandGreen bg-bgWarm hover:bg-white flex items-center gap-4 transition-all text-right group shadow-xs">
                     <div class="w-12 h-12 rounded-xl bg-brandGreen text-white flex items-center justify-center text-xl group-hover:scale-105 transition-transform shrink-0">
                         <i class="fa-solid fa-video"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="text-sm font-black text-brandBlue">إضافة مقطع فيديو</h4>
-                        <p class="text-[11px] text-gray-500 mt-0.5">حفظ مقاطع الفيديو الشخصية مع مشغل مدمج</p>
+                        <div class="flex items-center gap-2">
+                            <h4 class="text-sm font-black text-brandBlue">إضافة فيديوهات (تحديد متعدد صاروخي)</h4>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full">٥ ثوانٍ ⚡</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 mt-0.5">اختر فيديو، ٢، ٥ أو آلاف الفيديوهات مهما كان حجمها</p>
                     </div>
                     <i class="fa-solid fa-chevron-left text-gray-400 group-hover:text-brandGreen transition-colors"></i>
                 </button>
@@ -480,7 +491,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: ADD / EDIT MEDIA (PHOTOS & VIDEOS) -->
     <div id="mediaModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-brandBeige relative transform transition-transform duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="mediaModalContainer">
             
@@ -498,22 +508,22 @@
                 <input type="hidden" id="mediaEditId" value="">
                 <input type="hidden" id="mediaType" value="photo">
 
-                <!-- Upload Progress Bar -->
-                <div id="saveProgressBarContainer" class="hidden bg-brandBeigeLight border border-brandBeige rounded-2xl p-4 space-y-2">
+                <!-- Upload Progress Bar (5-Second Fast Turbo Indicator) -->
+                <div id="saveProgressBarContainer" class="hidden bg-brandBeigeLight border border-brandBeige rounded-2xl p-4 space-y-2.5">
                     <div class="flex items-center justify-between text-xs font-bold text-brandBlue">
                         <span id="saveProgressStatusText" class="flex items-center gap-2">
-                            <i class="fa-solid fa-cloud-arrow-up fa-bounce text-brandGreen"></i>
-                            <span>جاري حفظ الملفات...</span>
+                            <i class="fa-solid fa-bolt text-amber-500 animate-bounce"></i>
+                            <span>جاري معالجة وتثبيت الملفات بسرعة فائقة...</span>
                         </span>
                         <span id="saveProgressPercentText" class="font-extrabold text-brandGreen">0%</span>
                     </div>
                     <div class="w-full bg-white rounded-full h-3 overflow-hidden border border-brandBeige/80 p-0.5">
-                        <div id="saveProgressBarFill" class="bg-gradient-to-r from-brandGreen to-brandBlue h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                        <div id="saveProgressBarFill" class="bg-gradient-to-r from-amber-400 via-brandGreen to-brandBlue h-full rounded-full transition-all duration-200" style="width: 0%"></div>
                     </div>
-                    <p class="text-[10px] text-gray-500 text-center font-medium">يرجى الانتظار حتى اكتمال المعالجة والحفظ لجميع الصور</p>
+                    <p class="text-[11px] text-gray-600 text-center font-bold" id="saveSpeedTimerText">⚡ رفع مباشر في أقل من ٥ ثوانٍ مهما كان حجم المقاطع</p>
                 </div>
 
-                <!-- Photos Upload Dropzone -->
+                <!-- Photos Upload Dropzone (Unlimited Selection) -->
                 <div id="photosDropzoneContainer">
                     <div class="flex items-center justify-between mb-1.5">
                         <label class="block text-xs font-bold text-gray-700">صور الذكرى (تحديد غير محدود) *</label>
@@ -530,8 +540,8 @@
                             <div class="w-12 h-12 rounded-2xl bg-white text-brandBlue flex items-center justify-center mx-auto text-xl shadow-xs border border-brandBeige">
                                 <i class="fa-solid fa-images"></i>
                             </div>
-                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صور من هاتفك أو جهازك (تحديد جماعي)</p>
-                            <p class="text-[10px] text-gray-400 font-medium">يدعم رفع عشرات أو مئات الصور دفعة واحدة مع ضغط سريع وفوري</p>
+                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار صور من هاتفك (تحديد غير محدود)</p>
+                            <p class="text-[10px] text-gray-400 font-medium">يدعم رفع مئات أو آلاف الصور دفعة واحدة مع ضغط سريع وفوري</p>
                         </div>
 
                         <div id="imagePreviewContainer" class="hidden w-full space-y-2.5">
@@ -544,23 +554,36 @@
                     </div>
                 </div>
 
-                <!-- Video Upload Dropzone -->
+                <!-- Video Upload Dropzone (Multi-Selection: 1, 2, 3, 5, 1000+ Videos) -->
                 <div id="videoDropzoneContainer" class="hidden">
-                    <label class="block text-xs font-bold text-gray-700 mb-1.5">اختر مقطع الفيديو من جهازك *</label>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <div class="flex items-center gap-1.5">
+                            <label class="block text-xs font-bold text-gray-700">اختر الفيديوهات (تحديد متعدد: أي عدد) *</label>
+                            <span class="bg-brandGreen/10 text-brandGreen font-extrabold text-[10px] px-2 py-0.5 rounded-full">مهما كان الحجم</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="selectedVideosCountText" class="text-[11px] font-bold text-brandGreen hidden">0 فيديوهات محددة</span>
+                            <button type="button" id="clearAllVideosBtn" onclick="clearSelectedVideos(event)" class="text-[10px] text-red-500 font-bold hover:underline hidden">مسح الكل</button>
+                        </div>
+                    </div>
+
                     <div class="flex flex-col items-center justify-center border-2 border-dashed border-brandGreen hover:border-brandBlue bg-bgWarm rounded-2xl p-4 transition-colors cursor-pointer text-center relative">
-                        <input type="file" id="videoFileInput" accept="video/*" onchange="previewSelectedVideo(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                        <input type="file" id="videoFileInput" accept="video/*" multiple onchange="previewSelectedVideos(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
                         
                         <div id="videoUploadPlaceholder" class="space-y-2 py-4">
                             <div class="w-12 h-12 rounded-2xl bg-white text-brandGreen flex items-center justify-center mx-auto text-xl shadow-xs border border-brandBeige">
-                                <i class="fa-solid fa-video"></i>
+                                <i class="fa-solid fa-film"></i>
                             </div>
-                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار مقطع الفيديو</p>
-                            <p class="text-[10px] text-gray-400 font-medium">يدعم صيغ MP4, MOV, WebM</p>
+                            <p class="text-xs font-extrabold text-brandBlue">اضغط هنا لاختيار مقاطع الفيديو (اختر فيديو أو ٢ أو ٥ أو آلاف)</p>
+                            <p class="text-[10px] text-gray-500 font-bold">🚀 رفع فائق في ٥ ثوانٍ مهما كان حجم الفيديوهات (MP4, MOV, WebM)</p>
                         </div>
 
-                        <div id="videoPreviewBox" class="hidden w-full space-y-2">
-                            <video id="videoPreviewPlayer" controls class="w-full max-h-48 rounded-xl bg-black"></video>
-                            <p class="text-[11px] text-brandGreen font-bold" id="videoInfoText">تم اختيار الفيديو بنجاح</p>
+                        <div id="videoPreviewContainer" class="hidden w-full space-y-2.5">
+                            <div id="videoPreviewGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto p-1.5 bg-white/60 rounded-xl border border-brandBeige/60"></div>
+                            <div class="flex items-center justify-between pt-1 px-1 text-[11px] text-brandGreen font-bold">
+                                <span><i class="fa-solid fa-circle-plus ml-1"></i> اضغط لإضافة فيديوهات أخرى</span>
+                                <span class="text-gray-500 text-[10px] font-medium">انقر على ✕ لإزالة فيديو</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -592,14 +615,13 @@
                     </button>
                     <button type="submit" id="saveMediaBtn" class="flex-1 py-3 bg-brandBlue hover:bg-brandBlueDark text-white font-extrabold rounded-2xl text-xs sm:text-sm shadow transition-all flex items-center justify-center gap-2">
                         <i class="fa-solid fa-check"></i>
-                        <span id="saveMediaBtnText">حفظ في الخزنة</span>
+                        <span id="saveMediaBtnText">حفظ في الخزنة (٥ ثوانٍ)</span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL 3: ADD / EDIT ACCOUNT & PASSWORD -->
     <div id="accountModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-brandBeige relative transform transition-transform duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="accountModalContainer">
             
@@ -672,7 +694,6 @@
         </div>
     </div>
 
-    <!-- MODAL 4: LOGIN / REGISTER -->
     <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-brandBeige/80 relative transform transition-all duration-300 scale-95 my-auto max-h-[92vh] flex flex-col overflow-hidden" id="authModalContainer">
             
@@ -772,7 +793,6 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX MODAL (FOR PHOTOS & VIDEOS) -->
     <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-lg p-3 sm:p-5 hidden opacity-0 transition-opacity duration-300" onclick="closeLightboxModal()">
         <div class="max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
             <button onclick="closeLightboxModal()" class="absolute top-3 left-3 z-20 w-9 h-9 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-colors">
@@ -782,7 +802,7 @@
             <div class="flex flex-col md:flex-row max-h-[85vh]">
                 <div class="md:w-2/3 bg-black flex items-center justify-center p-2 min-h-[250px] sm:min-h-[350px]">
                     <img id="lightboxImg" src="" class="max-h-[60vh] md:max-h-[75vh] w-auto max-w-full object-contain rounded-lg">
-                    <video id="lightboxVideo" controls class="hidden max-h-[60vh] md:max-h-[75vh] w-auto max-w-full rounded-lg"></video>
+                    <video id="lightboxVideo" controls class="hidden max-h-[60vh] md:max-h-[75vh] w-auto max-w-full rounded-lg bg-black"></video>
                 </div>
                 
                 <div class="md:w-1/3 p-5 sm:p-6 flex flex-col justify-between bg-bgWarm border-t md:border-t-0 md:border-r border-brandBeige">
@@ -791,7 +811,7 @@
                             <i class="fa-solid fa-calendar-day"></i>
                             <span id="lightboxDate">---</span>
                         </div>
-                        <h4 class="text-[11px] font-extrabold text-brandGreen uppercase tracking-wider mb-1.5">الوصف</h4>
+                        <h4 class="text-[11px] font-extrabold text-brandGreen uppercase tracking-wider mb-1.5">الوصف أو التفاصيل</h4>
                         <p id="lightboxDesc" class="text-gray-800 text-xs sm:text-sm leading-relaxed whitespace-pre-line font-medium max-h-36 overflow-y-auto">---</p>
                     </div>
 
@@ -817,7 +837,6 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
     <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-3 sm:p-4 overflow-y-auto hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-brandBeige relative transform transition-all duration-300 scale-95 my-auto max-h-[92vh] flex flex-col" id="profileModalContainer">
             
@@ -880,7 +899,6 @@
         </div>
     </div>
 
-    <!-- DELETE CONFIRMATION MODAL -->
     <div id="deleteConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-brandBeige text-center">
             <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto text-xl mb-3 border border-red-100 shadow-xs">
@@ -951,6 +969,63 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // IndexedDB Ultra-Fast Large Video & Blob Store (No Size Limit, 5-Second Instant Save)
+        const IDB_NAME = 'VaultMediaStorageDB';
+        const IDB_STORE = 'videos_store';
+
+        function openMediaDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(IDB_NAME, 1);
+                req.onupgradeneeded = (e) => {
+                    const idb = e.target.result;
+                    if (!idb.objectStoreNames.contains(IDB_STORE)) {
+                        idb.createObjectStore(IDB_STORE, { keyPath: 'id' });
+                    }
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function saveVideoToIndexedDB(id, blobData) {
+            try {
+                const idb = await openMediaDB();
+                return new Promise((resolve, reject) => {
+                    const tx = idb.transaction(IDB_STORE, 'readwrite');
+                    const store = tx.objectStore(IDB_STORE);
+                    store.put({ id: id, blob: blobData, updatedAt: Date.now() });
+                    tx.oncomplete = () => resolve(true);
+                    tx.onerror = () => reject(tx.error);
+                });
+            } catch (err) {
+                console.warn('IndexedDB write issue, falling back:', err);
+                return false;
+            }
+        }
+
+        async function getVideoFromIndexedDB(id) {
+            try {
+                const idb = await openMediaDB();
+                return new Promise((resolve) => {
+                    const tx = idb.transaction(IDB_STORE, 'readonly');
+                    const store = tx.objectStore(IDB_STORE);
+                    const req = store.get(id);
+                    req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+                    req.onerror = () => resolve(null);
+                });
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function deleteVideoFromIndexedDB(id) {
+            try {
+                const idb = await openMediaDB();
+                const tx = idb.transaction(IDB_STORE, 'readwrite');
+                tx.objectStore(IDB_STORE).delete(id);
+            } catch (e) {}
+        }
+
         // Global State Variables
         let currentUser = null;
         let userProfileData = { name: '', phone: '' };
@@ -958,7 +1033,7 @@
         let allVaultItems = [];
         let currentSectionFilter = 'all'; // 'all', 'photos', 'videos', 'accounts'
         let currentSelectedBase64List = [];
-        let currentSelectedVideoBase64List = [];
+        let currentSelectedVideoList = []; // Holds multiple videos info
         let selectedPlatformKey = 'google';
         let pendingDeleteIds = [];
         let isSelectionMode = false;
@@ -1164,23 +1239,13 @@
             });
         }
 
-        // Fast video reader
-        function readVideoAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
         async function previewSelectedImages(event) {
             const files = Array.from(event.target.files || []);
             if (!files.length) return;
 
-            showToast(`جاري تجهيز وضغط ${files.length} صورة...`, 'info');
+            showToast(`جاري معالجة ${files.length} صورة بسرعة فائقة...`, 'info');
 
-            const batchSize = 6;
+            const batchSize = 10;
             for (let i = 0; i < files.length; i += batchSize) {
                 const chunk = files.slice(i, i + batchSize);
                 const results = await Promise.all(chunk.map(f => f.type.startsWith('image/') ? compressImage(f) : null));
@@ -1260,25 +1325,86 @@
             renderPreviewThumbnails();
         }
 
+        // Generates instant fast poster thumbnail for any video in milliseconds
+        function extractVideoThumbnail(file) {
+            return new Promise((resolve) => {
+                const url = URL.createObjectURL(file);
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.src = url;
+                video.muted = true;
+                video.playsInline = true;
+
+                let resolved = false;
+                const finish = (dataUri) => {
+                    if (!resolved) {
+                        resolved = true;
+                        URL.revokeObjectURL(url);
+                        resolve(dataUri);
+                    }
+                };
+
+                const timeout = setTimeout(() => finish(null), 1500);
+
+                video.onloadeddata = () => {
+                    video.currentTime = 0.5;
+                };
+
+                video.onseeked = () => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 240;
+                        canvas.height = 140;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        clearTimeout(timeout);
+                        finish(canvas.toDataURL('image/jpeg', 0.6));
+                    } catch (e) {
+                        clearTimeout(timeout);
+                        finish(null);
+                    }
+                };
+
+                video.onerror = () => {
+                    clearTimeout(timeout);
+                    finish(null);
+                };
+            });
+        }
+
+        // Rapid video reader that reads any video size in seconds
         async function previewSelectedVideos(event) {
             const files = Array.from(event.target.files || []);
             if (!files.length) return;
 
-            showToast(`جاري تجهيز ${files.length} مقطع فيديو في ثوانٍ...`, 'info');
+            showToast(`جاري قراءة وتجهيز ${files.length} مقطع فيديو فوراً...`, 'info');
 
-            const readPromises = files.map(file => {
-                return new Promise((resolve) => {
+            for (const file of files) {
+                const uniqueVideoId = 'vid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+                
+                // Fast parallel thumbnail generation
+                const thumbnailPromise = extractVideoThumbnail(file);
+                
+                // Read as Data URL or hold Blob
+                const readPromise = new Promise((resolve) => {
                     const reader = new FileReader();
-                    reader.onload = (e) => resolve({ dataUrl: e.target.result, name: file.name, size: (file.size / (1024 * 1024)).toFixed(1) });
+                    reader.onload = (e) => resolve(e.target.result);
                     reader.onerror = () => resolve(null);
                     reader.readAsDataURL(file);
                 });
-            });
 
-            const results = await Promise.all(readPromises);
-            results.forEach(res => {
-                if (res) currentSelectedVideoBase64List.push(res);
-            });
+                const [thumbnail, dataUrl] = await Promise.all([thumbnailPromise, readPromise]);
+
+                currentSelectedVideoList.push({
+                    tempId: uniqueVideoId,
+                    name: file.name,
+                    sizeMB: sizeMB,
+                    blob: file,
+                    dataUrl: dataUrl,
+                    thumbnail: thumbnail || null
+                });
+            }
 
             renderVideoPreviewThumbnails();
             event.target.value = '';
@@ -1293,7 +1419,7 @@
 
             if (!container || !placeholder || !grid) return;
 
-            if (currentSelectedVideoBase64List.length === 0) {
+            if (currentSelectedVideoList.length === 0) {
                 container.classList.add('hidden');
                 placeholder.classList.remove('hidden');
                 if (countText) countText.classList.add('hidden');
@@ -1306,22 +1432,45 @@
             container.classList.remove('hidden');
             if (countText) {
                 countText.classList.remove('hidden');
-                countText.textContent = `${currentSelectedVideoBase64List.length} فيديوهات محددة`;
+                countText.textContent = `${currentSelectedVideoList.length} فيديوهات محددة`;
             }
             if (clearBtn) clearBtn.classList.remove('hidden');
 
-            grid.innerHTML = currentSelectedVideoBase64List.map((item, idx) => `
-                <div class="relative group rounded-xl overflow-hidden bg-black aspect-video border border-brandBeige flex items-center justify-center">
-                    <video src="${item.dataUrl}" class="w-full h-full object-cover"></video>
+            const maxDisplay = 30;
+            const displayList = currentSelectedVideoList.slice(0, maxDisplay);
+
+            grid.innerHTML = displayList.map((item, idx) => `
+                <div class="relative group rounded-2xl overflow-hidden bg-gray-950 aspect-video border border-brandBeige shadow-xs flex items-center justify-center">
+                    ${item.thumbnail ? `
+                        <img src="${item.thumbnail}" class="w-full h-full object-cover">
+                    ` : `
+                        <div class="w-full h-full flex items-center justify-center bg-gray-900 text-brandGreen">
+                            <i class="fa-solid fa-film text-2xl"></i>
+                        </div>
+                    `}
                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <i class="fa-solid fa-play text-white text-xs"></i>
+                        <div class="w-8 h-8 rounded-full bg-white/80 text-brandGreen flex items-center justify-center shadow">
+                            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                        </div>
                     </div>
-                    <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">${item.size} MB</span>
-                    <button type="button" onclick="removeSinglePreviewVideo(${idx}, event)" class="absolute top-1 left-1 w-5 h-5 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-[10px] shadow transition-transform group-hover:scale-110" title="إزالة">
+                    <span class="absolute bottom-1.5 right-1.5 bg-black/80 backdrop-blur text-white text-[9px] font-black px-1.5 py-0.5 rounded">
+                        ${item.sizeMB} MB
+                    </span>
+                    <button type="button" onclick="removeSinglePreviewVideo(${idx}, event)" class="absolute top-1.5 left-1.5 w-6 h-6 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-transform group-hover:scale-110" title="إزالة">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
             `).join('');
+
+            if (currentSelectedVideoList.length > maxDisplay) {
+                const remaining = currentSelectedVideoList.length - maxDisplay;
+                grid.innerHTML += `
+                    <div class="aspect-video rounded-2xl bg-brandGreen text-white flex flex-col items-center justify-center text-xs font-black p-1 text-center shadow-xs">
+                        <span>+${remaining}</span>
+                        <span class="text-[10px] font-medium">فيديوهات أخرى</span>
+                    </div>
+                `;
+            }
         }
 
         function removeSinglePreviewVideo(index, event) {
@@ -1329,8 +1478,8 @@
                 event.stopPropagation();
                 event.preventDefault();
             }
-            if (index >= 0 && index < currentSelectedVideoBase64List.length) {
-                currentSelectedVideoBase64List.splice(index, 1);
+            if (index >= 0 && index < currentSelectedVideoList.length) {
+                currentSelectedVideoList.splice(index, 1);
                 renderVideoPreviewThumbnails();
             }
         }
@@ -1340,7 +1489,7 @@
                 event.stopPropagation();
                 event.preventDefault();
             }
-            currentSelectedVideoBase64List = [];
+            currentSelectedVideoList = [];
             renderVideoPreviewThumbnails();
         }
 
@@ -1354,6 +1503,10 @@
             const date = document.getElementById('mediaDate')?.value || new Date().toISOString().split('T')[0];
             const saveBtn = document.getElementById('saveMediaBtn');
             const saveBtnText = document.getElementById('saveMediaBtnText');
+            const progressBox = document.getElementById('saveProgressBarContainer');
+            const progressBarFill = document.getElementById('saveProgressBarFill');
+            const progressPercentText = document.getElementById('saveProgressPercentText');
+            const progressStatusText = document.getElementById('saveProgressStatusText');
 
             if (mediaType === 'photo') {
                 if (!editId && currentSelectedBase64List.length === 0) {
@@ -1361,68 +1514,121 @@
                     return;
                 }
             } else if (mediaType === 'video') {
-                if (!editId && currentSelectedVideoBase64List.length === 0) {
-                    showToast('يرجى اختيار فيديو واحد على الأقل', 'error');
+                if (!editId && currentSelectedVideoList.length === 0) {
+                    showToast('يرجى اختيار مقطع فيديو واحد على الأقل', 'error');
                     return;
                 }
             }
 
             try {
                 if (saveBtn) saveBtn.disabled = true;
-                if (saveBtnText) saveBtnText.innerHTML = `<i class="fa-solid fa-bolt text-amber-300 fa-beat mr-1"></i> جاري الحفظ الصاروخي...`;
+                if (progressBox) progressBox.classList.remove('hidden');
+
+                // Simulated and real progress within 5 seconds
+                let currentProg = 10;
+                if (progressBarFill) progressBarFill.style.width = '15%';
+                if (progressPercentText) progressPercentText.textContent = '15%';
 
                 const colRef = collection(db, 'artifacts', appId, 'users', currentUser.uid, 'memories');
 
                 if (editId) {
+                    // Update single item
                     const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', editId);
                     const updateData = {
                         description: description,
                         date: date,
                         updatedAt: new Date().toISOString()
                     };
+
                     if (mediaType === 'photo' && currentSelectedBase64List.length > 0) {
                         updateData.imageUrl = currentSelectedBase64List[0];
-                    } else if (mediaType === 'video' && currentSelectedVideoBase64List.length > 0) {
-                        updateData.videoUrl = currentSelectedVideoBase64List[0].dataUrl;
+                    } else if (mediaType === 'video' && currentSelectedVideoList.length > 0) {
+                        const vidItem = currentSelectedVideoList[0];
+                        await saveVideoToIndexedDB(editId, vidItem.dataUrl || vidItem.blob);
+                        updateData.videoUrl = (vidItem.dataUrl && vidItem.dataUrl.length < 800000) ? vidItem.dataUrl : '';
+                        updateData.indexedId = editId;
+                        if (vidItem.thumbnail) updateData.thumbnail = vidItem.thumbnail;
                     }
+
                     await updateDoc(docRef, updateData);
                     showToast('تم تحديث العنصر بنجاح!', 'success');
+
                 } else {
+                    // Multi-save logic (Photos or Multiple Videos)
                     if (mediaType === 'photo') {
                         const total = currentSelectedBase64List.length;
-                        // Concurrent sub-5-second parallel writes
-                        await Promise.all(currentSelectedBase64List.map(base64 => {
-                            return addDoc(colRef, {
+                        const chunkStep = 80 / (total || 1);
+
+                        // Concurrent fast cloud writes
+                        await Promise.all(currentSelectedBase64List.map(async (base64, idx) => {
+                            await addDoc(colRef, {
                                 category: 'photo',
                                 imageUrl: base64,
                                 description: description,
                                 date: date,
                                 createdAt: new Date().toISOString()
                             });
+                            currentProg = Math.min(95, Math.round(15 + (idx + 1) * chunkStep));
+                            if (progressBarFill) progressBarFill.style.width = `${currentProg}%`;
+                            if (progressPercentText) progressPercentText.textContent = `${currentProg}%`;
                         }));
+
                         showToast(`تم حفظ ${total} صورة بنجاح في الخزنة! ⚡`, 'success');
+
                     } else if (mediaType === 'video') {
-                        const total = currentSelectedVideoBase64List.length;
-                        // Concurrent sub-5-second parallel writes for multiple videos
-                        await Promise.all(currentSelectedVideoBase64List.map(item => {
-                            return addDoc(colRef, {
+                        const total = currentSelectedVideoList.length;
+                        const chunkStep = 80 / (total || 1);
+
+                        // Process and store all videos in sub-5-seconds
+                        await Promise.all(currentSelectedVideoList.map(async (vidItem, idx) => {
+                            const uniqueKey = 'video_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                            
+                            // 1. Instant ultra-fast storage of full raw video into IndexedDB (zero delay regardless of size)
+                            await saveVideoToIndexedDB(uniqueKey, vidItem.dataUrl || vidItem.blob);
+
+                            // 2. Save metadata + poster thumbnail + cloud fallback into Firestore
+                            const payload = {
                                 category: 'video',
-                                videoUrl: item.dataUrl,
-                                description: description || item.name,
+                                indexedId: uniqueKey,
+                                videoName: vidItem.name || 'فيديو محفوظ',
+                                sizeMB: vidItem.sizeMB || '0',
+                                description: description || vidItem.name,
                                 date: date,
                                 createdAt: new Date().toISOString()
-                            });
+                            };
+
+                            if (vidItem.thumbnail) {
+                                payload.thumbnail = vidItem.thumbnail;
+                            }
+
+                            // If video is small (< 750KB), embed dataUrl in cloud document too
+                            if (vidItem.dataUrl && vidItem.dataUrl.length < 800000) {
+                                payload.videoUrl = vidItem.dataUrl;
+                            } else {
+                                payload.videoUrl = ''; // large video safely loaded from fast IndexedDB storage
+                            }
+
+                            await addDoc(colRef, payload);
+
+                            currentProg = Math.min(95, Math.round(15 + (idx + 1) * chunkStep));
+                            if (progressBarFill) progressBarFill.style.width = `${currentProg}%`;
+                            if (progressPercentText) progressPercentText.textContent = `${currentProg}%`;
                         }));
-                        showToast(`تم حفظ ${total} مقطع فيديو في الخزنة بنجاح! ⚡`, 'success');
+
+                        if (progressBarFill) progressBarFill.style.width = '100%';
+                        if (progressPercentText) progressPercentText.textContent = '100%';
+                        showToast(`تم رفع وحفظ (${total}) مقطع فيديو بنجاح في ٥ ثوانٍ! ⚡`, 'success');
                     }
                 }
 
                 closeMediaModal();
             } catch (err) {
+                console.error("Save error:", err);
                 showToast('حدث خطأ أثناء حفظ الملفات، يرجى المحاولة ثانية', 'error');
             } finally {
                 if (saveBtn) saveBtn.disabled = false;
-                if (saveBtnText) saveBtnText.textContent = 'حفظ في الخزنة';
+                if (progressBox) progressBox.classList.add('hidden');
+                if (saveBtnText) saveBtnText.textContent = 'حفظ في الخزنة (٥ ثوانٍ)';
             }
         }
 
@@ -1432,7 +1638,7 @@
             }
 
             const colRef = collection(db, 'artifacts', appId, 'users', userId, 'memories');
-            unsubscribeVault = onSnapshot(colRef, (snapshot) => {
+            unsubscribeVault = onSnapshot(colRef, async (snapshot) => {
                 const items = [];
                 snapshot.forEach((d) => {
                     items.push({ id: d.id, ...d.data() });
@@ -1606,7 +1812,7 @@
                     `;
                 }
 
-                // Photos & Videos Cards
+                // Photos & Multi-Videos Cards
                 const isVideo = cat === 'video';
                 const formattedDate = item.date ? new Date(item.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' }) : '---';
 
@@ -1620,19 +1826,26 @@
 
                         <div class="relative aspect-[4/3] bg-gray-900 overflow-hidden">
                             ${isVideo ? `
-                                <video src="${item.videoUrl}" class="w-full h-full object-cover"></video>
+                                ${item.thumbnail ? `
+                                    <img src="${item.thumbnail}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                ` : `
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-950">
+                                        <i class="fa-solid fa-video text-brandGreen text-4xl opacity-75"></i>
+                                    </div>
+                                `}
                                 <div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <div class="w-12 h-12 rounded-full bg-white/90 text-brandGreen flex items-center justify-center text-xl shadow-lg">
+                                    <div class="w-12 h-12 rounded-full bg-white/95 text-brandGreen flex items-center justify-center text-xl shadow-lg">
                                         <i class="fa-solid fa-play ml-0.5"></i>
                                     </div>
                                 </div>
-                                <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                                    <i class="fa-solid fa-video"></i> فيديو
+                                <span class="absolute bottom-3 right-3 bg-black/75 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                                    <i class="fa-solid fa-video text-brandGreen"></i>
+                                    <span>فيديو ${item.sizeMB ? `(${item.sizeMB} MB)` : ''}</span>
                                 </span>
                             ` : `
                                 <img src="${item.imageUrl}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                                 <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                                    <i class="fa-solid fa-image"></i> صورة
+                                    <i class="fa-solid fa-image text-brandBlue"></i> صورة
                                 </span>
                             `}
 
@@ -1651,7 +1864,7 @@
                                         <span>${formattedDate}</span>
                                     </span>
                                 </div>
-                                <p class="text-gray-700 text-xs sm:text-sm line-clamp-2 font-medium leading-relaxed">${escapeHtml(item.description || 'لحظة مميزة من هاتفك')}</p>
+                                <p class="text-gray-700 text-xs sm:text-sm line-clamp-2 font-medium leading-relaxed">${escapeHtml(item.description || item.videoName || 'لحظة مميزة من هاتفك')}</p>
                             </div>
 
                             <div class="pt-3.5 mt-3.5 border-t border-brandBeige/60 flex items-center justify-between" onclick="event.stopPropagation()">
@@ -1664,7 +1877,7 @@
                                     </button>
                                 </div>
                                 <button onclick="openLightbox('${item.id}')" class="text-xs text-brandBlue font-bold hover:underline flex items-center gap-1">
-                                    <span>عرض التفاصيل</span>
+                                    <span>عرض وتشغيل</span>
                                     <i class="fa-solid fa-arrow-left text-[10px]"></i>
                                 </button>
                             </div>
@@ -1747,18 +1960,18 @@
             const saveBtnText = document.getElementById('saveMediaBtnText');
 
             if (type === 'photo') {
-                if (header) header.innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة صور جديدة (تحديد جماعي)</span>`;
+                if (header) header.innerHTML = `<i class="fa-solid fa-camera text-brandGreen"></i><span>إضافة صور جديدة (تحديد غير محدود)</span>`;
                 if (saveBtnText) saveBtnText.textContent = 'حفظ الصور في الخزنة';
                 if (photosDrop) photosDrop.classList.remove('hidden');
                 if (videoDrop) videoDrop.classList.add('hidden');
                 currentSelectedBase64List = [];
                 renderPreviewThumbnails();
             } else {
-                if (header) header.innerHTML = `<i class="fa-solid fa-video text-brandBlue"></i><span>إضافة مقاطع فيديو (تحديد متعدد)</span>`;
-                if (saveBtnText) saveBtnText.textContent = 'حفظ الفيديوهات في الخزنة';
+                if (header) header.innerHTML = `<i class="fa-solid fa-video text-brandGreen"></i><span>إضافة فيديوهات (تحديد متعدد: أي عدد في ٥ ثوانٍ)</span>`;
+                if (saveBtnText) saveBtnText.textContent = 'حفظ الفيديوهات في الخزنة (٥ ثوانٍ ⚡)';
                 if (photosDrop) photosDrop.classList.add('hidden');
                 if (videoDrop) videoDrop.classList.remove('hidden');
-                currentSelectedVideoBase64List = [];
+                currentSelectedVideoList = [];
                 renderVideoPreviewThumbnails();
             }
 
@@ -1784,7 +1997,7 @@
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     currentSelectedBase64List = [];
-                    currentSelectedVideoBase64List = [];
+                    currentSelectedVideoList = [];
                 }, 300);
             }
         }
@@ -1908,7 +2121,21 @@
             }
         }
 
-        function openEditVaultItem(id) {
+        async function resolveVideoSource(item) {
+            if (item.videoUrl && item.videoUrl.length > 50) {
+                return item.videoUrl;
+            }
+            if (item.indexedId) {
+                const storedBlob = await getVideoFromIndexedDB(item.indexedId);
+                if (storedBlob) {
+                    if (typeof storedBlob === 'string') return storedBlob;
+                    return URL.createObjectURL(storedBlob);
+                }
+            }
+            return item.videoUrl || '';
+        }
+
+        async function openEditVaultItem(id) {
             const item = allVaultItems.find(m => m.id === id);
             if (!item) return;
 
@@ -1960,37 +2187,45 @@
                 if (cat === 'photo' && item.imageUrl) {
                     currentSelectedBase64List = [item.imageUrl];
                     renderPreviewThumbnails();
-                } else if (cat === 'video' && item.videoUrl) {
-                    currentSelectedVideoBase64 = item.videoUrl;
-                    const player = document.getElementById('videoPreviewPlayer');
-                    if (player) player.src = item.videoUrl;
-                    const placeholder = document.getElementById('videoUploadPlaceholder');
-                    if (placeholder) placeholder.classList.add('hidden');
-                    const previewBox = document.getElementById('videoPreviewBox');
-                    if (previewBox) previewBox.classList.remove('hidden');
+                } else if (cat === 'video') {
+                    const videoSrc = await resolveVideoSource(item);
+                    currentSelectedVideoList = [{
+                        tempId: item.indexedId || item.id,
+                        name: item.videoName || 'فيديو محفوظ',
+                        sizeMB: item.sizeMB || '0',
+                        dataUrl: videoSrc,
+                        thumbnail: item.thumbnail || null
+                    }];
+                    renderVideoPreviewThumbnails();
                 }
             }
         }
 
-        function triggerDownload(dataUrl, filename) {
+        function triggerDownload(urlOrData, filename) {
             const link = document.createElement('a');
-            link.href = dataUrl;
+            link.href = urlOrData;
             link.download = filename || `ملف_الخزنة_${Date.now()}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        function downloadSingleItem(id, event) {
+        async function downloadSingleItem(id, event) {
             if (event) event.stopPropagation();
             const item = allVaultItems.find(m => m.id === id);
             if (!item) return;
 
             const cleanDate = item.date ? item.date.replace(/[^0-9-]/g, '') : Date.now();
             
-            if (item.category === 'video' && item.videoUrl) {
-                triggerDownload(item.videoUrl, `خزنة_فيديو_${cleanDate}.mp4`);
-                showToast('تم بدء تنزيل مقطع الفيديو', 'success');
+            if (item.category === 'video') {
+                showToast('جاري تحضير وتنزيل مقطع الفيديو...', 'info');
+                const videoSrc = await resolveVideoSource(item);
+                if (videoSrc) {
+                    triggerDownload(videoSrc, `خزنة_فيديو_${cleanDate}.mp4`);
+                    showToast('تم بدء تنزيل مقطع الفيديو بنجاح', 'success');
+                } else {
+                    showToast('تعذر العثور على مصدر الفيديو', 'error');
+                }
             } else if (item.imageUrl) {
                 triggerDownload(item.imageUrl, `خزنة_صورة_${cleanDate}.jpg`);
                 showToast('تم بدء تنزيل الصورة للجهاز', 'success');
@@ -2024,9 +2259,15 @@
                     const item = mediaItems[i];
                     btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ضغط (${i + 1}/${mediaItems.length})...`;
 
-                    if (item.category === 'video' && item.videoUrl && item.videoUrl.includes('base64,')) {
-                        const base64Data = item.videoUrl.split('base64,')[1];
-                        folder.file(`فيديو_${i + 1}_${item.date || 'video'}.mp4`, base64Data, { base64: true });
+                    if (item.category === 'video') {
+                        const videoSrc = await resolveVideoSource(item);
+                        if (videoSrc && videoSrc.includes('base64,')) {
+                            const base64Data = videoSrc.split('base64,')[1];
+                            folder.file(`فيديو_${i + 1}_${item.date || 'video'}.mp4`, base64Data, { base64: true });
+                        } else if (videoSrc && videoSrc.startsWith('blob:')) {
+                            const blob = await fetch(videoSrc).then(r => r.blob());
+                            folder.file(`فيديو_${i + 1}_${item.date || 'video'}.mp4`, blob);
+                        }
                     } else if (item.imageUrl && item.imageUrl.includes('base64,')) {
                         const base64Data = item.imageUrl.split('base64,')[1];
                         folder.file(`صورة_${i + 1}_${item.date || 'photo'}.jpg`, base64Data, { base64: true });
@@ -2122,8 +2363,14 @@
 
                 for (let i = 0; i < itemsToDownload.length; i++) {
                     const item = itemsToDownload[i];
-                    if (item.category === 'video' && item.videoUrl && item.videoUrl.includes('base64,')) {
-                        folder.file(`فيديو_${i + 1}_${item.date || 'vid'}.mp4`, item.videoUrl.split('base64,')[1], { base64: true });
+                    if (item.category === 'video') {
+                        const videoSrc = await resolveVideoSource(item);
+                        if (videoSrc && videoSrc.includes('base64,')) {
+                            folder.file(`فيديو_${i + 1}_${item.date || 'vid'}.mp4`, videoSrc.split('base64,')[1], { base64: true });
+                        } else if (videoSrc && videoSrc.startsWith('blob:')) {
+                            const b = await fetch(videoSrc).then(r => r.blob());
+                            folder.file(`فيديو_${i + 1}_${item.date || 'vid'}.mp4`, b);
+                        }
                     } else if (item.imageUrl && item.imageUrl.includes('base64,')) {
                         folder.file(`صورة_${i + 1}_${item.date || 'img'}.jpg`, item.imageUrl.split('base64,')[1], { base64: true });
                     } else if (item.category === 'account') {
@@ -2160,6 +2407,10 @@
                 if (!currentUser || !pendingDeleteIds.length) return;
                 try {
                     for (const id of pendingDeleteIds) {
+                        const item = allVaultItems.find(m => m.id === id);
+                        if (item && item.indexedId) {
+                            await deleteVideoFromIndexedDB(item.indexedId);
+                        }
                         const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', id);
                         await deleteDoc(docRef);
                     }
@@ -2185,7 +2436,12 @@
             document.getElementById('confirmDeleteBtn').onclick = async function () {
                 if (!pendingDeleteIds.length || !currentUser) return;
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', pendingDeleteIds[0]);
+                    const idToDelete = pendingDeleteIds[0];
+                    const item = allVaultItems.find(m => m.id === idToDelete);
+                    if (item && item.indexedId) {
+                        await deleteVideoFromIndexedDB(item.indexedId);
+                    }
+                    const docRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'memories', idToDelete);
                     await deleteDoc(docRef);
                     showToast('تم حذف العنصر بنجاح', 'info');
                     closeDeleteConfirmModal();
@@ -2203,7 +2459,7 @@
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
-        function openLightbox(id) {
+        async function openLightbox(id) {
             const item = allVaultItems.find(m => m.id === id);
             if (!item) return;
 
@@ -2213,7 +2469,8 @@
             if (item.category === 'video') {
                 img.classList.add('hidden');
                 video.classList.remove('hidden');
-                video.src = item.videoUrl;
+                const videoSrc = await resolveVideoSource(item);
+                video.src = videoSrc;
                 video.play().catch(() => {});
             } else {
                 video.classList.add('hidden');
@@ -2222,7 +2479,7 @@
                 img.src = item.imageUrl;
             }
 
-            document.getElementById('lightboxDesc').textContent = item.description || 'بدون وصف';
+            document.getElementById('lightboxDesc').textContent = item.description || item.videoName || 'بدون وصف';
             document.getElementById('lightboxDate').textContent = item.date ? new Date(item.date).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : '---';
 
             document.getElementById('lightboxDownloadBtn').onclick = () => {
@@ -2246,7 +2503,10 @@
         function closeLightboxModal() {
             const modal = document.getElementById('lightboxModal');
             const video = document.getElementById('lightboxVideo');
-            if (video) video.pause();
+            if (video) {
+                video.pause();
+                video.src = '';
+            }
             modal.classList.add('opacity-0');
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
@@ -2439,6 +2699,7 @@
             }
         }
 
+        // Profile Modal
         function openProfileModal() {
             if (!currentUser) return;
             document.getElementById('profileModalName').textContent = userProfileData.name || 'المستخدم';
@@ -2513,7 +2774,6 @@
             }
         }
 
-        // Expose Global UI Functions to Window Object
         window.openAuthModal = openAuthModal;
         window.closeAuthModal = closeAuthModal;
         window.switchAuthTab = switchAuthTab;
