@@ -1820,6 +1820,7 @@
                 const progressBox = document.getElementById('uploadProgressBox');
                 const progressBar = document.getElementById('uploadProgressBar');
                 const progressText = document.getElementById('uploadProgressPercent');
+                const progressLabel = document.getElementById('uploadProgressText');
                 const submitBtn = document.getElementById('submitMediaUploadBtn');
 
                 try {
@@ -1829,43 +1830,91 @@
                     const total = this.stagedFiles.length;
                     const colRef = collection(db, 'artifacts', APP_ID, 'users', this.user.uid, 'vault');
 
-                    // Read, compress if photo, cache in IndexedDB and write documents in batches
-                    for (let i = 0; i < total; i++) {
-                        const file = this.stagedFiles[i];
-                        const pct = Math.round(((i + 1) / total) * 100);
-                        progressBar.style.width = `${pct}%`;
-                        progressText.textContent = `${pct}%`;
+                    // 1. Parallel ultra-fast file processing in concurrent chunks of 20
+                    const preparedDocs = [];
+                    const CONCURRENCY = 20;
 
-                        let mediaUrl = '';
-                        if (file.type.startsWith('image/')) {
-                            mediaUrl = await this.compressImageFile(file);
-                        } else {
-                            mediaUrl = await this.readFileAsDataURL(file);
+                    for (let i = 0; i < total; i += CONCURRENCY) {
+                        const chunk = this.stagedFiles.slice(i, i + CONCURRENCY);
+                        const processedChunk = await Promise.all(chunk.map(async (file, idx) => {
+                            const globalIndex = i + idx;
+                            let mediaUrl = '';
+
+                            try {
+                                if (file.type.startsWith('image/')) {
+                                    mediaUrl = await this.compressImageFile(file);
+                                } else if (file.type.startsWith('video/')) {
+                                    // Generate fast video thumbnail snapshot for instant listing
+                                    mediaUrl = await this.generateVideoThumbnail(file);
+                                } else if (file.size < 600000) {
+                                    mediaUrl = await this.readFileAsDataURL(file);
+                                }
+                            } catch (readErr) {
+                                console.warn('Fast read fallback for file:', file.name, readErr);
+                            }
+
+                            // Cache original blob in ultra-fast IndexedDB
+                            const cacheKey = `vault_media_${this.user.uid}_${Date.now()}_${globalIndex}`;
+                            try {
+                                await idb.set(cacheKey, file);
+                            } catch (idbErr) {}
+
+                            return {
+                                category: cat,
+                                title: file.name,
+                                name: file.name,
+                                mediaUrl: mediaUrl,
+                                storageKey: cacheKey,
+                                description: desc,
+                                date: date,
+                                tags: tags,
+                                sizeBytes: file.size,
+                                sizeText: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
+                                isFavorite: false,
+                                isDeleted: false,
+                                createdAt: new Date().toISOString()
+                            };
+                        }));
+
+                        preparedDocs.push(...processedChunk);
+
+                        const prepPct = Math.round((preparedDocs.length / total) * 50);
+                        progressBar.style.width = `${prepPct}%`;
+                        progressText.textContent = `${prepPct}%`;
+                        if (progressLabel) {
+                            progressLabel.innerHTML = `<i class="fa-solid fa-bolt text-brandTeal"></i> <span>جاري معالجة الملفات (${preparedDocs.length} من ${total})...</span>`;
                         }
-
-                        const docData = {
-                            category: cat,
-                            title: file.name,
-                            name: file.name,
-                            mediaUrl: mediaUrl,
-                            description: desc,
-                            date: date,
-                            tags: tags,
-                            sizeBytes: file.size,
-                            sizeText: (file.size / (1024 * 1024)).toFixed(1) + ' MB',
-                            isFavorite: false,
-                            isDeleted: false,
-                            createdAt: new Date().toISOString()
-                        };
-
-                        await addDoc(colRef, docData);
                     }
 
-                    this.toast(`تم حفظ (${total}) عنصر بنجاح في خزنتك السحابية! ⚡`, 'success');
+                    // 2. Commit to Cloud Database in optimized batches of 100 (بدل 500 لتفادي أي خطأ ورفع 1000 بسلاسة)
+                    const BATCH_SIZE = 100;
+                    const totalBatches = Math.ceil(preparedDocs.length / BATCH_SIZE);
+
+                    for (let b = 0; b < totalBatches; b++) {
+                        const batch = writeBatch(db);
+                        const batchDocs = preparedDocs.slice(b * BATCH_SIZE, (b + 1) * BATCH_SIZE);
+
+                        batchDocs.forEach(docData => {
+                            const newDocRef = doc(colRef);
+                            batch.set(newDocRef, docData);
+                        });
+
+                        await batch.commit();
+
+                        const uploadPct = 50 + Math.round(((b + 1) / totalBatches) * 50);
+                        progressBar.style.width = `${uploadPct}%`;
+                        progressText.textContent = `${uploadPct}%`;
+                        if (progressLabel) {
+                            progressLabel.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-brandTeal"></i> <span>جاري الحفظ السحابي: دفعة ${b + 1} من ${totalBatches} (${Math.min((b + 1) * BATCH_SIZE, total)} ملف)...</span>`;
+                        }
+                    }
+
+                    this.toast(`تم حفظ (${total}) عنصر بنجاح في خزنتك السحابية في ثوانٍ معدودة! ⚡`, 'success');
+                    this.clearStagedFiles();
                     this.closeMediaUploadModal();
                 } catch (err) {
                     console.error('Upload error:', err);
-                    this.toast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى', 'error');
+                    this.toast('حدث خطأ أثناء الحفظ، يرجى المحاولة مرة أخرى: ' + (err.message || ''), 'error');
                 } finally {
                     submitBtn.disabled = false;
                     progressBox.classList.add('hidden');
@@ -1881,7 +1930,7 @@
                             const canvas = document.createElement('canvas');
                             let w = img.width;
                             let h = img.height;
-                            const max = 1280;
+                            const max = 960;
                             if (w > max || h > max) {
                                 if (w > h) { h = Math.round((h * max) / w); w = max; }
                                 else { w = Math.round((w * max) / h); h = max; }
@@ -1890,11 +1939,56 @@
                             canvas.height = h;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, w, h);
-                            resolve(canvas.toDataURL('image/jpeg', 0.8));
+                            // Quality 0.68 ensures fast compression, high clarity, and tiny payload per document
+                            resolve(canvas.toDataURL('image/jpeg', 0.68));
                         };
+                        img.onerror = () => resolve('');
                         img.src = e.target.result;
                     };
+                    r.onerror = () => resolve('');
                     r.readAsDataURL(file);
+                });
+            },
+
+            generateVideoThumbnail(file) {
+                return new Promise((resolve) => {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    video.muted = true;
+                    video.playsInline = true;
+
+                    const url = URL.createObjectURL(file);
+                    video.src = url;
+
+                    const cleanup = () => {
+                        try { URL.revokeObjectURL(url); } catch (e) {}
+                    };
+
+                    video.onloadeddata = () => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 320;
+                            canvas.height = Math.round((video.videoHeight / (video.videoWidth || 1)) * 320) || 180;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            cleanup();
+                            resolve(canvas.toDataURL('image/jpeg', 0.6));
+                        } catch (e) {
+                            cleanup();
+                            resolve('');
+                        }
+                    };
+
+                    video.onerror = () => {
+                        cleanup();
+                        resolve('');
+                    };
+
+                    // Timeout safety: resolve empty if video metadata hangs
+                    setTimeout(() => {
+                        cleanup();
+                        resolve('');
+                    }, 1200);
                 });
             },
 
