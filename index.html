@@ -522,6 +522,13 @@
                         </div>
                         <p class="text-xs font-black text-brandNavy" id="dropzoneMainLabel">اضغط لاختيار ملفات (يمكنك اختيار أي عدد دفعة واحدة)</p>
                         <p class="text-[10px] text-slate-400 font-medium" id="dropzoneSubLabel">يدعم الصور والفيديوهات والملفات بأحجامها الطبيعية</p>
+                        
+                        <div class="pt-2">
+                            <span class="inline-flex items-center gap-1 text-[10px] font-black text-brandAmber bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span>يدعم تحديد وسحب كل ما في الجهاز دفعة واحدة</span>
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Selected Files Thumbnail Preview -->
@@ -1109,36 +1116,34 @@
                     this.currentDisplayName = displayName;
                     document.getElementById('dashGreetingName').textContent = displayName;
                     addBtn.classList.remove('hidden');
-                    searchBox.classList.remove('hidden');
 
                     slot.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <!-- Lock Icon for Name & Password Security Verification & Change -->
-                            <button onclick="AetherApp.openLockVerifyModal()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 hover:bg-amber-100 text-brandAmber flex items-center justify-center text-sm font-bold transition-all border border-amber-200/80 shadow-soft-xs active:scale-95" title="تغيير الاسم وكلمة السر بعد التحقق">
-                                <i class="fa-solid fa-lock"></i>
+                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                            <!-- Lock Button for Name & Password Security Verification -->
+                            <button onclick="AetherApp.openLockVerifyModal()" class="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-amber-50 hover:bg-amber-100 text-brandAmber flex items-center justify-center text-xs sm:text-sm font-bold transition-all border border-amber-200/90 shadow-soft-xs active:scale-95 shrink-0" title="تغيير الاسم وكلمة السر">
+                                <i class="fa-solid fa-lock text-[11px] sm:text-xs"></i>
                             </button>
 
                             <!-- Profile Name Button -->
-                            <button onclick="AetherApp.openProfileModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surfaceMuted hover:bg-slate-200 text-slate-800 transition-colors cursor-pointer group">
-                                <div class="w-7 h-7 rounded-lg bg-brandNavy text-white flex items-center justify-center text-xs font-bold shrink-0">
+                            <button onclick="AetherApp.openProfileModal()" class="flex items-center gap-1 sm:gap-1.5 h-7 sm:h-9 px-1.5 sm:px-2.5 rounded-lg sm:rounded-xl bg-surfaceMuted hover:bg-slate-200 text-slate-800 transition-colors cursor-pointer group shrink-0" title="الملف الشخصي">
+                                <div class="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg bg-brandNavy text-white flex items-center justify-center text-[10px] sm:text-xs font-bold shrink-0">
                                     <i class="fa-solid fa-user"></i>
                                 </div>
-                                <span class="text-xs font-bold hidden sm:inline max-w-[120px] truncate">${this.escape(displayName)}</span>
+                                <span class="text-[11px] sm:text-xs font-bold max-w-[55px] xs:max-w-[75px] sm:max-w-[120px] truncate">${this.escape(displayName)}</span>
                             </button>
 
                             <!-- Logout Button -->
-                            <button onclick="AetherApp.logout()" class="w-8 h-8 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center text-xs font-bold transition-colors" title="تسجيل الخروج">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            <button onclick="AetherApp.logout()" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center text-xs font-bold transition-colors shrink-0" title="تسجيل الخروج">
+                                <i class="fa-solid fa-arrow-right-from-bracket text-[11px] sm:text-xs"></i>
                             </button>
                         </div>
                     `;
                     this.navigate('dashboard');
                 } else {
                     addBtn.classList.add('hidden');
-                    searchBox.classList.add('hidden');
                     slot.innerHTML = `
-                        <button onclick="AetherApp.openAuthModal('login')" class="bg-brandNavy text-white hover:bg-brandNavyDark text-xs sm:text-sm font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-soft-xs transition-all flex items-center gap-1.5">
-                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <button onclick="AetherApp.openAuthModal('login')" class="bg-brandNavy text-white hover:bg-brandNavyDark text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-soft-xs transition-all flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
                             <span data-i18n="login">تسجيل الدخول</span>
                         </button>
                     `;
@@ -1685,16 +1690,34 @@
 
                 const title = document.getElementById('mediaUploadTitle');
                 const input = document.getElementById('mediaFileInput');
+                const pullTitle = document.getElementById('dedicatedPullTitle');
+                const pullDesc = document.getElementById('dedicatedPullDesc');
+                const pullBtnText = document.getElementById('dedicatedPullBtnText');
+                const dedicatedInput = document.getElementById('dedicatedPullAllInput');
 
                 if (type === 'photo') {
-                    title.innerHTML = `<i class="fa-solid fa-images text-brandTeal"></i><span>إضافة صور (تحديد غير محدود)</span>`;
-                    input.accept = 'image/*';
+                    if (title) title.innerHTML = `<i class="fa-solid fa-images text-brandTeal"></i><span>إضافة صور (تحديد غير محدود)</span>`;
+                    if (input) input.accept = 'image/*';
+                    if (pullTitle) pullTitle.textContent = 'سحب كل الصور من الجهاز';
+                    if (pullDesc) pullDesc.textContent = 'تحديد وسحب كافة الصور الموجودة بهاتفك دفعة واحدة';
+                    if (pullBtnText) pullBtnText.textContent = 'سحب كل الصور';
                 } else if (type === 'video') {
-                    title.innerHTML = `<i class="fa-solid fa-video text-brandTeal"></i><span>إضافة فيديوهات (تحديد متعدد وسلس)</span>`;
-                    input.accept = 'video/*';
+                    if (title) title.innerHTML = `<i class="fa-solid fa-video text-brandTeal"></i><span>إضافة فيديوهات (تحديد متعدد وسلس)</span>`;
+                    if (input) input.accept = 'video/*';
+                    if (pullTitle) pullTitle.textContent = 'سحب كل الفيديوهات من الجهاز';
+                    if (pullDesc) pullDesc.textContent = 'تحديد وسحب كافة مقاطع الفيديو من هاتفك دفعة واحدة';
+                    if (pullBtnText) pullBtnText.textContent = 'سحب كل الفيديوهات';
                 } else {
-                    title.innerHTML = `<i class="fa-solid fa-file-lines text-blue-600"></i><span>إضافة ملفات ومستندات</span>`;
-                    input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip';
+                    if (title) title.innerHTML = `<i class="fa-solid fa-file-lines text-blue-600"></i><span>إضافة ملفات ومستندات</span>`;
+                    if (input) input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip';
+                    if (pullTitle) pullTitle.textContent = 'سحب كل المستندات والملفات';
+                    if (pullDesc) pullDesc.textContent = 'تحديد ونقل كافة ملفات الـ PDF ومستندات العمل';
+                    if (pullBtnText) pullBtnText.textContent = 'سحب كل الملفات';
+                }
+
+                // Match dedicated input accept attribute
+                if (dedicatedInput && input) {
+                    dedicatedInput.accept = input.accept;
                 }
 
                 const m = document.getElementById('mediaUploadModal');
@@ -1760,6 +1783,25 @@
             clearStagedFiles() {
                 this.stagedFiles = [];
                 this.renderStagedFiles();
+            },
+
+            triggerDedicatedPullAll() {
+                const dedicatedInput = document.getElementById('dedicatedPullAllInput');
+                const catType = document.getElementById('uploadCategoryType').value || 'photo';
+                if (!dedicatedInput) return;
+
+                if (catType === 'video') {
+                    dedicatedInput.accept = 'video/*';
+                    this.toast('اختر كافة مقاطع الفيديو التي تريد سحبها من جهازك', 'info');
+                } else if (catType === 'photo') {
+                    dedicatedInput.accept = 'image/*';
+                    this.toast('اختر كافة الصور التي تريد سحبها من جهازك دفعة واحدة', 'info');
+                } else {
+                    dedicatedInput.accept = '*/*';
+                    this.toast('اختر كافة الملفات التي تريد سحبها من جهازك', 'info');
+                }
+
+                dedicatedInput.click();
             },
 
             async handleMediaUploadSubmit(e) {
@@ -2002,7 +2044,7 @@
             },
 
             openItemDetails(id) {
-                const item = this.items.find(i => i.id === id);
+                const item = this.items.find(i => i.id === id || `modern_${i.id}` === id || `legacy1_${i.id}` === id || `legacy2_${i.id}` === id);
                 if (!item) return;
 
                 const modal = document.getElementById('detailsModal');
@@ -2013,19 +2055,38 @@
                 const descEl = document.getElementById('detailsDesc');
                 const tagsEl = document.getElementById('detailsTags');
 
-                catBadge.textContent = item.category.toUpperCase();
+                catBadge.textContent = (item.category || 'صورة').toUpperCase();
                 dateEl.textContent = item.date || '---';
                 titleEl.textContent = item.title || item.name || item.platform || 'عنصر';
-                descEl.textContent = item.description || item.content || (item.url ? `الرابط: ${item.url}` : 'لا يوجد وصف');
+                
+                let descText = item.description || item.content || '';
+                if (item.category === 'account') {
+                    descText = `اسم المستخدم: ${item.username || ''}\n` + (item.description ? `ملاحظات: ${item.description}` : '');
+                }
+                descEl.textContent = descText || (item.url ? `الرابط: ${item.url}` : 'لا يوجد وصف');
 
                 tagsEl.innerHTML = (item.tags || []).map(t => `
                     <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-bold">#${this.escape(t)}</span>
                 `).join('');
 
-                if (item.category === 'photo') {
-                    mediaContainer.innerHTML = `<img src="${item.mediaUrl}" class="max-h-[75vh] max-w-full object-contain rounded-lg">`;
-                } else if (item.category === 'video') {
-                    mediaContainer.innerHTML = `<video src="${item.mediaUrl}" controls autoplay class="max-h-[75vh] max-w-full rounded-lg"></video>`;
+                const mediaUrl = item.mediaUrl || item.imageUrl || item.videoUrl || '';
+
+                if (item.category === 'photo' && mediaUrl) {
+                    mediaContainer.innerHTML = `<img src="${mediaUrl}" class="max-h-[75vh] max-w-full object-contain rounded-lg">`;
+                } else if (item.category === 'video' && mediaUrl) {
+                    mediaContainer.innerHTML = `<video src="${mediaUrl}" controls autoplay class="max-h-[75vh] max-w-full rounded-lg"></video>`;
+                } else if (item.category === 'account') {
+                    mediaContainer.innerHTML = `
+                        <div class="text-center text-white py-10 px-4">
+                            <i class="fa-solid fa-key text-5xl mb-3 text-amber-400"></i>
+                            <h4 class="text-base font-black">${this.escape(item.platform || 'حساب محفوظ')}</h4>
+                            <p class="text-xs text-slate-300 mt-1 font-mono">${this.escape(item.username || '')}</p>
+                            <div class="mt-4 inline-block bg-white/10 px-3 py-1.5 rounded-xl text-xs">
+                                <span>كلمة المرور: </span>
+                                <span class="font-mono font-bold text-amber-300" dir="ltr">${this.escape(item.password || (item.passwordEnc ? decodeURIComponent(escape(atob(item.passwordEnc))) : '••••••'))}</span>
+                            </div>
+                        </div>
+                    `;
                 } else {
                     mediaContainer.innerHTML = `
                         <div class="text-center text-white py-12">
@@ -2035,34 +2096,27 @@
                     `;
                 }
 
-                document.getElementById('detailsDownloadBtn').onclick = () => this.downloadSingleItem(id);
-                document.getElementById('detailsFavBtn').onclick = () => this.toggleFavorite(id);
+                document.getElementById('detailsDownloadBtn').onclick = () => this.downloadSingleItem(item.id);
+                document.getElementById('detailsFavBtn').onclick = () => this.toggleFavorite(item.id);
                 document.getElementById('detailsDeleteBtn').onclick = () => {
                     this.closeLightbox();
-                    this.moveToTrash(id);
+                    this.moveToTrash(item.id);
                 };
 
                 modal.classList.remove('hidden');
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
             },
 
-            closeLightbox() {
-                const m = document.getElementById('detailsModal');
-                if (!m) return;
-                const v = m.querySelector('video');
-                if (v) v.pause();
-                m.classList.add('opacity-0');
-                setTimeout(() => m.classList.add('hidden'), 200);
-            },
-
             downloadSingleItem(id, event) {
                 if (event) event.stopPropagation();
-                const item = this.items.find(i => i.id === id);
+                const item = this.items.find(i => i.id === id || `modern_${i.id}` === id || `legacy1_${i.id}` === id || `legacy2_${i.id}` === id);
                 if (!item) return;
 
-                if (item.mediaUrl) {
+                const media = item.mediaUrl || item.imageUrl || item.videoUrl;
+
+                if (media) {
                     const a = document.createElement('a');
-                    a.href = item.mediaUrl;
+                    a.href = media;
                     a.download = item.title || item.name || `aether_${Date.now()}`;
                     document.body.appendChild(a);
                     a.click();
@@ -2077,6 +2131,16 @@
                     a.click();
                     URL.revokeObjectURL(url);
                     this.toast('تم تنزيل الملاحظة', 'success');
+                } else if (item.category === 'account') {
+                    const pass = item.password || (item.passwordEnc ? decodeURIComponent(escape(atob(item.passwordEnc))) : '');
+                    const blob = new Blob([`المنصة: ${item.platform}\nاسم المستخدم: ${item.username}\nكلمة المرور: ${pass}`], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `حساب_${item.platform}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    this.toast('تم تنزيل بيانات الحساب كملف نصي', 'success');
                 } else {
                     this.toast('تم فتح تفاصيل العنصر', 'info');
                 }
