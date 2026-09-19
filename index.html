@@ -946,7 +946,9 @@
             updateProfile,
             updatePassword,
             reauthenticateWithCredential,
-            EmailAuthProvider
+            EmailAuthProvider,
+            setPersistence,
+            inMemoryPersistence
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, 
@@ -1027,12 +1029,21 @@
             isSelectMode: false,
             selectedIds: new Set(),
             stagedFiles: [],
+            mediaBlobs: {},
             isVaultUnlocked: false,
             vaultPin: '1234',
             verifiedOldPassword: '',
             notifications: [],
 
-            init() {
+            async init() {
+                try {
+                    // Enforce in-memory session: nothing stays saved on disk across launches
+                    await setPersistence(auth, inMemoryPersistence);
+                    // Explicitly purge any previously saved local credentials on startup
+                    await signOut(auth);
+                } catch (e) {
+                    console.warn('Persistence error:', e);
+                }
                 this.detectLanguage();
                 this.setupConnectivityListener();
                 this.setupAuthListener();
@@ -1140,6 +1151,8 @@
                     `;
                     this.navigate('dashboard');
                 } else {
+                    this.currentDisplayName = '';
+                    document.getElementById('dashGreetingName').textContent = '';
                     addBtn.classList.add('hidden');
                     slot.innerHTML = `
                         <button onclick="AetherApp.openAuthModal('login')" class="bg-brandNavy text-white hover:bg-brandNavyDark text-xs sm:text-sm font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl shadow-soft-xs transition-all flex items-center gap-1.5 shrink-0">
@@ -1384,9 +1397,16 @@
                 try {
                     await updateProfile(this.user, { displayName: name });
                     localStorage.setItem(`aether_name_${this.user.uid}`, name);
+                    localStorage.setItem('aether_global_display_name', name);
+                    await setDoc(doc(db, 'artifacts', APP_ID, 'users', this.user.uid, 'profile', 'info'), {
+                        name: name,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+
+                    this.currentDisplayName = name;
                     document.getElementById('dashGreetingName').textContent = name;
-                    this.updateUIForAuth(this.user);
-                    this.toast('تم تحديث اسمك بنجاح!', 'success');
+                    await this.updateUIForAuth(this.user);
+                    this.toast('تم تحديث وحفظ اسمك بنجاح!', 'success');
                     this.closeProfileModal();
                 } catch (err) {
                     this.toast('حدث خطأ أثناء حفظ الاسم', 'error');
@@ -1765,14 +1785,35 @@
 
                 prompt.classList.add('hidden');
                 container.classList.remove('hidden');
-                summary.textContent = `${this.stagedFiles.length} ملفات محددة جاهزة للحفظ`;
 
-                grid.innerHTML = this.stagedFiles.slice(0, 16).map((file, idx) => `
-                    <div class="relative rounded-lg bg-slate-100 aspect-square overflow-hidden flex items-center justify-center p-1 text-[10px] text-slate-500 font-bold text-center border border-slate-200">
-                        <span class="truncate px-1">${this.escape(file.name)}</span>
-                        <button type="button" onclick="AetherApp.removeStagedFile(${idx})" class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-[9px]">✕</button>
-                    </div>
-                `).join('');
+                // Auto-count categories to show accurate summary
+                let pCount = 0, vCount = 0, fCount = 0;
+                this.stagedFiles.forEach(f => {
+                    if (f.type.startsWith('image/') || /\.(jpe?g|png|gif|webp|svg|bmp|heic|heif)$/i.test(f.name)) pCount++;
+                    else if (f.type.startsWith('video/') || /\.(mp4|mov|avi|mkv|webm|3gp|m4v|flv)$/i.test(f.name)) vCount++;
+                    else fCount++;
+                });
+
+                let breakdown = [];
+                if (pCount > 0) breakdown.push(`${pCount} صورة`);
+                if (vCount > 0) breakdown.push(`${vCount} فيديو`);
+                if (fCount > 0) breakdown.push(`${fCount} ملف`);
+
+                summary.innerHTML = `<span class="text-brandTeal font-black">${this.stagedFiles.length} ملف محدد</span> <span class="text-slate-400 font-medium text-[10px]">(${breakdown.join(' • ')})</span>`;
+
+                grid.innerHTML = this.stagedFiles.slice(0, 16).map((file, idx) => {
+                    let icon = 'fa-file-lines text-blue-500';
+                    if (file.type.startsWith('image/') || /\.(jpe?g|png|gif|webp)$/i.test(file.name)) icon = 'fa-image text-brandNavy';
+                    else if (file.type.startsWith('video/') || /\.(mp4|mov|webm)$/i.test(file.name)) icon = 'fa-video text-brandTeal';
+
+                    return `
+                        <div class="relative rounded-lg bg-slate-100 aspect-square overflow-hidden flex flex-col items-center justify-center p-1 text-[10px] text-slate-500 font-bold text-center border border-slate-200 group">
+                            <i class="fa-solid ${icon} text-sm mb-0.5"></i>
+                            <span class="truncate px-1 w-full text-[9px]">${this.escape(file.name)}</span>
+                            <button type="button" onclick="AetherApp.removeStagedFile(${idx})" class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-[9px] shadow-xs">✕</button>
+                        </div>
+                    `;
+                }).join('');
             },
 
             removeStagedFile(idx) {
@@ -1811,7 +1852,6 @@
                     return;
                 }
 
-                const cat = document.getElementById('uploadCategoryType').value;
                 const desc = document.getElementById('uploadDescription').value.trim();
                 const date = document.getElementById('uploadDate').value || new Date().toISOString().split('T')[0];
                 const rawTags = document.getElementById('uploadTags').value;
@@ -1830,7 +1870,7 @@
                     const total = this.stagedFiles.length;
                     const colRef = collection(db, 'artifacts', APP_ID, 'users', this.user.uid, 'vault');
 
-                    // 1. Parallel ultra-fast file processing in concurrent chunks of 20
+                    // 1. Parallel file processing in concurrent chunks of 20 with SMART AUTO-CLASSIFICATION
                     const preparedDocs = [];
                     const CONCURRENCY = 20;
 
@@ -1839,13 +1879,28 @@
                         const processedChunk = await Promise.all(chunk.map(async (file, idx) => {
                             const globalIndex = i + idx;
                             let mediaUrl = '';
+                            let thumbnailUrl = '';
+
+                            // Precise file categorization
+                            let actualCategory = 'file';
+                            const isImg = file.type.startsWith('image/') || /\.(jpe?g|png|gif|webp|svg|bmp|heic|heif)$/i.test(file.name);
+                            const isVid = file.type.startsWith('video/') || /\.(mp4|mov|avi|mkv|webm|3gp|m4v|flv)$/i.test(file.name);
+
+                            if (isImg) {
+                                actualCategory = 'photo';
+                            } else if (isVid) {
+                                actualCategory = 'video';
+                            } else {
+                                actualCategory = 'file';
+                            }
 
                             try {
-                                if (file.type.startsWith('image/')) {
+                                if (actualCategory === 'photo') {
                                     mediaUrl = await this.compressImageFile(file);
-                                } else if (file.type.startsWith('video/')) {
+                                } else if (actualCategory === 'video') {
                                     // Generate fast video thumbnail snapshot for instant listing
-                                    mediaUrl = await this.generateVideoThumbnail(file);
+                                    thumbnailUrl = await this.generateVideoThumbnail(file);
+                                    mediaUrl = thumbnailUrl;
                                 } else if (file.size < 600000) {
                                     mediaUrl = await this.readFileAsDataURL(file);
                                 }
@@ -1853,17 +1908,22 @@
                                 console.warn('Fast read fallback for file:', file.name, readErr);
                             }
 
-                            // Cache original blob in ultra-fast IndexedDB
-                            const cacheKey = `vault_media_${this.user.uid}_${Date.now()}_${globalIndex}`;
+                            // Cache original blob in RAM and ultra-fast IndexedDB
+                            const cacheKey = `vault_media_${this.user.uid}_${Date.now()}_${globalIndex}_${file.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                            this.mediaBlobs[cacheKey] = file;
+
                             try {
                                 await idb.set(cacheKey, file);
-                            } catch (idbErr) {}
+                            } catch (idbErr) {
+                                console.warn('IDB store warning:', idbErr);
+                            }
 
                             return {
-                                category: cat,
+                                category: actualCategory, // Accurate categorization (photo vs video vs file)
                                 title: file.name,
                                 name: file.name,
                                 mediaUrl: mediaUrl,
+                                thumbnailUrl: thumbnailUrl || mediaUrl,
                                 storageKey: cacheKey,
                                 description: desc,
                                 date: date,
@@ -1882,11 +1942,11 @@
                         progressBar.style.width = `${prepPct}%`;
                         progressText.textContent = `${prepPct}%`;
                         if (progressLabel) {
-                            progressLabel.innerHTML = `<i class="fa-solid fa-bolt text-brandTeal"></i> <span>جاري معالجة الملفات (${preparedDocs.length} من ${total})...</span>`;
+                            progressLabel.innerHTML = `<i class="fa-solid fa-bolt text-brandTeal"></i> <span>جاري تصنيف ومعالجة الملفات (${preparedDocs.length} من ${total})...</span>`;
                         }
                     }
 
-                    // 2. Commit to Cloud Database in optimized batches of 100 (بدل 500 لتفادي أي خطأ ورفع 1000 بسلاسة)
+                    // 2. Commit to Cloud Database in optimized batches of 100
                     const BATCH_SIZE = 100;
                     const totalBatches = Math.ceil(preparedDocs.length / BATCH_SIZE);
 
@@ -1905,11 +1965,21 @@
                         progressBar.style.width = `${uploadPct}%`;
                         progressText.textContent = `${uploadPct}%`;
                         if (progressLabel) {
-                            progressLabel.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-brandTeal"></i> <span>جاري الحفظ السحابي: دفعة ${b + 1} من ${totalBatches} (${Math.min((b + 1) * BATCH_SIZE, total)} ملف)...</span>`;
+                            progressLabel.innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-brandTeal"></i> <span>جاري الحفظ السحابي: دفعة ${b + 1} من ${totalBatches}...</span>`;
                         }
                     }
 
-                    this.toast(`تم حفظ (${total}) عنصر بنجاح في خزنتك السحابية في ثوانٍ معدودة! ⚡`, 'success');
+                    // Count summary of uploaded categories
+                    const uploadedPhotos = preparedDocs.filter(d => d.category === 'photo').length;
+                    const uploadedVideos = preparedDocs.filter(d => d.category === 'video').length;
+                    const uploadedFiles = preparedDocs.filter(d => d.category === 'file').length;
+
+                    let msg = `تم حفظ (${total}) عنصر بنجاح!`;
+                    if (uploadedPhotos && uploadedVideos) {
+                        msg = `تم حفظ وتصنيف (${uploadedPhotos} صورة) و (${uploadedVideos} فيديو) بنجاح في أماكنها المخصصة! ⚡`;
+                    }
+                    this.toast(msg, 'success');
+
                     this.clearStagedFiles();
                     this.closeMediaUploadModal();
                 } catch (err) {
@@ -2137,7 +2207,7 @@
                 }
             },
 
-            openItemDetails(id) {
+            async openItemDetails(id) {
                 const item = this.items.find(i => i.id === id || `modern_${i.id}` === id || `legacy1_${i.id}` === id || `legacy2_${i.id}` === id);
                 if (!item) return;
 
@@ -2149,7 +2219,7 @@
                 const descEl = document.getElementById('detailsDesc');
                 const tagsEl = document.getElementById('detailsTags');
 
-                catBadge.textContent = (item.category || 'صورة').toUpperCase();
+                catBadge.textContent = (item.category === 'photo' ? 'صورة' : item.category === 'video' ? 'فيديو' : item.category === 'file' ? 'ملف' : item.category === 'account' ? 'حساب' : item.category === 'link' ? 'رابط' : 'ملاحظة').toUpperCase();
                 dateEl.textContent = item.date || '---';
                 titleEl.textContent = item.title || item.name || item.platform || 'عنصر';
                 
@@ -2163,12 +2233,67 @@
                     <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-md font-bold">#${this.escape(t)}</span>
                 `).join('');
 
-                const mediaUrl = item.mediaUrl || item.imageUrl || item.videoUrl || '';
+                // Check and retrieve real blob for video, photo, or document
+                let blob = this.mediaBlobs[item.storageKey] || null;
+                if (!blob && item.storageKey) {
+                    try {
+                        blob = await idb.get(item.storageKey);
+                        if (blob) this.mediaBlobs[item.storageKey] = blob;
+                    } catch (e) {
+                        console.warn('IDB fetch error:', e);
+                    }
+                }
 
-                if (item.category === 'photo' && mediaUrl) {
-                    mediaContainer.innerHTML = `<img src="${mediaUrl}" class="max-h-[75vh] max-w-full object-contain rounded-lg">`;
-                } else if (item.category === 'video' && mediaUrl) {
-                    mediaContainer.innerHTML = `<video src="${mediaUrl}" controls autoplay class="max-h-[75vh] max-w-full rounded-lg"></video>`;
+                if (item.category === 'video') {
+                    let videoSrc = '';
+                    if (blob) {
+                        videoSrc = URL.createObjectURL(blob);
+                    } else if (item.videoUrl) {
+                        videoSrc = item.videoUrl;
+                    } else if (item.mediaUrl && !item.mediaUrl.startsWith('data:image/')) {
+                        videoSrc = item.mediaUrl;
+                    }
+
+                    if (videoSrc) {
+                        mediaContainer.innerHTML = `
+                            <div class="w-full h-full flex flex-col items-center justify-center p-2">
+                                <video src="${videoSrc}" controls autoplay playsinline class="max-h-[70vh] max-w-full rounded-2xl shadow-xl bg-black"></video>
+                            </div>
+                        `;
+                    } else {
+                        mediaContainer.innerHTML = `
+                            <div class="text-center text-white py-12 p-4">
+                                <i class="fa-solid fa-video text-5xl mb-3 text-brandTeal"></i>
+                                <h4 class="text-sm font-black mb-1">${this.escape(item.title || item.name || 'مقطع فيديو')}</h4>
+                                <p class="text-xs text-slate-300 font-medium mb-3">حجم الفيديو: ${item.sizeText || '---'}</p>
+                                <button onclick="AetherApp.downloadSingleItem('${item.id}')" class="px-4 py-2 bg-brandTeal hover:bg-brandTealDark text-white text-xs font-bold rounded-xl shadow-soft-xs inline-flex items-center gap-2">
+                                    <i class="fa-solid fa-download"></i> تنزيل الفيديو وتشغيله بالجهاز
+                                </button>
+                            </div>
+                        `;
+                    }
+                } else if (item.category === 'photo') {
+                    let imgSrc = '';
+                    if (blob) {
+                        imgSrc = URL.createObjectURL(blob);
+                    } else {
+                        imgSrc = item.mediaUrl || item.imageUrl || '';
+                    }
+                    mediaContainer.innerHTML = `<img src="${imgSrc}" class="max-h-[75vh] max-w-full object-contain rounded-lg shadow-md">`;
+                } else if (item.category === 'file') {
+                    mediaContainer.innerHTML = `
+                        <div class="text-center text-white py-12 p-4 flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 rounded-2xl bg-white/10 text-brandTeal flex items-center justify-center text-3xl mb-3 shadow-soft-xs">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                            <h4 class="text-sm font-black mb-1">${this.escape(item.title || item.name || 'مستند')}</h4>
+                            <p class="text-xs text-slate-300 mb-4">${item.sizeText || 'ملف جاهز للتنزيل'}</p>
+                            <button onclick="AetherApp.downloadSingleItem('${item.id}')" class="px-5 py-2.5 bg-brandTeal hover:bg-brandTealDark text-white font-black text-xs rounded-xl shadow-soft-xs inline-flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-download"></i>
+                                <span>فتح وتنزيل الملف للجهاز</span>
+                            </button>
+                        </div>
+                    `;
                 } else if (item.category === 'account') {
                     mediaContainer.innerHTML = `
                         <div class="text-center text-white py-10 px-4">
@@ -2184,7 +2309,7 @@
                 } else {
                     mediaContainer.innerHTML = `
                         <div class="text-center text-white py-12">
-                            <i class="fa-solid fa-file-lines text-5xl mb-3 text-teal-400"></i>
+                            <i class="fa-solid fa-note-sticky text-5xl mb-3 text-emerald-400"></i>
                             <p class="text-xs font-bold">${this.escape(item.title || item.name || '')}</p>
                         </div>
                     `;
@@ -2201,114 +2326,62 @@
                 setTimeout(() => modal.classList.remove('opacity-0'), 10);
             },
 
-            downloadSingleItem(id, event) {
-                if (event) event.stopPropagation();
-                const item = this.items.find(i => i.id === id || `modern_${i.id}` === id || `legacy1_${i.id}` === id || `legacy2_${i.id}` === id);
-                if (!item) return;
+            closeLightbox() {
+                const modal = document.getElementById('detailsModal');
+                if (!modal) return;
+                const mediaContainer = document.getElementById('detailsMediaContainer');
+                if (mediaContainer) {
+                    const video = mediaContainer.querySelector('video');
+                    if (video) video.pause();
+                }
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    if (mediaContainer) mediaContainer.innerHTML = '';
+                }, 200);
+            },
 
-                const media = item.mediaUrl || item.imageUrl || item.videoUrl;
-
-                if (media) {
-                    const a = document.createElement('a');
-                    a.href = media;
-                    a.download = item.title || item.name || `aether_${Date.now()}`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    this.toast('تم بدء التنزيل للجهاز', 'success');
-                } else if (item.category === 'note') {
-                    const blob = new Blob([`${item.title}\n\n${item.content}`], { type: 'text/plain;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${item.title}.txt`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    this.toast('تم تنزيل الملاحظة', 'success');
-                } else if (item.category === 'account') {
-                    const pass = item.password || (item.passwordEnc ? decodeURIComponent(escape(atob(item.passwordEnc))) : '');
-                    const blob = new Blob([`المنصة: ${item.platform}\nاسم المستخدم: ${item.username}\nكلمة المرور: ${pass}`], { type: 'text/plain;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `حساب_${item.platform}.txt`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    this.toast('تم تنزيل بيانات الحساب كملف نصي', 'success');
-                } else {
-                    this.toast('تم فتح تفاصيل العنصر', 'info');
+            openPinModal() {
+                const m = document.getElementById('pinAuthModal');
+                if (m) {
+                    m.classList.remove('hidden');
+                    setTimeout(() => m.classList.remove('opacity-0'), 10);
                 }
             },
 
-            async exportFullBackup() {
-                if (!this.items.length) {
-                    this.toast('لا توجد ملفات في خزنتك لإنشاء نسخة احتياطية', 'info');
-                    return;
+            closePinModal() {
+                const m = document.getElementById('pinAuthModal');
+                if (m) {
+                    m.classList.add('opacity-0');
+                    setTimeout(() => m.classList.add('hidden'), 200);
                 }
+            },
 
-                const btn = document.getElementById('fullBackupBtn');
-                const orig = btn.innerHTML;
-
-                try {
-                    btn.disabled = true;
-                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري إنشاء ZIP...`;
-
-                    const zip = new JSZip();
-                    const mediaFolder = zip.folder("وسائط_الخزنة");
-                    const notesFolder = zip.folder("الملاحظات_والروابط");
-
-                    let activeList = this.items.filter(i => !i.isDeleted);
-
-                    for (let i = 0; i < activeList.length; i++) {
-                        const itm = activeList[i];
-                        if (itm.mediaUrl && itm.mediaUrl.includes('base64,')) {
-                            const b64 = itm.mediaUrl.split('base64,')[1];
-                            const ext = itm.category === 'video' ? 'mp4' : 'jpg';
-                            mediaFolder.file(`${i + 1}_${itm.title || 'media'}.${ext}`, b64, { base64: true });
-                        } else if (itm.category === 'note') {
-                            notesFolder.file(`ملاحظة_${i + 1}.txt`, `${itm.title}\n\n${itm.content}`);
-                        } else if (itm.category === 'link') {
-                            notesFolder.file(`رابط_${i + 1}.txt`, `${itm.title}\n${itm.url}\n${itm.description || ''}`);
-                        }
-                    }
-
-                    const blob = await zip.generateAsync({ type: 'blob' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `AetherVault_Backup_${new Date().toISOString().split('T')[0]}.zip`;
-                    a.click();
-                    setTimeout(() => URL.revokeObjectURL(url), 10000);
-                    this.toast('تم تنزيل النسخة الاحتياطية الكاملة كملف ZIP!', 'success');
-                } catch (e) {
-                    this.toast('حدث خطأ أثناء تصدير ملف النسخة الاحتياطية', 'error');
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
+            verifyPin() {
+                const input = document.getElementById('vaultPinInput');
+                if (input && input.value === this.vaultPin) {
+                    this.isVaultUnlocked = true;
+                    this.closePinModal();
+                    this.toast('تم تأكيد الرمز وفك قفل الخزنة بنجاح', 'success');
+                    this.renderVault();
+                } else {
+                    this.toast('رمز PIN غير صحيح', 'error');
                 }
             },
 
             toggleSelectMode() {
                 this.isSelectMode = !this.isSelectMode;
                 const bar = document.getElementById('batchBar');
-                const txt = document.getElementById('batchModeToggleText');
-
+                const btnText = document.getElementById('batchModeToggleText');
                 if (this.isSelectMode) {
                     bar.classList.remove('hidden');
-                    txt.textContent = 'إلغاء التحديد';
+                    btnText.textContent = 'إلغاء التحديد';
                 } else {
                     bar.classList.add('hidden');
-                    txt.textContent = 'تحديد متعدد';
+                    btnText.textContent = 'تحديد متعدد';
                     this.selectedIds.clear();
+                    this.updateBatchBadge();
                 }
-                this.updateBatchBadge();
-                this.renderVault();
-            },
-
-            toggleItemSelection(id, checked) {
-                if (checked) this.selectedIds.add(id);
-                else this.selectedIds.delete(id);
-                this.updateBatchBadge();
                 this.renderVault();
             },
 
@@ -2520,16 +2593,35 @@
 
             async handleAuthSubmit(e) {
                 e.preventDefault();
-                const identifier = document.getElementById('authIdentifierInput').value.trim();
+                const rawIdentifier = document.getElementById('authIdentifierInput').value.trim();
                 const pass = document.getElementById('authPasswordInput').value;
                 const btn = document.getElementById('authSubmitBtn');
 
-                if (!identifier || !pass) return;
+                if (!rawIdentifier || !pass) {
+                    this.toast('يرجى ملء جميع الحقول المطلوبة', 'error');
+                    return;
+                }
 
-                let email = identifier;
-                if (!identifier.includes('@')) {
-                    const cleanPhone = identifier.replace(/[^0-9]/g, '');
+                // Convert Arabic/Eastern digits to English numbers (e.g. ٠١٠ -> 010)
+                const normalized = rawIdentifier
+                    .replace(/[٠-٩]/g, d => String.fromCharCode(d.charCodeAt(0) - 1632))
+                    .replace(/[۰-۹]/g, d => String.fromCharCode(d.charCodeAt(0) - 1776));
+
+                let email = normalized;
+                let cleanPhone = '';
+
+                if (!normalized.includes('@')) {
+                    cleanPhone = normalized.replace(/[^0-9]/g, '');
+                    if (!cleanPhone || cleanPhone.length < 6) {
+                        this.toast('يرجى إدخال رقم هاتف صحيح', 'error');
+                        return;
+                    }
                     email = `user_${cleanPhone}@aethervault.com`;
+                }
+
+                if (pass.length < 6) {
+                    this.toast('كلمة المرور يجب أن تكون 6 أحرف أو أرقام على الأقل', 'error');
+                    return;
                 }
 
                 try {
@@ -2537,28 +2629,55 @@
                     btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...`;
 
                     if (this.authMode === 'login') {
-                        const userCred = await signInWithEmailAndPassword(auth, email, pass);
-                        this.toast('مرحباً بعودتك إلى خزنتك!', 'success');
+                        let userCred;
+                        try {
+                            // Try signing in with current app domain
+                            userCred = await signInWithEmailAndPassword(auth, email, pass);
+                        } catch (firstErr) {
+                            // If user was created in legacy version with phone, fallback to @memories.com
+                            if (cleanPhone && (firstErr.code === 'auth/user-not-found' || firstErr.code === 'auth/invalid-credential')) {
+                                const legacyEmail = `user_${cleanPhone}@memories.com`;
+                                try {
+                                    userCred = await signInWithEmailAndPassword(auth, legacyEmail, pass);
+                                } catch (secErr) {
+                                    throw firstErr;
+                                }
+                            } else {
+                                throw firstErr;
+                            }
+                        }
+
+                        this.toast('مرحباً بعودتك إلى خزنتك السحابية!', 'success');
                     } else {
+                        // Register new user account
                         const name = document.getElementById('authNameInput').value.trim() || 'المستخدم';
                         const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+                        
                         await updateProfile(userCred.user, { displayName: name });
                         localStorage.setItem(`aether_name_${userCred.user.uid}`, name);
+                        
                         await setDoc(doc(db, 'artifacts', APP_ID, 'users', userCred.user.uid, 'profile', 'info'), {
                             name: name,
+                            phone: cleanPhone || '',
                             email: email,
                             createdAt: new Date().toISOString()
                         });
-                        this.toast('تم إنشاء خزنتك بنجاح!', 'success');
+
+                        this.toast('تم إنشاء خزنتك الخاصة بنجاح!', 'success');
                     }
+
+                    document.getElementById('authForm').reset();
                     this.closeAuthModal();
                 } catch (err) {
+                    console.error('Auth error:', err);
                     if (err.code === 'auth/email-already-in-use') {
-                        this.toast('هذا الحساب مسجل بالفعل، يرجى تسجيل الدخول', 'error');
+                        this.toast('هذا الرقم أو الحساب مسجل بالفعل، يرجى الضغط على تسجيل الدخول', 'error');
                     } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-                        this.toast('كلمة المرور أو رقم الهاتف غير صحيح', 'error');
+                        this.toast('رقم الهاتف أو كلمة المرور غير صحيحة', 'error');
+                    } else if (err.code === 'auth/user-not-found') {
+                        this.toast('لا يوجد حساب مسجل بهذا الرقم، يرجى إنشاء حساب جديد أولاً', 'error');
                     } else {
-                        this.toast('حدث خطأ أثناء المصادقة: ' + err.message, 'error');
+                        this.toast('حدث خطأ أثناء المصادقة: ' + (err.message || ''), 'error');
                     }
                 } finally {
                     btn.disabled = false;
@@ -2568,9 +2687,17 @@
 
             async logout() {
                 try {
+                    const uid = this.user?.uid;
+                    if (uid) {
+                        localStorage.removeItem(`aether_name_${uid}`);
+                    }
                     await signOut(auth);
-                    this.toast('تم تسجيل الخروج بنجاح', 'info');
-                    this.navigate('landing');
+                    this.user = null;
+                    this.items = [];
+                    this.selectedIds.clear();
+                    this.renderVault();
+                    this.toast('تم تسجيل الخروج بنجاح. بياناتك بأمان 🔒', 'info');
+                    this.updateUIForAuth(null);
                 } catch (e) {
                     this.toast('حدث خطأ أثناء الخروج', 'error');
                 }
